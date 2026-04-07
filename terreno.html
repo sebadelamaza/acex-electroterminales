@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>ACEX · Formulario de Terreno</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0b0f14; --s1:#111720; --s2:#18202c; --s3:#1e2a38;
+  --border:#263040; --border2:#2e3d52;
+  --text:#dde6f0; --muted:#6b839e; --faint:#3a4f66;
+  --green:#007140; --greenl:#00a85e; --greenbg:#071a0f; --lime:#78be20;
+  --blue:#1a6fdb; --bluel:#4d9fff; --bluebg:#06152a;
+  --amber:#c96d00; --amberl:#f59e0b; --amberbg:#1a0e00;
+  --red:#c0392b; --redl:#f05040; --redbg:#1a0505;
+  --teal:#0d7377; --teall:#2ea09a; --tealbg:#041415;
+  --r:12px; --rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:100px}
+
+/* TOPBAR */
+.topbar{background:var(--s1);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-block{display:flex;align-items:center;gap:7px}
+.logo-sq{width:16px;height:16px;background:#5b4dc8;border-radius:3px}
+.logo-txt{font-size:13px;font-weight:700;color:var(--text)}
+.logo-txt span{color:#5b4dc8}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--greenl)}
+.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--greenl);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.progress-bar{height:3px;background:var(--border)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--lime));transition:width .4s ease}
+
+/* CASE BANNER */
+.case-banner{margin:16px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:14px;display:none}
+.case-banner.show{display:block}
+.case-banner.error{background:var(--redbg);border-color:var(--red)}
+.cb-ticket{font-family:'DM Mono',monospace;font-size:18px;font-weight:700;color:var(--greenl);margin-bottom:8px}
+.cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cb-item{font-size:12px}
+.cb-key{color:var(--muted);margin-bottom:1px}
+.cb-val{color:var(--text);font-weight:500}
+.warranty-chip{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:'DM Mono',monospace;margin-top:6px}
+.warranty-chip.garantia,.warranty-chip.extendida{background:var(--greenbg);border:1px solid var(--green);color:var(--greenl)}
+.warranty-chip.fuera,.warranty-chip.siniestro{background:var(--redbg);border:1px solid var(--red);color:var(--redl)}
+
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;gap:16px}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--greenl);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ERROR STATE */
+.error-state{display:none;margin:16px;background:var(--redbg);border:1px solid var(--red);border-radius:var(--r);padding:20px;text-align:center}
+.error-state.show{display:block}
+
+/* SECTIONS */
+.section{margin:16px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:none}
+.section.show{display:block}
+.section-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.section-title{font-size:14px;font-weight:700}
+.section-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.section-body{padding:16px}
+
+/* FORM ELEMENTS */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.fg:last-child{margin-bottom:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.2px}
+.req::after{content:' *';color:var(--redl)}
+
+input,select,textarea{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 13px;width:100%;outline:none;-webkit-appearance:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,111,219,.1)}
+input[readonly]{background:var(--s3);color:var(--muted);border-color:var(--border)}
+input::placeholder,textarea::placeholder{color:var(--faint)}
+select option{background:var(--s2)}
+textarea{resize:none;min-height:90px;line-height:1.5}
+
+/* TIME BUTTONS */
+.time-btn{display:flex;align-items:center;gap:8px}
+.time-btn input{flex:1}
+.btn-now{padding:12px 14px;background:var(--teal);border:none;border-radius:var(--rs);color:white;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.btn-now:active{background:var(--teall)}
+
+/* HH DISPLAY */
+.hh-display{background:var(--s3);border:1px solid var(--border2);border-radius:var(--rs);padding:12px 13px;font-family:'DM Mono',monospace;font-size:15px;color:var(--teall);font-weight:500}
+
+/* MATERIALES */
+.mat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.mat-item{background:var(--s2);border:1px solid var(--border2);border-radius:var(--rs);padding:12px;position:relative}
+.mat-item-grid{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}
+.mat-item-desc{font-size:13px;color:var(--text);font-weight:500;margin-bottom:4px}
+.mat-item-meta{font-size:11px;color:var(--muted)}
+.mat-delete{background:var(--redbg);border:1px solid var(--red);border-radius:var(--rs);color:var(--redl);padding:6px 10px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.mat-total{background:var(--greenbg);border:1px solid var(--green);border-radius:var(--rs);padding:10px 13px;font-size:13px;font-weight:600;color:var(--greenl);text-align:right;font-family:'DM Mono',monospace}
+
+.btn-add{width:100%;padding:12px;background:var(--s2);border:1px dashed var(--border2);border-radius:var(--rs);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-add:active{background:var(--s3);border-color:var(--blue);color:var(--bluel)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:flex-end}
+.modal-overlay.show{display:flex}
+.modal{background:var(--s1);border-radius:16px 16px 0 0;padding:20px;width:100%;max-height:85vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px}
+.modal-actions{display:flex;gap:10px;margin-top:16px}
+
+/* FOTOS */
+.foto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.foto-thumb{aspect-ratio:1;border-radius:var(--rs);overflow:hidden;position:relative;background:var(--s2);border:1px solid var(--border)}
+.foto-thumb img{width:100%;height:100%;object-fit:cover}
+.foto-thumb .foto-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);border:none;border-radius:4px;color:white;padding:3px 6px;font-size:10px;cursor:pointer}
+.foto-empty{aspect-ratio:1;border-radius:var(--rs);background:var(--s2);border:1px dashed var(--border2);display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:22px}
+.btn-foto{width:100%;padding:14px;background:var(--bluebg);border:1px solid var(--blue);border-radius:var(--rs);color:var(--bluel);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-foto:active{background:var(--blue);color:white}
+input[type=file]{display:none}
+
+/* TOGGLES */
+.tgroup{display:flex;gap:8px}
+.tcard{flex:1;padding:12px;border-radius:var(--rs);border:1px solid var(--border);background:var(--s2);cursor:pointer;text-align:center;font-size:14px;font-weight:600;color:var(--muted);user-select:none;transition:all .15s}
+.tcard:active{transform:scale(.97)}
+.tcard.yes{background:var(--greenbg);border-color:var(--green);color:var(--greenl)}
+.tcard.no{background:var(--redbg);border-color:var(--red);color:var(--redl)}
+
+/* CHAR COUNT */
+.cc{font-size:10px;color:var(--faint);text-align:right;margin-top:3px}
+
+/* BOTTOM BUTTON */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:16px;background:var(--s1);border-top:1px solid var(--border);z-index:50}
+.btn-submit{width:100%;padding:16px;background:var(--green);border:none;border-radius:var(--rs);color:white;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:active{background:var(--greenl);transform:scale(.98)}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* SUCCESS */
+.success-screen{display:none;flex-direction:column;align-items:center;padding:48px 20px;text-align:center}
+.success-screen.show{display:flex}
+.s-icon{width:64px;height:64px;border-radius:50%;background:var(--greenbg);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:16px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.s-ticket{font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--greenl);margin:6px 0}
+
+/* INFO NOTE */
+.info-note{background:var(--bluebg);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px;display:flex;gap:7px}
+.info-note strong{color:var(--bluel)}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo-block">
+    <div class="logo-sq"></div>
+    <div class="logo-txt">enel <span>x</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="live">Formulario terreno</div>
+  </div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+
+<!-- LOADING STATE -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div style="font-size:13px;color:var(--muted)">Cargando datos del caso…</div>
+</div>
+
+<!-- ERROR STATE -->
+<div class="error-state" id="error-state">
+  <div style="font-size:28px;margin-bottom:12px">⚠️</div>
+  <div style="font-size:15px;font-weight:700;margin-bottom:8px">No se pudo cargar el caso</div>
+  <div style="font-size:13px;color:var(--muted);line-height:1.6" id="error-msg">Verifica que el link sea correcto o solicita uno nuevo al operador ACEX.</div>
+</div>
+
+<!-- CASE BANNER -->
+<div class="case-banner" id="case-banner">
+  <div class="cb-ticket" id="cb-ticket">—</div>
+  <div class="cb-grid">
+    <div class="cb-item"><div class="cb-key">Cliente</div><div class="cb-val" id="cb-cliente">—</div></div>
+    <div class="cb-item"><div class="cb-key">Terminal</div><div class="cb-val" id="cb-terminal">—</div></div>
+    <div class="cb-item"><div class="cb-key">Ubicación</div><div class="cb-val" id="cb-ubic">—</div></div>
+    <div class="cb-item"><div class="cb-key">Falla reportada</div><div class="cb-val" id="cb-falla">—</div></div>
+  </div>
+  <div class="warranty-chip" id="cb-warranty">—</div>
+</div>
+
+<!-- SECCIÓN 1: REGISTRO DE TIEMPO -->
+<div class="section" id="sec-tiempo">
+  <div class="section-hdr">
+    <div class="section-icon" style="background:var(--bluebg);border:1px solid var(--blue)">🕐</div>
+    <div>
+      <div class="section-title">Registro de tiempo</div>
+      <div class="section-sub">Marca tu hora de llegada y salida</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="fg">
+      <label class="req">Hora de llegada al sitio</label>
+      <div class="time-btn">
+        <input type="time" id="in-llegada"/>
+        <button class="btn-now" onclick="setNow('in-llegada')">Ahora</button>
+      </div>
+    </div>
+    <div class="fg">
+      <label>Hora de salida del sitio</label>
+      <div class="time-btn">
+        <input type="time" id="in-salida"/>
+        <button class="btn-now" onclick="setNow('in-salida')">Ahora</button>
+      </div>
+    </div>
+    <div class="fg">
+      <label>HH trabajadas (calculado automáticamente)</label>
+      <div class="hh-display" id="hh-display">— horas</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 2: DIAGNÓSTICO -->
+<div class="section" id="sec-diag">
+  <div class="section-hdr">
+    <div class="section-icon" style="background:var(--amberbg);border:1px solid var(--amber)">🔧</div>
+    <div>
+      <div class="section-title">Diagnóstico técnico</div>
+      <div class="section-sub">Describe lo que encontraste en terreno</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="fg">
+      <label class="req">Descripción técnica de la intervención</label>
+      <textarea id="in-desc-tec" placeholder="Describe detalladamente qué encontraste, qué hiciste y cómo lo resolviste…" rows="5" oninput="cc(this,'cc-desc',800)"></textarea>
+      <div class="cc" id="cc-desc">0 / 800 caracteres</div>
+    </div>
+    <div class="fg">
+      <label class="req">¿El terminal volvió a operar?</label>
+      <div class="tgroup">
+        <div class="tcard" id="op-si" onclick="setOp('si')">✅ Sí, operativo</div>
+        <div class="tcard" id="op-no" onclick="setOp('no')">❌ No resuelto</div>
+        <div class="tcard" id="op-par" onclick="setOp('parcial')">⚠️ Parcial</div>
+      </div>
+    </div>
+    <div class="fg">
+      <label>Observaciones adicionales</label>
+      <textarea id="in-obs" placeholder="Recomendaciones, próximos pasos, materiales que quedan pendientes…" rows="3" oninput="cc(this,'cc-obs',400)"></textarea>
+      <div class="cc" id="cc-obs">0 / 400 caracteres</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 3: MATERIALES -->
+<div class="section" id="sec-mat">
+  <div class="section-hdr">
+    <div class="section-icon" style="background:var(--tealbg);border:1px solid var(--teal)">📦</div>
+    <div>
+      <div class="section-title">Materiales utilizados</div>
+      <div class="section-sub">Registra cada ítem con cantidad y costo</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="info-note">
+      <span>💡</span>
+      <div>Si no usaste materiales, puedes dejar esta sección vacía y continuar.</div>
+    </div>
+    <div class="mat-list" id="mat-list"></div>
+    <div class="mat-total" id="mat-total" style="display:none">Total materiales: $0</div>
+    <button class="btn-add" onclick="abrirModalMat()">+ Agregar material</button>
+  </div>
+</div>
+
+<!-- SECCIÓN 4: FOTOS -->
+<div class="section" id="sec-fotos">
+  <div class="section-hdr">
+    <div class="section-icon" style="background:var(--purplebg,#120a24);border:1px solid #6d28d9">📷</div>
+    <div>
+      <div class="section-title">Registro fotográfico</div>
+      <div class="section-sub">Saca fotos antes y después de la intervención</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="info-note">
+      <span>📸</span>
+      <div>Las fotos se guardan en el caso. Recomendado: <strong>mínimo 2 fotos</strong> — antes y después.</div>
+    </div>
+    <div class="foto-grid" id="foto-grid">
+      <div class="foto-empty">📷</div>
+    </div>
+    <button class="btn-foto" onclick="document.getElementById('file-input').click()">
+      📷 Tomar foto o elegir de galería
+    </button>
+    <input type="file" id="file-input" accept="image/*" capture="environment" multiple onchange="agregarFotos(event)"/>
+    <div style="font-size:11px;color:var(--faint);margin-top:8px;text-align:center" id="foto-count">0 fotos agregadas</div>
+  </div>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div class="success-screen" id="success-screen">
+  <div class="s-icon">✅</div>
+  <div style="font-size:13px;color:var(--muted);font-weight:500">Registro completado</div>
+  <div class="s-ticket" id="s-ticket">—</div>
+  <div style="font-size:13px;color:var(--muted);max-width:300px;line-height:1.7;margin-top:8px">
+    Los datos fueron enviados correctamente. El operador ACEX ha sido notificado.
+  </div>
+  <div style="margin-top:24px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:16px;width:100%;max-width:360px" id="s-resumen"></div>
+</div>
+
+<!-- BOTTOM SUBMIT BUTTON -->
+<div class="bottom-bar" id="bottom-bar" style="display:none">
+  <button class="btn-submit" id="btn-submit" onclick="submitTerreno()">
+    ✅ Enviar registro de terreno
+  </button>
+</div>
+
+<!-- MODAL: AGREGAR MATERIAL -->
+<div class="modal-overlay" id="modal-mat">
+  <div class="modal">
+    <div class="modal-title">Agregar material</div>
+    <div class="fg">
+      <label class="req">Descripción del material</label>
+      <input type="text" id="mat-desc" placeholder="Ej: Fusible 63A, Cable THHN 4mm…"/>
+    </div>
+    <div class="row2">
+      <div class="fg">
+        <label class="req">Cantidad</label>
+        <input type="number" id="mat-qty" placeholder="0" min="1"/>
+      </div>
+      <div class="fg">
+        <label>Costo unitario ($)</label>
+        <input type="number" id="mat-cost" placeholder="0" min="0"/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-add" style="border:1px solid var(--border)" onclick="cerrarModalMat()">Cancelar</button>
+      <button class="btn-submit" style="position:static;padding:12px 20px;font-size:14px;border-radius:var(--rs)" onclick="guardarMaterial()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+const T = {
+  ticket: null, token: null, recordId: null,
+  caso: null, materiales: [], fotos: [], operativo: null
+};
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search);
+  T.ticket = params.get('ticket');
+  T.token  = params.get('token');
+
+  if (!T.ticket || !T.token) {
+    showError('Link inválido. Solicita un nuevo link al operador ACEX.');
+    return;
+  }
+
+  await cargarCaso();
+};
+
+async function cargarCaso() {
+  try {
+    const resp = await fetch(`/.netlify/functions/obtener-caso?ticket=${encodeURIComponent(T.ticket)}&token=${encodeURIComponent(T.token)}`);
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      showError(data.error === 'Token inválido'
+        ? 'Link no autorizado. Solicita un nuevo link al operador ACEX.'
+        : 'Caso no encontrado. Verifica el link.');
+      return;
+    }
+
+    T.recordId = data.id;
+    T.caso     = data.fields;
+    mostrarCaso();
+
+  } catch(e) {
+    showError('No se pudo conectar. Verifica tu conexión a internet.');
+  }
+}
+
+function mostrarCaso() {
+  document.getElementById('loading').style.display = 'none';
+
+  // Banner del caso
+  const f = T.caso;
+  document.getElementById('cb-ticket').textContent   = f['Ticket'] || '—';
+  document.getElementById('cb-cliente').textContent  = f['Cliente nombre'] || '—';
+  document.getElementById('cb-terminal').textContent = f['Terminal nombre'] || f['Terminal ID'] || '—';
+  document.getElementById('cb-ubic').textContent     = f['Ubicacion'] || '—';
+  document.getElementById('cb-falla').textContent    = f['Tipo falla'] || '—';
+
+  const wChip = document.getElementById('cb-warranty');
+  const wMap = {
+    'GARANTÍA VIGENTE':           { cls:'garantia',  txt:'✅ GARANTÍA VIGENTE' },
+    'GARANTÍA EXTENDIDA':         { cls:'extendida', txt:'✅ GARANTÍA EXTENDIDA' },
+    'FUERA DE GARANTÍA':          { cls:'fuera',     txt:'✗ FUERA DE GARANTÍA' },
+    'SINIESTRO — CARGO CLIENTE':  { cls:'siniestro', txt:'🚨 SINIESTRO' },
+  };
+  const w = wMap[f['Resultado garantia']];
+  if (w) { wChip.className = 'warranty-chip ' + w.cls; wChip.textContent = w.txt; }
+
+  document.getElementById('case-banner').classList.add('show');
+  document.getElementById('sec-tiempo').classList.add('show');
+  document.getElementById('sec-diag').classList.add('show');
+  document.getElementById('sec-mat').classList.add('show');
+  document.getElementById('sec-fotos').classList.add('show');
+  document.getElementById('bottom-bar').style.display = 'block';
+  document.getElementById('prog').style.width = '25%';
+
+  // Hora de llegada automática
+  setNow('in-llegada');
+}
+
+function showError(msg) {
+  document.getElementById('loading').style.display = 'none';
+  const el = document.getElementById('error-state');
+  el.classList.add('show');
+  document.getElementById('error-msg').textContent = msg;
+}
+
+// ── TIEMPO ─────────────────────────────────────────────────────────────────
+function setNow(id) {
+  const now = new Date();
+  document.getElementById(id).value = now.toTimeString().slice(0,5);
+  calcHH();
+}
+
+function calcHH() {
+  const ll = document.getElementById('in-llegada').value;
+  const sa = document.getElementById('in-salida').value;
+  const el = document.getElementById('hh-display');
+  if (ll && sa) {
+    const [lh,lm] = ll.split(':').map(Number);
+    const [sh,sm] = sa.split(':').map(Number);
+    const mins = (sh*60+sm) - (lh*60+lm);
+    if (mins > 0) {
+      const h = Math.floor(mins/60);
+      const m = mins%60;
+      el.textContent = `${h}h ${m}m (${(mins/60).toFixed(2)} HH)`;
+      el.style.color = 'var(--greenl)';
+      document.getElementById('prog').style.width = '50%';
+    } else {
+      el.textContent = 'Verifica los horarios';
+      el.style.color = 'var(--redl)';
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('in-llegada').addEventListener('change', calcHH);
+  document.getElementById('in-salida').addEventListener('change', calcHH);
+});
+
+// ── OPERATIVO ──────────────────────────────────────────────────────────────
+function setOp(val) {
+  T.operativo = val;
+  document.getElementById('op-si').className  = 'tcard' + (val==='si'     ? ' yes' : '');
+  document.getElementById('op-no').className  = 'tcard' + (val==='no'     ? ' no'  : '');
+  document.getElementById('op-par').className = 'tcard' + (val==='parcial'? ' yes' : '');
+  document.getElementById('prog').style.width = '75%';
+}
+
+// ── MATERIALES ─────────────────────────────────────────────────────────────
+function abrirModalMat() {
+  document.getElementById('mat-desc').value = '';
+  document.getElementById('mat-qty').value  = '';
+  document.getElementById('mat-cost').value = '';
+  document.getElementById('modal-mat').classList.add('show');
+  setTimeout(() => document.getElementById('mat-desc').focus(), 100);
+}
+
+function cerrarModalMat() {
+  document.getElementById('modal-mat').classList.remove('show');
+}
+
+function guardarMaterial() {
+  const desc = document.getElementById('mat-desc').value.trim();
+  const qty  = parseInt(document.getElementById('mat-qty').value)  || 0;
+  const cost = parseFloat(document.getElementById('mat-cost').value) || 0;
+  if (!desc || qty < 1) { alert('Ingresa descripción y cantidad'); return; }
+  T.materiales.push({ desc, qty, cost, total: qty * cost });
+  cerrarModalMat();
+  renderMateriales();
+}
+
+function eliminarMaterial(i) {
+  T.materiales.splice(i, 1);
+  renderMateriales();
+}
+
+function renderMateriales() {
+  const list = document.getElementById('mat-list');
+  const totalEl = document.getElementById('mat-total');
+  list.innerHTML = '';
+  let total = 0;
+  T.materiales.forEach((m, i) => {
+    total += m.total;
+    list.innerHTML += `
+      <div class="mat-item">
+        <div class="mat-item-desc">${m.desc}</div>
+        <div class="mat-item-grid">
+          <div class="mat-item-meta">Cant: ${m.qty} × $${m.cost.toLocaleString('es-CL')} = $${m.total.toLocaleString('es-CL')}</div>
+          <button class="mat-delete" onclick="eliminarMaterial(${i})">✕</button>
+        </div>
+      </div>`;
+  });
+  if (T.materiales.length > 0) {
+    totalEl.style.display = 'block';
+    totalEl.textContent = `Total materiales: $${total.toLocaleString('es-CL')}`;
+  } else {
+    totalEl.style.display = 'none';
+  }
+}
+
+// ── FOTOS ──────────────────────────────────────────────────────────────────
+function agregarFotos(event) {
+  const files = Array.from(event.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      T.fotos.push({ name: file.name, data: e.target.result });
+      renderFotos();
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function eliminarFoto(i) {
+  T.fotos.splice(i, 1);
+  renderFotos();
+}
+
+function renderFotos() {
+  const grid = document.getElementById('foto-grid');
+  grid.innerHTML = '';
+  T.fotos.forEach((f, i) => {
+    grid.innerHTML += `
+      <div class="foto-thumb">
+        <img src="${f.data}" alt="foto ${i+1}"/>
+        <button class="foto-del" onclick="eliminarFoto(${i})">✕</button>
+      </div>`;
+  });
+  if (T.fotos.length === 0) {
+    grid.innerHTML = '<div class="foto-empty">📷</div>';
+  }
+  document.getElementById('foto-count').textContent = `${T.fotos.length} foto${T.fotos.length !== 1 ? 's' : ''} agregada${T.fotos.length !== 1 ? 's' : ''}`;
+}
+
+// ── CHAR COUNT ─────────────────────────────────────────────────────────────
+function cc(el, id, max) {
+  document.getElementById(id).textContent = el.value.length + ' / ' + max + ' caracteres';
+  if (el.value.length > max) el.value = el.value.slice(0, max);
+}
+
+// ── SUBMIT ─────────────────────────────────────────────────────────────────
+async function submitTerreno() {
+  const llegada = document.getElementById('in-llegada').value;
+  const salida  = document.getElementById('in-salida').value;
+  const descTec = document.getElementById('in-desc-tec').value.trim();
+
+  if (!llegada)  { alert('Ingresa la hora de llegada'); return; }
+  if (!descTec)  { alert('Ingresa la descripción técnica'); return; }
+  if (!T.operativo) { alert('Indica si el terminal volvió a operar'); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando…';
+
+  // Calcular HH
+  let hhTotal = 0;
+  if (llegada && salida) {
+    const [lh,lm] = llegada.split(':').map(Number);
+    const [sh,sm] = salida.split(':').map(Number);
+    hhTotal = parseFloat(((sh*60+sm - lh*60-lm)/60).toFixed(2));
+  }
+
+  // Calcular total materiales
+  const totalMat = T.materiales.reduce((s,m) => s+m.total, 0);
+
+  // Armar string de materiales
+  const matStr = T.materiales.length > 0
+    ? T.materiales.map(m => `${m.desc} × ${m.qty} = $${m.total.toLocaleString('es-CL')}`).join('\n')
+    : 'Sin materiales';
+
+  const opMap = { si:'Operativo', no:'No resuelto', parcial:'Parcialmente operativo' };
+
+  const campos = {
+    "Hora llegada":         llegada,
+    "Hora salida":          salida || '',
+    "HH total":             hhTotal,
+    "Materiales":           matStr,
+    "Descripcion tecnica":  descTec,
+    "Terminal operativo":   opMap[T.operativo] || '',
+    "Observaciones terreno":document.getElementById('in-obs').value || '',
+    "Fotos count":          T.fotos.length,
+    "Fecha cierre terreno": new Date().toLocaleString('es-CL', {timeZone:'America/Santiago', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}),
+    "Estado":               T.operativo === 'si' ? 'Resuelto en terreno' : T.operativo === 'parcial' ? 'Parcialmente resuelto' : 'Pendiente escalación',
+  };
+
+  try {
+    const resp = await fetch('/.netlify/functions/actualizar-caso', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recordId: T.recordId, token: T.token, campos }),
+    });
+
+    const data = await resp.json();
+
+    if (resp.ok) {
+      mostrarExito(hhTotal, totalMat, opMap[T.operativo]);
+    } else {
+      alert('Error al guardar: ' + JSON.stringify(data.error));
+      btn.disabled = false;
+      btn.textContent = '✅ Enviar registro de terreno';
+    }
+  } catch(e) {
+    alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
+    btn.disabled = false;
+    btn.textContent = '✅ Enviar registro de terreno';
+  }
+}
+
+function mostrarExito(hh, totalMat, operativo) {
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.getElementById('case-banner').style.display = 'none';
+  document.getElementById('bottom-bar').style.display = 'none';
+  document.getElementById('prog').style.width = '100%';
+
+  document.getElementById('s-ticket').textContent = T.ticket;
+  document.getElementById('s-resumen').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">HH trabajadas</span><span style="font-family:'DM Mono',monospace;color:var(--teall)">${hh} HH</span></div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px"><span style="color:var(--muted)">Total materiales</span><span style="font-family:'DM Mono',monospace;color:var(--amberl)">$${totalMat.toLocaleString('es-CL')}</span></div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px"><span style="color:var(--muted)">Fotos registradas</span><span style="font-family:'DM Mono',monospace">${T.fotos.length}</span></div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px"><span style="color:var(--muted)">Estado terminal</span><span style="font-weight:600;color:${T.operativo==='si'?'var(--greenl)':T.operativo==='parcial'?'var(--amberl)':'var(--redl)'}">${operativo}</span></div>
+    </div>`;
+
+  document.getElementById('success-screen').classList.add('show');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>ACEX · Apertura de Caso — Electroterminales</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0b0f14; --s1:#111720; --s2:#18202c; --s3:#1e2a38; --s4:#263548;
+  --border:#263040; --border2:#2e3d52; --text:#dde6f0; --muted:#6b839e; --faint:#3a4f66;
+  --green:#007140; --greenl:#00a85e; --greenbg:#071a0f; --greenb:#0d3320; --lime:#78be20;
+  --blue:#1a6fdb; --bluel:#4d9fff; --bluebg:#06152a;
+  --amber:#c96d00; --amberl:#f59e0b; --amberbg:#1a0e00;
+  --red:#c0392b; --redl:#f05040; --redbg:#1a0505;
+  --purple:#6d28d9; --purplel:#a78bfa; --purplebg:#120a24;
+  --teal:#0d7377; --teall:#2ea09a; --tealbg:#041415;
+  --r:10px; --rs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px}
+.logo-block{display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rs)}
+.logo-sq{width:18px;height:18px;background:#5b4dc8;border-radius:3px}
+.logo-txt{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.logo-txt span{color:#5b4dc8}
+.topbar-title{font-size:13px;color:var(--muted);margin-left:14px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.live{display:flex;align-items:center;gap:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--greenl)}
+.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--greenl);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.ticket-chip{font-family:'DM Mono',monospace;font-size:12px;padding:5px 12px;background:var(--s2);border:1px solid var(--border2);border-radius:20px;color:var(--text);font-weight:500;transition:all .3s}
+.ticket-chip.ready{border-color:var(--greenl);color:var(--greenl);background:var(--greenbg)}
+
+.progress-bar{height:2px;background:var(--border)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--lime));transition:width .4s ease}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:240px 1fr 272px;min-height:calc(100vh - 54px)}
+
+/* SIDEBAR */
+.sidebar{background:var(--s1);border-right:1px solid var(--border);padding:18px 14px;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto}
+.slabel{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--faint);text-transform:uppercase;margin-bottom:8px}
+.step{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--rs);margin-bottom:2px;cursor:pointer;transition:background .15s}
+.step.active{background:var(--s3)}
+.step:hover:not(.active){background:var(--s2)}
+.snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:var(--s3);border:1px solid var(--border2);color:var(--muted);font-family:'DM Mono',monospace}
+.step.active .snum,.step.done .snum{background:var(--greenbg);border-color:var(--green);color:var(--greenl)}
+.step.done .snum{font-size:11px}
+.slabel2{font-size:12px;font-weight:500;color:var(--muted)}
+.step.active .slabel2{color:var(--text)}
+.sconn{width:1px;height:8px;background:var(--border);margin:1px 0 1px 20px}
+
+.wbox{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-top:6px}
+.wbadge{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:var(--rs);font-size:11px;font-weight:700;margin-bottom:6px;font-family:'DM Mono',monospace}
+.wbadge.garantia{background:var(--greenbg);border:1px solid var(--green);color:var(--greenl)}
+.wbadge.extendida{background:var(--greenbg);border:1px solid var(--lime);color:var(--lime)}
+.wbadge.fuera,.wbadge.siniestro{background:var(--redbg);border:1px solid var(--red);color:var(--redl)}
+.wdesc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* MAIN */
+.main{padding:24px 28px;overflow-y:auto}
+.sec-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.sec-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sec-title{font-size:17px;font-weight:700}
+.sec-sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+.fblock{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;transition:border-color .2s}
+.fblock:hover{border-color:var(--border2)}
+.btitle{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.btitle::before{content:'';width:3px;height:11px;border-radius:2px;background:var(--blue);flex-shrink:0}
+.btitle.green::before{background:var(--green)}
+.btitle.amber::before{background:var(--amber)}
+.btitle.red::before{background:var(--red)}
+.btitle.purple::before{background:var(--purple)}
+.btitle.teal::before{background:var(--teal)}
+
+.row{display:grid;gap:12px;margin-bottom:12px}
+.row:last-child{margin-bottom:0}
+.row.c2{grid-template-columns:1fr 1fr}
+.row.c3{grid-template-columns:1fr 1fr 1fr}
+.row.c1{grid-template-columns:1fr}
+.fg{display:flex;flex-direction:column;gap:4px}
+label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px}
+.req::after{content:' *';color:var(--redl)}
+
+input,select,textarea{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 11px;width:100%;transition:border-color .15s,box-shadow .15s;outline:none;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,111,219,.12)}
+input[readonly]{background:var(--s3);color:var(--muted);cursor:default;border-color:var(--border)}
+input[readonly]:focus{border-color:var(--border);box-shadow:none}
+input::placeholder,textarea::placeholder{color:var(--faint)}
+select option{background:var(--s2)}
+select:disabled{opacity:.45;cursor:not-allowed}
+textarea{resize:vertical;min-height:76px;line-height:1.5}
+
+/* Autofill highlight */
+.autofill{border-color:var(--teal)!important;background:var(--tealbg)!important;color:var(--teall)!important}
+.autofill-wrap{position:relative}
+.autofill-tag{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:9px;font-weight:700;color:var(--teal);background:var(--tealbg);border:1px solid var(--teal);border-radius:3px;padding:1px 5px;pointer-events:none;font-family:'DM Mono',monospace}
+
+/* Ticket display */
+.ticket-display-big{background:var(--greenbg);border:1px solid var(--greenb);border-radius:var(--rs);padding:10px 14px;font-family:'DM Mono',monospace;font-size:14px;color:var(--greenl);font-weight:500;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+.ticket-display-big.empty{background:var(--s3);border-color:var(--border);color:var(--faint);font-size:12px;font-family:'DM Sans',monospace}
+
+/* Toggles */
+.tgroup{display:flex;gap:7px}
+.tcard{flex:1;padding:9px 12px;border-radius:var(--rs);border:1px solid var(--border);background:var(--s2);cursor:pointer;text-align:center;font-size:13px;font-weight:600;transition:all .15s;color:var(--muted);user-select:none}
+.tcard:hover{border-color:var(--border2);color:var(--text)}
+.tcard.yes{background:var(--greenbg);border-color:var(--green);color:var(--greenl)}
+.tcard.no{background:var(--redbg);border-color:var(--red);color:var(--redl)}
+.tcard.neutral{background:var(--s3);border-color:var(--border2);color:var(--text)}
+.tcard.sm{font-size:11px;padding:7px 8px}
+
+.alert-box{display:none;margin-top:10px;background:var(--redbg);border:1px solid var(--red);border-radius:var(--rs);padding:11px 13px;font-size:12px;color:var(--redl);line-height:1.5;gap:7px;align-items:flex-start}
+.alert-box.show{display:flex}
+
+/* warranty result inline */
+.wresult{display:none;border-radius:var(--rs);padding:12px 14px;margin-top:10px}
+.wresult.show{display:block}
+.wresult.garantia{background:var(--greenbg);border:1px solid var(--green)}
+.wresult.extendida{background:var(--greenbg);border:1px solid var(--lime)}
+.wresult.fuera,.wresult.siniestro{background:var(--redbg);border:1px solid var(--red)}
+.wresult-title{font-size:12px;font-weight:700;margin-bottom:3px}
+.wresult.garantia .wresult-title,.wresult.extendida .wresult-title{color:var(--greenl)}
+.wresult.fuera .wresult-title,.wresult.siniestro .wresult-title{color:var(--redl)}
+.wresult-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* Info note */
+.info-note{background:var(--bluebg);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 13px;font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:12px;display:flex;gap:7px}
+.info-note strong{color:var(--bluel)}
+
+/* NAV */
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:18px 0 2px;border-top:1px solid var(--border);margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 2px 12px rgba(0,113,64,.3)}
+.btn-primary:hover{background:var(--greenl);transform:translateY(-1px)}
+.btn-secondary{background:var(--s2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--s3);border-color:var(--border2)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+.step-label-nav{font-size:11px;color:var(--faint)}
+
+/* RIGHT PANEL */
+.rpanel{background:var(--s1);border-left:1px solid var(--border);padding:18px 14px;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto}
+.ptitle{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--faint);text-transform:uppercase;margin-bottom:8px}
+.psec{margin-bottom:20px}
+.irow{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);gap:8px}
+.irow:last-child{border-bottom:none}
+.ikey{font-size:11px;color:var(--muted);flex-shrink:0}
+.ival{font-size:11px;color:var(--text);font-weight:500;text-align:right;font-family:'DM Mono',monospace;font-size:10px}
+.ival.mt{color:var(--teall)}
+.ival.empty{color:var(--faint);font-family:'DM Sans',sans-serif;font-weight:400;font-size:11px}
+
+.chk-item{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:11px;color:var(--faint);transition:color .2s}
+.chk-item.done{color:var(--text)}
+.chk-box{width:14px;height:14px;border-radius:3px;border:1px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .2s}
+.chk-item.done .chk-box{background:var(--greenbg);border-color:var(--green);color:var(--greenl)}
+
+.hint{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);padding:11px;font-size:11px;color:var(--muted);line-height:1.6}
+.hint strong{color:var(--text);display:block;margin-bottom:3px}
+
+/* PAGE / ANIMATION */
+.page{display:none}
+.page.active{display:block;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+/* SUCCESS */
+.success-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 30px;text-align:center}
+.sicon{width:60px;height:60px;border-radius:50%;background:var(--greenbg);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.s-ticket{font-family:'DM Mono',monospace;font-size:26px;font-weight:700;color:var(--greenl);margin:8px 0;letter-spacing:1px}
+.scard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin:16px 0;text-align:left;width:100%;max-width:500px}
+.srow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.srow:last-child{border-bottom:none}
+.sk{color:var(--muted)}.sv{color:var(--text);font-weight:500;font-family:'DM Mono',monospace;font-size:11px}
+
+/* CHAR COUNT */
+.cc{font-size:10px;color:var(--faint);text-align:right;margin-top:2px}
+
+/* MOBILE */
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar,.rpanel{display:none}.main{padding:14px}.row.c2,.row.c3{grid-template-columns:1fr}}
+@media(max-width:600px){.topbar-title{display:none}.live span{display:none}}
+</style>
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════════════
+  DATOS DE REFERENCIA (en producción: reemplazar por API)
+  ═══════════════════════════════════════════════════════════ -->
+<script>
+const DB = {
+  clientes: [
+    { id:'TRB', nombre:'Transbus S.A.',        rut:'76.543.210-1' },
+    { id:'MBU', nombre:'Metbus Ltda.',          rut:'77.123.456-8' },
+    { id:'SUB', nombre:'Subus Chile S.A.',      rut:'76.890.123-5' },
+    { id:'RED', nombre:'Redbus Urbano S.A.',    rut:'76.234.567-9' },
+    { id:'SIT', nombre:'SIT Santiago Ltda.',    rut:'77.456.789-2' },
+    { id:'BUS', nombre:'Buses Vule S.A.',       rut:'76.678.901-3' },
+  ],
+  terminales: {
+    TRB: [
+      { id:'ET-TRB-001', nombre:'Terminal Pudahuel Norte',    ubic:'Av. El Colorado 1240, Pudahuel',       region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:12, pm:'2022-11-15', jefe:'Carlos Muñoz',   tel:'+56 9 8765 4321', email:'c.munoz@transbus.cl' },
+      { id:'ET-TRB-002', nombre:'Terminal Lo Espejo',         ubic:'Av. Central 890, Lo Espejo',          region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:8,  pm:'2023-03-01', jefe:'Ana Soto',       tel:'+56 9 7654 3210', email:'a.soto@transbus.cl' },
+      { id:'ET-TRB-003', nombre:'Patio Renca',                ubic:'Av. Renca 450, Renca',                region:'Metropolitana', tipo:'Cargador rápido DC',              cargadores:4,  pm:'2024-01-10', jefe:'Pedro Vega',     tel:'+56 9 6543 2109', email:'p.vega@transbus.cl' },
+    ],
+    MBU: [
+      { id:'ET-MBU-001', nombre:'Terminal Maipú',             ubic:'Av. Rinconada 1500, Maipú',           region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:16, pm:'2022-06-20', jefe:'Luis Herrera',   tel:'+56 9 9876 5432', email:'l.herrera@metbus.cl' },
+      { id:'ET-MBU-002', nombre:'Terminal Quilicura',         ubic:'Av. Matta 2300, Quilicura',           region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:10, pm:'2023-08-14', jefe:'Rosa Díaz',      tel:'+56 9 8765 1234', email:'r.diaz@metbus.cl' },
+      { id:'ET-MBU-003', nombre:'Subestación Independencia',  ubic:'Av. Independencia 3400, Independencia',region:'Metropolitana',tipo:'Transformador MT/BT',             cargadores:0,  pm:'2021-12-01', jefe:'Jorge Palma',    tel:'+56 9 5432 1098', email:'j.palma@metbus.cl' },
+    ],
+    SUB: [
+      { id:'ET-SUB-001', nombre:'Terminal Pudahuel Sur',      ubic:'Av. Américo Vespucio 8900, Pudahuel', region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:20, pm:'2023-02-28', jefe:'María Torres',   tel:'+56 9 7890 1234', email:'m.torres@subus.cl' },
+      { id:'ET-SUB-002', nombre:'Terminal San Bernardo',      ubic:'Av. Padre Hurtado 1200, San Bernardo',region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:14, pm:'2022-09-05', jefe:'Héctor Rojas',   tel:'+56 9 6789 0123', email:'h.rojas@subus.cl' },
+    ],
+    RED: [
+      { id:'ET-RED-001', nombre:'Terminal Valparaíso Centro', ubic:'Av. Argentina 1800, Valparaíso',      region:'Valparaíso',    tipo:'Terminal de carga bus eléctrico', cargadores:8,  pm:'2023-11-20', jefe:'Sandra López',   tel:'+56 9 5678 9012', email:'s.lopez@redbus.cl' },
+      { id:'ET-RED-002', nombre:'Terminal Viña del Mar',      ubic:'Av. Sporting 180, Viña del Mar',     region:'Valparaíso',    tipo:'Cargador rápido DC',              cargadores:6,  pm:'2024-02-14', jefe:'Pablo Mora',     tel:'+56 9 4567 8901', email:'p.mora@redbus.cl' },
+    ],
+    SIT: [
+      { id:'ET-SIT-001', nombre:'Terminal La Florida',        ubic:'Av. Vicuña Mackenna 9800, La Florida',region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:18, pm:'2022-04-10', jefe:'Claudia Reyes',  tel:'+56 9 3456 7890', email:'c.reyes@sitsantiago.cl' },
+      { id:'ET-SIT-002', nombre:'Terminal Peñalolén',         ubic:'Av. Tobalaba 13500, Peñalolén',      region:'Metropolitana', tipo:'Equipo de respaldo / generador',  cargadores:2,  pm:'2023-06-30', jefe:'Roberto Castro', tel:'+56 9 2345 6789', email:'r.castro@sitsantiago.cl' },
+    ],
+    BUS: [
+      { id:'ET-BUS-001', nombre:'Terminal Ñuñoa',             ubic:'Av. Irarrazaval 5100, Ñuñoa',        region:'Metropolitana', tipo:'Cargador AC punto fijo',          cargadores:6,  pm:'2024-05-01', jefe:'Fernanda Silva', tel:'+56 9 1234 5678', email:'f.silva@busesvule.cl' },
+    ],
+  },
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+const S = {
+  page:1, clienteId:null, terminalId:null, terminal:null,
+  siniestro:null, extendida:null, resuelto:null, notificar:null,
+  warranty:null, ticket:null, seqCounter:{}
+};
+
+// ── TICKET GENERATOR ───────────────────────────────────────────────────────
+function genTicket() {
+  if (!S.clienteId) return null;
+  const d = new Date();
+  const fecha = d.getFullYear().toString() +
+    String(d.getMonth()+1).padStart(2,'0') +
+    String(d.getDate()).padStart(2,'0');
+  const key = fecha + S.clienteId;
+  S.seqCounter[key] = (S.seqCounter[key] || 0) + 1;
+  return `TKT-${fecha}-${S.clienteId}-${String(S.seqCounter[key]).padStart(3,'0')}`;
+}
+
+// ── WARRANTY CALC ──────────────────────────────────────────────────────────
+function calcWarranty() {
+  const pm = S.terminal?.pm;
+  let result=null, title='', desc='';
+
+  if (S.siniestro==='si') {
+    result='siniestro'; title='🚨 SINIESTRO — Cargo al cliente';
+    desc='Los siniestros siempre son cargo del cliente sin importar la garantía. Se generará cotización al cierre.';
+  } else if (S.extendida==='si') {
+    result='extendida'; title='✅ GARANTÍA EXTENDIDA';
+    desc='El cliente tiene garantía extendida contratada. Cobertura total sin cargo.';
+  } else if (pm) {
+    const meses = Math.floor((new Date()-new Date(pm))/(1000*60*60*24*30.44));
+    if (meses<=24) {
+      result='garantia'; title='✅ GARANTÍA VIGENTE';
+      desc=`${meses} meses desde la PM. Dentro de los 24 meses estándar. Sin cargo al cliente.`;
+    } else {
+      result='fuera'; title='✗ FUERA DE GARANTÍA';
+      desc=`${meses} meses desde la PM (${meses-24} meses fuera del período). Cargo al cliente, se generará cotización.`;
+    }
+  }
+  S.warranty=result;
+
+  // Update inline
+  const el=document.getElementById('wr-inline');
+  if(el){ el.className='wresult'+(result?' show '+result:''); el.querySelector('.wresult-title').textContent=title; el.querySelector('.wresult-desc').textContent=desc; }
+
+  // Right panel
+  const rp=document.getElementById('wr-right'); const rpp=document.getElementById('wr-right-pending');
+  if(rp){ if(result){ rp.className='wresult show '+result; rp.querySelector('.wresult-title').textContent=title; rp.querySelector('.wresult-desc').textContent=desc; if(rpp) rpp.style.display='none'; } else { rp.className='wresult'; if(rpp) rpp.style.display='block'; } }
+
+  // Sidebar badge
+  const sb=document.getElementById('ws-badge'), sp=document.getElementById('ws-pending');
+  if(result){ sb?.parentElement.classList.remove('hidden'); if(sp) sp.style.display='none'; if(sb){ sb.className='wbadge '+result; sb.textContent=title; } const wd=document.getElementById('ws-desc'); if(wd) wd.textContent=desc; }
+  updateComplete();
+}
+
+// ── CLIENT CHANGE ──────────────────────────────────────────────────────────
+function onClienteChange() {
+  const sel = document.getElementById('sel-cliente');
+  S.clienteId = sel.value || null;
+  S.terminalId = null; S.terminal = null;
+  S.warranty = null;
+
+  // Populate terminal dropdown
+  const tsel = document.getElementById('sel-terminal');
+  tsel.innerHTML = '<option value="">Seleccionar terminal…</option>';
+  tsel.disabled = !S.clienteId;
+
+  if (S.clienteId) {
+    const terms = DB.terminales[S.clienteId] || [];
+    terms.forEach(t => { const o=document.createElement('option'); o.value=t.id; o.textContent=`${t.id} — ${t.nombre}`; tsel.appendChild(o); });
+    // generate ticket
+    S.ticket = genTicket();
+    document.getElementById('ticket-chip').textContent = S.ticket;
+    document.getElementById('ticket-chip').className = 'ticket-chip ready';
+    document.getElementById('ticket-big').textContent = S.ticket;
+    document.getElementById('ticket-big').className = 'ticket-display-big';
+  } else {
+    S.ticket = null;
+    document.getElementById('ticket-chip').textContent = '— sin ticket';
+    document.getElementById('ticket-chip').className = 'ticket-chip';
+    document.getElementById('ticket-big').textContent = 'Se generará al seleccionar el cliente';
+    document.getElementById('ticket-big').className = 'ticket-display-big empty';
+  }
+
+  clearTerminalFields();
+  updatePreview();
+  updateComplete();
+}
+
+// ── TERMINAL CHANGE ────────────────────────────────────────────────────────
+function onTerminalChange() {
+  const tsel = document.getElementById('sel-terminal');
+  S.terminalId = tsel.value || null;
+  if (!S.terminalId) { clearTerminalFields(); return; }
+
+  const terms = DB.terminales[S.clienteId] || [];
+  S.terminal = terms.find(t => t.id === S.terminalId) || null;
+
+  if (S.terminal) {
+    setAF('af-ubicacion',  S.terminal.ubic);
+    setAF('af-region',     S.terminal.region);
+    setAF('af-tipo',       S.terminal.tipo);
+    setAF('af-cargadores', S.terminal.cargadores);
+    setAF('af-pm',         formatDate(S.terminal.pm));
+    // PM months
+    const meses = Math.floor((new Date()-new Date(S.terminal.pm))/(1000*60*60*24*30.44));
+    const mEl = document.getElementById('af-meses');
+    mEl.value = meses + ' meses';
+    mEl.className = 'autofill';
+    mEl.style.color = meses<=24 ? 'var(--greenl)' : 'var(--redl)';
+    // Jefe de patio pre-fill (editable)
+    document.getElementById('in-jefe').value  = S.terminal.jefe;
+    document.getElementById('in-tel').value   = S.terminal.tel;
+    document.getElementById('in-email').value = S.terminal.email;
+  }
+  calcWarranty();
+  updatePreview();
+  updateComplete();
+}
+
+function setAF(id, val) {
+  const el = document.getElementById(id);
+  if (el) { el.value = val; el.className = 'autofill'; }
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,dd] = d.split('-');
+  return `${dd}/${m}/${y}`;
+}
+
+function clearTerminalFields() {
+  ['af-ubicacion','af-region','af-tipo','af-cargadores','af-pm','af-meses'].forEach(id=>{
+    const el=document.getElementById(id); if(el){ el.value=''; el.className=''; }
+  });
+  S.terminal=null; S.warranty=null;
+  calcWarranty(); updatePreview();
+}
+
+// ── TOGGLE ─────────────────────────────────────────────────────────────────
+function tog(key, val) {
+  S[key]=val;
+  if(key==='siniestro'){
+    tc('sin-si', val==='si'?'yes':'');
+    tc('sin-no', val==='no'?'no':'');
+    const alrt=document.getElementById('sin-alert');
+    if(alrt) alrt.className='alert-box'+(val==='si'?' show':'');
+    const dg=document.getElementById('sin-desc-g');
+    if(dg) dg.style.display=val==='si'?'flex':'none';
+  }
+  if(key==='extendida'){
+    tc('ext-si',val==='si'?'neutral':'');
+    tc('ext-no',val==='no'?'no':'');
+  }
+  if(key==='resuelto'){
+    tc('res-si',val==='si'?'yes':'');
+    tc('res-no',val==='no'?'no':'');
+  }
+  if(key==='notificar'){
+    tc('not-si',val==='si'?'neutral':'');
+    tc('not-no',val==='no'?'no':'');
+  }
+  calcWarranty(); updateComplete();
+}
+
+function tc(id,cls){
+  const el=document.getElementById(id);
+  if(el){ el.className='tcard'+(cls?' '+cls:''); }
+}
+
+function setChk(id,val){
+  ['si','no','ns'].forEach(v=>{
+    const el=document.getElementById(id+'-'+v);
+    if(el){ el.className='tcard sm'+(v===val?' '+(v==='si'?'yes':v==='no'?'no':'neutral'):''); }
+  });
+}
+
+// ── PREVIEW UPDATE ─────────────────────────────────────────────────────────
+function updatePreview() {
+  const cname = S.clienteId ? DB.clientes.find(c=>c.id===S.clienteId)?.nombre : null;
+  pv('pv-ticket',  S.ticket);
+  pv('pv-cliente', cname);
+  pv('pv-terminal',S.terminal?.nombre || S.terminalId);
+  pv('pv-ubic',    S.terminal?.ubic);
+  pv('pv-tipo',    S.terminal?.tipo);
+  pv('pv-region',  S.terminal?.region);
+  const meses = S.terminal ? Math.floor((new Date()-new Date(S.terminal.pm))/(1000*60*60*24*30.44)) : null;
+  const mEl = document.getElementById('pv-pm');
+  if(mEl){
+    if(meses!==null){
+      mEl.textContent = meses+' meses'; mEl.className='ival mt';
+    } else {
+      mEl.textContent='—'; mEl.className='ival empty';
+    }
+  }
+}
+
+function pv(id, val){
+  const el=document.getElementById(id);
+  if(el){ el.textContent=val||'—'; el.className=val?'ival':'ival empty'; }
+}
+
+// ── COMPLETENESS ───────────────────────────────────────────────────────────
+function updateComplete(){
+  const checks={
+    'ck-cliente':  !!S.clienteId,
+    'ck-terminal': !!S.terminalId,
+    'ck-jefe':     !!document.getElementById('in-jefe')?.value,
+    'ck-garantia': !!S.warranty,
+    'ck-falla':    !!document.getElementById('sel-falla')?.value,
+    'ck-recurso':  !!document.getElementById('sel-recurso')?.value,
+  };
+  Object.entries(checks).forEach(([id,done])=>{
+    const el=document.getElementById(id);
+    if(el){ el.className='chk-item'+(done?' done':''); el.querySelector('.chk-box').textContent=done?'✓':''; }
+  });
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
+const hints={
+  1:{t:'Terminal afectado', d:'Selecciona primero el cliente para cargar la lista de terminales asociados. Al elegir el terminal, los campos se completan automáticamente.'},
+  2:{t:'Validación de garantía', d:'Responde en orden. Si hay siniestro, el resultado es inmediato. Si no, el sistema calcula automáticamente según la fecha de puesta en marcha.'},
+  3:{t:'Descripción de la falla', d:'Sé específico. El check list telefónico te ayuda a pre-diagnosticar antes de despachar un técnico — evita visitas innecesarias.'},
+  4:{t:'Asignación y cierre', d:'Para fallas de media tensión usa siempre Cuadrilla Pesada. Verifica disponibilidad antes de confirmar la asignación.'},
+};
+
+function goTo(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  document.querySelectorAll('.step').forEach((el,i)=>{
+    el.classList.remove('active','done');
+    if(i+1<n) el.classList.add('done');
+    if(i+1===n) el.classList.add('active');
+  });
+  document.getElementById('prog').style.width=(n/4*100)+'%';
+  S.page=n;
+  const h=hints[n];
+  if(h){ document.getElementById('hint-box').innerHTML=`<strong>${h.t}</strong>${h.d}`; }
+  window.scrollTo(0,0); updateComplete();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// CONFIGURACIÓN — el token ya NO está aquí, vive en Netlify de forma segura
+// El formulario llama a nuestra propia función serverless
+// ════════════════════════════════════════════════════════════════════════════
+const FUNCION_URL = '/.netlify/functions/guardar-caso';
+
+// ── GENERAR TOKEN ÚNICO POR CASO (seguridad contratistas) ──────────────────
+function genTokenCaso() {
+  return Math.random().toString(36).substring(2,10).toUpperCase() +
+         Date.now().toString(36).toUpperCase();
+}
+
+// ── SUBMIT CON NETLIFY FUNCTION ─────────────────────────────────────────────
+async function submitForm(){
+  const btnSubmit = document.getElementById('btn-submit');
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = '⏳ Guardando caso…';
+
+  const cname      = DB.clientes.find(c=>c.id===S.clienteId)?.nombre||'—';
+  const urgSel     = document.getElementById('sel-urgencia');
+  const recursoSel = document.getElementById('sel-recurso');
+  const fallaSel   = document.getElementById('sel-falla');
+  const tokenCaso  = genTokenCaso();
+
+  const wl = {garantia:'GARANTÍA VIGENTE',extendida:'GARANTÍA EXTENDIDA',fuera:'FUERA DE GARANTÍA',siniestro:'SINIESTRO — CARGO CLIENTE'};
+  const wc = {garantia:'var(--greenl)',extendida:'var(--lime)',fuera:'var(--redl)',siniestro:'var(--redl)'};
+
+  // ── Armar el registro ──
+  const registro = {
+    "Ticket":                   S.ticket || '—',
+    "Fecha evento":             document.getElementById('in-fecha')?.value || '',
+    "Hora evento":              document.getElementById('in-hora')?.value  || '',
+    "Cliente ID":               S.clienteId || '',
+    "Cliente nombre":           cname,
+    "Terminal ID":              S.terminalId || '',
+    "Terminal nombre":          S.terminal?.nombre || '',
+    "Ubicacion":                S.terminal?.ubic   || '',
+    "Region":                   S.terminal?.region || '',
+    "Tipo terminal":            S.terminal?.tipo   || '',
+    "Cargadores instalados":    S.terminal?.cargadores || 0,
+    "Cargadores afectados":     parseInt(document.getElementById('in-afectados')?.value) || 0,
+    "Fecha PM":                 S.terminal?.pm     || '',
+    "Meses PM":                 S.terminal ? Math.floor((new Date()-new Date(S.terminal.pm))/(1000*60*60*24*30.44)) : 0,
+    "Jefe patio":               document.getElementById('in-jefe')?.value  || '',
+    "Tel contacto":             document.getElementById('in-tel')?.value   || '',
+    "Email contacto":           document.getElementById('in-email')?.value || '',
+    "Es siniestro":             S.siniestro   || '',
+    "Garantia extendida":       S.extendida   || '',
+    "Resultado garantia":       wl[S.warranty] || '',
+    "Tipo falla":               fallaSel?.value || '',
+    "Disponibilidad":           document.getElementById('sel-disponibilidad')?.value || '',
+    "Descripcion falla":        document.getElementById('in-desc')?.value  || '',
+    "Resuelto telefonicamente": S.resuelto    || '',
+    "Urgencia":                 urgSel?.value || '',
+    "Fuente falla":             document.getElementById('sel-fuente')?.value || '',
+    "Recurso asignado":         recursoSel?.value || '',
+    "ETA":                      document.getElementById('in-eta')?.value   || '',
+    "Observaciones tecnico":    document.getElementById('in-obs')?.value   || '',
+    "Notificar RRII":           S.notificar   || '',
+    "Operador ACEX":            document.getElementById('in-operador')?.value || '',
+    "Estado":                   "Abierto",
+    "Token caso":               tokenCaso,
+    "Fecha creacion":           new Date().toLocaleString('es-CL', {timeZone:'America/Santiago', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit'}),
+  };
+
+  // ── Llamar a la función serverless de Netlify ──
+  let guardadoOk = false;
+  try {
+    const resp = await fetch(FUNCION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(registro),
+    });
+
+    if (resp.ok) {
+      guardadoOk = true;
+      S.tokenCaso = tokenCaso;
+    } else {
+      const err = await resp.json();
+      console.error('Error función:', err);
+    }
+  } catch(e) {
+    console.error('Error de conexión:', e);
+  }
+
+  // ── Mostrar pantalla de éxito ──
+  document.getElementById('s-ticket').textContent = S.ticket || '—';
+  document.getElementById('s-guardado').innerHTML = guardadoOk
+    ? `<div style="background:var(--greenbg);border:1px solid var(--green);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--greenl);margin-bottom:14px">
+        ✅ Caso guardado correctamente en Airtable
+       </div>`
+    : `<div style="background:var(--amberbg);border:1px solid var(--amber);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--amberl);margin-bottom:14px">
+        ⚠️ No se pudo conectar. Verifica la configuración de Netlify.
+       </div>`;
+
+  document.getElementById('s-card').innerHTML = `
+    <div class="srow"><span class="sk">Ticket</span><span class="sv">${S.ticket||'—'}</span></div>
+    <div class="srow"><span class="sk">Cliente</span><span class="sv">${cname}</span></div>
+    <div class="srow"><span class="sk">Terminal</span><span class="sv">${S.terminal?.nombre||'—'} (${S.terminalId||'—'})</span></div>
+    <div class="srow"><span class="sk">Ubicación</span><span class="sv">${S.terminal?.ubic||'—'}</span></div>
+    <div class="srow"><span class="sk">Tipo falla</span><span class="sv">${fallaSel?.value||'—'}</span></div>
+    <div class="srow"><span class="sk">Urgencia</span><span class="sv">${urgSel?.options[urgSel.selectedIndex]?.text||'—'}</span></div>
+    <div class="srow"><span class="sk">Garantía</span><span class="sv" style="color:${wc[S.warranty]||'var(--muted)'};font-weight:700">${wl[S.warranty]||'—'}</span></div>
+    <div class="srow"><span class="sk">Recurso</span><span class="sv">${recursoSel?.value||'—'}</span></div>
+    <div class="srow"><span class="sk">Estado</span><span class="sv" style="color:var(--greenl)">Abierto</span></div>
+    <div class="srow"><span class="sk">Apertura</span><span class="sv">${new Date().toLocaleString('es-CL')}</span></div>
+    ${guardadoOk ? `<div class="srow"><span class="sk">Token caso</span><span class="sv" style="color:var(--muted);font-size:10px">${tokenCaso}</span></div>` : ''}
+  `;
+
+  document.querySelectorAll('.step').forEach(el=>el.classList.add('done'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-5').classList.add('active');
+  document.getElementById('prog').style.width='100%';
+
+  btnSubmit.disabled = false;
+  btnSubmit.textContent = '✅ Confirmar apertura del caso';
+}
+
+function cc(el,id,max){ document.getElementById(id).textContent=el.value.length+' / '+max+' caracteres'; if(el.value.length>max)el.value=el.value.slice(0,max); }
+
+window.onload=()=>{
+  const now=new Date();
+  document.getElementById('in-fecha').value=now.toISOString().split('T')[0];
+  document.getElementById('in-hora').value=now.toTimeString().slice(0,5);
+  document.getElementById('pv-time').textContent=now.toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})+' · '+now.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'});
+  updateComplete();
+};
+</script>
+
+<!-- ══════════════════════════════════════════════════════════ TOPBAR -->
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="logo-block"><div class="logo-sq"></div><div class="logo-txt">enel <span>x</span></div></div>
+    <div class="topbar-title">Apertura de Caso · Electroterminales 24/7</div>
+  </div>
+  <div class="topbar-right">
+    <div class="live"><span>Sistema activo</span></div>
+    <div class="ticket-chip" id="ticket-chip">— sin ticket</div>
+  </div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="prog" style="width:25%"></div></div>
+
+<div class="layout">
+<!-- ══════════════════════════════════════════════════════════ SIDEBAR -->
+<aside class="sidebar">
+  <div style="margin-bottom:20px">
+    <div class="slabel">Pasos</div>
+    <div class="step active" id="nav-1" onclick="goTo(1)"><div class="snum">1</div><div class="slabel2">Terminal afectado</div></div>
+    <div class="sconn"></div>
+    <div class="step" id="nav-2" onclick="goTo(2)"><div class="snum">2</div><div class="slabel2">Validación garantía</div></div>
+    <div class="sconn"></div>
+    <div class="step" id="nav-3" onclick="goTo(3)"><div class="snum">3</div><div class="slabel2">Descripción falla</div></div>
+    <div class="sconn"></div>
+    <div class="step" id="nav-4" onclick="goTo(4)"><div class="snum">4</div><div class="slabel2">Asignación y cierre</div></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="slabel">Resultado garantía</div>
+    <div class="wbox">
+      <div class="wbadge" id="ws-badge" style="display:none"></div>
+      <div class="wdesc" id="ws-desc"></div>
+      <div id="ws-pending" style="font-size:11px;color:var(--faint)">Se calculará en el paso 2.</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="slabel">Lógica garantía</div>
+    <div style="font-size:10px;color:var(--faint);line-height:1.8;padding:2px 0">
+      <div>① <strong style="color:var(--redl)">SINIESTRO</strong> → cargo cliente</div>
+      <div>② <strong style="color:var(--lime)">GARANTÍA EXTENDIDA</strong> → cobertura total</div>
+      <div>③ <strong style="color:var(--greenl)">DENTRO 24 MESES</strong> → cobertura total</div>
+      <div>④ <strong style="color:var(--redl)">FUERA GARANTÍA</strong> → cargo cliente</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════════════════════════════════════════════════════ MAIN -->
+<main class="main">
+
+<!-- ─── PAGE 1: TERMINAL AFECTADO ─────────────────────────────────────── -->
+<div class="page active" id="page-1">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:var(--bluebg);border:1px solid var(--blue)">⚡</div>
+    <div><div class="sec-title">Terminal afectado</div><div class="sec-sub">Selecciona cliente y terminal — los datos se cargan automáticamente</div></div>
+  </div>
+
+  <!-- Ticket autogenerado -->
+  <div class="fblock">
+    <div class="btitle">Ticket generado automáticamente</div>
+    <div class="info-note">
+      <span>ℹ️</span>
+      <div>El número de ticket se genera al seleccionar el cliente, en base a la fecha del evento y un correlativo diario. Formato: <strong>TKT-YYYYMMDD-CLIENTE-NNN</strong></div>
+    </div>
+    <div class="row c2">
+      <div class="fg">
+        <label>N° Ticket (autogenerado)</label>
+        <div class="ticket-display-big empty" id="ticket-big">Selecciona el cliente para generar el ticket</div>
+      </div>
+      <div class="row c2" style="margin-bottom:0">
+        <div class="fg"><label class="req">Fecha evento</label><input type="date" id="in-fecha"/></div>
+        <div class="fg"><label class="req">Hora evento</label><input type="time" id="in-hora"/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cliente + Terminal -->
+  <div class="fblock">
+    <div class="btitle">Identificación</div>
+    <div class="row c2">
+      <div class="fg">
+        <label class="req">Cliente / Empresa</label>
+        <select id="sel-cliente" onchange="onClienteChange()">
+          <option value="">Seleccionar cliente…</option>
+          <!-- filled by JS -->
+        </select>
+      </div>
+      <div class="fg">
+        <label class="req">Electroterminal afectado</label>
+        <select id="sel-terminal" disabled onchange="onTerminalChange()">
+          <option value="">Primero selecciona el cliente</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Datos del terminal (autofill) -->
+  <div class="fblock">
+    <div class="btitle teal">Datos del terminal <span style="color:var(--teal);font-size:9px;font-weight:700;margin-left:6px;background:var(--tealbg);border:1px solid var(--teal);border-radius:3px;padding:1px 5px">AUTO-COMPLETADO</span></div>
+    <div class="info-note" style="margin-bottom:14px">
+      <span>🔄</span>
+      <div>Los campos marcados en <strong>verde azulado</strong> se completan automáticamente desde el registro del terminal. No requieren edición en condiciones normales.</div>
+    </div>
+    <div class="row c2">
+      <div class="fg"><label>Ubicación</label><input type="text" id="af-ubicacion" readonly placeholder="Se cargará al seleccionar terminal"/></div>
+      <div class="fg"><label>Región</label><input type="text" id="af-region" readonly placeholder="—"/></div>
+    </div>
+    <div class="row c3" style="margin-top:0">
+      <div class="fg"><label>Tipo de equipo</label><input type="text" id="af-tipo" readonly placeholder="—"/></div>
+      <div class="fg"><label>Cargadores instalados</label><input type="text" id="af-cargadores" readonly placeholder="—"/></div>
+      <div class="fg"><label>Fecha puesta en marcha</label><input type="text" id="af-pm" readonly placeholder="—"/></div>
+    </div>
+    <div class="row c2" style="margin-top:0">
+      <div class="fg">
+        <label>Meses desde puesta en marcha</label>
+        <input type="text" id="af-meses" readonly placeholder="Se calcula automáticamente"/>
+      </div>
+      <div class="fg">
+        <label>Cargadores afectados en este evento</label>
+        <input type="number" id="in-afectados" placeholder="¿Cuántos no funcionan?" min="0" max="99" oninput="updateComplete()"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contacto en patio -->
+  <div class="fblock">
+    <div class="btitle green">Contacto en patio <span style="color:var(--green);font-size:9px;font-weight:700;margin-left:6px;background:var(--greenbg);border:1px solid var(--green);border-radius:3px;padding:1px 5px">PRE-CARGADO · EDITABLE</span></div>
+    <div class="info-note" style="margin-bottom:14px">
+      <span>✏️</span>
+      <div>Los datos del jefe de patio se pre-cargan desde el registro del terminal. <strong>Edítalos si quien llama es otra persona.</strong></div>
+    </div>
+    <div class="row c3">
+      <div class="fg"><label class="req">Nombre jefe de patio</label><input type="text" id="in-jefe" placeholder="Nombre de quien reporta" oninput="updateComplete()"/></div>
+      <div class="fg"><label>Teléfono de contacto</label><input type="tel" id="in-tel" placeholder="+56 9 XXXX XXXX"/></div>
+      <div class="fg"><label>Correo electrónico</label><input type="email" id="in-email" placeholder="correo@empresa.cl"/></div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <div class="step-label-nav">Paso 1 de 4</div>
+    <button class="btn btn-primary" onclick="goTo(2)">Siguiente → Garantía</button>
+  </div>
+</div>
+
+<!-- ─── PAGE 2: GARANTÍA ────────────────────────────────────────────────── -->
+<div class="page" id="page-2">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:var(--purplebg);border:1px solid var(--purple)">🛡️</div>
+    <div><div class="sec-title">Validación de garantía</div><div class="sec-sub">El resultado se calcula automáticamente — responde en el orden indicado</div></div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle red">① ¿Es un siniestro?</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:11px;line-height:1.6">Choque de bus con infraestructura, robo, accidente vehicular, vandalismo u otro evento externo dañó el equipo.</div>
+    <div class="tgroup">
+      <div class="tcard" id="sin-si" onclick="tog('siniestro','si')">🚨 Sí, es siniestro</div>
+      <div class="tcard" id="sin-no" onclick="tog('siniestro','no')">No es siniestro</div>
+    </div>
+    <div class="alert-box" id="sin-alert">⚠️
+      <div><strong style="display:block;margin-bottom:2px">Cargo siempre al cliente</strong>Los siniestros no están cubiertos por garantía. Se cotizará al cierre.</div>
+    </div>
+    <div class="fg" id="sin-desc-g" style="display:none;margin-top:11px">
+      <label>Descripción del siniestro *</label>
+      <textarea id="sin-desc" placeholder="Describe: tipo de impacto, componentes dañados, si hay denuncia policial, etc." rows="3" oninput="cc(this,'sin-cc',400)"></textarea>
+      <div class="cc" id="sin-cc">0 / 400 caracteres</div>
+    </div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle purple">② ¿Tiene garantía extendida contratada?</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:11px;line-height:1.6">Algunos proyectos tienen contrato especial con cobertura más allá de los 24 meses estándar.</div>
+    <div class="tgroup">
+      <div class="tcard" id="ext-si" onclick="tog('extendida','si')">✅ Sí, garantía extendida</div>
+      <div class="tcard" id="ext-no" onclick="tog('extendida','no')">No tiene garantía extendida</div>
+    </div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle amber">③ Período de garantía estándar</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:11px;line-height:1.6">Los datos de puesta en marcha ya están cargados desde el terminal seleccionado.</div>
+    <div class="row c2">
+      <div class="fg"><label>Fecha puesta en marcha (desde registro)</label><input type="text" id="af-pm2" readonly placeholder="Selecciona el terminal en el paso 1"/></div>
+      <div class="fg"><label>Meses transcurridos</label><input type="text" id="af-meses2" readonly placeholder="—"/></div>
+    </div>
+    <div class="wresult" id="wr-inline"><div class="wresult-title"></div><div class="wresult-desc"></div></div>
+  </div>
+
+  <div class="navbar">
+    <button class="btn btn-secondary" onclick="goTo(1)">← Volver</button>
+    <button class="btn btn-primary" onclick="goTo(3)">Siguiente → Falla</button>
+  </div>
+</div>
+
+<!-- ─── PAGE 3: FALLA ───────────────────────────────────────────────────── -->
+<div class="page" id="page-3">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:var(--amberbg);border:1px solid var(--amber)">🔧</div>
+    <div><div class="sec-title">Descripción de la falla</div><div class="sec-sub">Síntomas reportados por el jefe de patio y check list telefónico</div></div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle">Clasificación de la falla</div>
+    <div class="row c2">
+      <div class="fg">
+        <label class="req">Tipo de falla</label>
+        <select id="sel-falla" oninput="updateComplete()">
+          <option value="">Seleccionar tipo…</option>
+          <optgroup label="Sin energía">
+            <option>Sin energía en todo el terminal</option>
+            <option>Sin energía en cargadores específicos</option>
+            <option>Corte de suministro red pública</option>
+          </optgroup>
+          <optgroup label="Grupo electrógeno">
+            <option>Grupo electrógeno no enciende</option>
+            <option>Grupo electrógeno con alarma activa</option>
+            <option>Grupo electrógeno sin combustible</option>
+          </optgroup>
+          <optgroup label="Cargadores">
+            <option>Cargador no entrega carga</option>
+            <option>Cargador con error / alarma</option>
+            <option>Cargador dañado físicamente</option>
+            <option>Comunicación con cargador perdida</option>
+          </optgroup>
+          <optgroup label="Alta/Media tensión">
+            <option>Falla en transformador MT/BT</option>
+            <option>Falla en celdas de media tensión</option>
+            <option>Falla en protecciones o relés</option>
+          </optgroup>
+          <optgroup label="Otro">
+            <option>Falla en sistema de monitoreo</option>
+            <option>Daño físico (siniestro)</option>
+            <option>Otro (especificar en descripción)</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Disponibilidad actual del terminal</label>
+        <select id="sel-disponibilidad">
+          <option value="">Evaluar con jefe de patio…</option>
+          <option value="0">0% — Terminal completamente inoperativo</option>
+          <option value="25">Menos del 25% operativo</option>
+          <option value="50">Entre 25% y 50% operativo</option>
+          <option value="75">Más del 50% operativo</option>
+          <option value="100">100% — Falla menor / preventiva</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:0">
+      <label class="req">Descripción detallada de la falla</label>
+      <textarea id="in-desc" placeholder="Describe con detalle lo que reporta el jefe de patio: síntomas exactos, cuándo comenzó, si hubo evento previo (tormenta, corte eléctrico, etc.), alarmas encendidas…" rows="4" oninput="cc(this,'dc',600)"></textarea>
+      <div class="cc" id="dc">0 / 600 caracteres</div>
+    </div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle teal">Check list telefónico</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5">Verifica estos puntos con el jefe de patio. Un buen diagnóstico telefónico puede evitar una visita innecesaria.</div>
+    <div class="row c2" style="margin-bottom:10px">
+      <div class="fg"><label>¿Hay energía en el tablero general?</label>
+        <div class="tgroup"><div class="tcard sm" id="chk1-si" onclick="setChk('chk1','si')">✅ Sí</div><div class="tcard sm" id="chk1-no" onclick="setChk('chk1','no')">❌ No</div><div class="tcard sm" id="chk1-ns" onclick="setChk('chk1','ns')">No sabe</div></div>
+      </div>
+      <div class="fg"><label>¿Hay alarmas visuales o sonoras activas?</label>
+        <div class="tgroup"><div class="tcard sm" id="chk2-si" onclick="setChk('chk2','si')">✅ Sí</div><div class="tcard sm" id="chk2-no" onclick="setChk('chk2','no')">❌ No</div><div class="tcard sm" id="chk2-ns" onclick="setChk('chk2','ns')">No sabe</div></div>
+      </div>
+    </div>
+    <div class="row c2">
+      <div class="fg"><label>¿El grupo electrógeno está activo/encendido?</label>
+        <div class="tgroup"><div class="tcard sm" id="chk3-si" onclick="setChk('chk3','si')">✅ Sí</div><div class="tcard sm" id="chk3-no" onclick="setChk('chk3','no')">❌ No</div><div class="tcard sm" id="chk3-ns" onclick="setChk('chk3','ns')">No aplica</div></div>
+      </div>
+      <div class="fg"><label>¿Se reinició algún equipo recientemente?</label>
+        <div class="tgroup"><div class="tcard sm" id="chk4-si" onclick="setChk('chk4','si')">✅ Sí</div><div class="tcard sm" id="chk4-no" onclick="setChk('chk4','no')">❌ No</div><div class="tcard sm" id="chk4-ns" onclick="setChk('chk4','ns')">No sabe</div></div>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:12px">
+      <label>¿Se resolvió con el check list telefónico?</label>
+      <div class="tgroup">
+        <div class="tcard" id="res-si" onclick="tog('resuelto','si')">✅ Sí, se resolvió — cierre directo</div>
+        <div class="tcard" id="res-no" onclick="tog('resuelto','no')">❌ No — requiere visita técnica</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle">Urgencia y fuente</div>
+    <div class="row c2">
+      <div class="fg">
+        <label>Nivel de urgencia</label>
+        <select id="sel-urgencia">
+          <option value="">Evaluar…</option>
+          <option value="critica">🔴 Crítica — más del 50% inoperativo</option>
+          <option value="alta">🟠 Alta — impacto operacional parcial</option>
+          <option value="media">🟡 Media — falla menor con operación parcial</option>
+          <option value="baja">🟢 Baja — sin impacto inmediato</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Fuente de la falla</label>
+        <select id="sel-fuente">
+          <option value="">Seleccionar…</option>
+          <option>Falla interna del equipo</option>
+          <option>Falla en red pública (Enel distribución)</option>
+          <option>Falla en instalación del cliente</option>
+          <option>Causa desconocida — requiere diagnóstico</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <button class="btn btn-secondary" onclick="goTo(2)">← Volver</button>
+    <button class="btn btn-primary" onclick="goTo(4)">Siguiente → Asignación</button>
+  </div>
+</div>
+
+<!-- ─── PAGE 4: ASIGNACIÓN ─────────────────────────────────────────────── -->
+<div class="page" id="page-4">
+  <div class="sec-hdr">
+    <div class="sec-icon" style="background:var(--greenbg);border:1px solid var(--green)">👷</div>
+    <div><div class="sec-title">Asignación y cierre de apertura</div><div class="sec-sub">Asigna el recurso y confirma la apertura formal del caso</div></div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle green">Asignación de recurso técnico</div>
+    <div class="row c2">
+      <div class="fg">
+        <label class="req">Recurso asignado</label>
+        <select id="sel-recurso" oninput="updateComplete()">
+          <option value="">Seleccionar…</option>
+          <optgroup label="Inspector Contratista">
+            <option>Rodrigo Jerez (Inspector)</option>
+            <option>Eddic Monzart (Inspector)</option>
+          </optgroup>
+          <optgroup label="Cuadrilla Liviana">
+            <option>DCC — Emergencia grupos electrógenos</option>
+            <option>RAICA — Emergencia cargadores</option>
+          </optgroup>
+          <optgroup label="Cuadrilla Pesada (Media Tensión)">
+            <option>LARI</option>
+            <option>SOLGEC</option>
+            <option>AINEL</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="fg"><label>ETA estimada (hora de llegada)</label><input type="time" id="in-eta"/></div>
+    </div>
+    <div class="fg" style="margin-top:0">
+      <label>Observaciones para el técnico</label>
+      <textarea id="in-obs" placeholder="Acceso al patio, contacto en puerta, herramientas específicas, restricciones de seguridad…" rows="3" oninput="cc(this,'oc',400)"></textarea>
+      <div class="cc" id="oc">0 / 400 caracteres</div>
+    </div>
+  </div>
+
+  <div class="fblock">
+    <div class="btitle">Notificaciones y registro</div>
+    <div class="row c2">
+      <div class="fg">
+        <label>¿Notificar a RRII / Nuevas Conexiones?</label>
+        <div class="tgroup">
+          <div class="tcard" id="not-si" onclick="tog('notificar','si')">Sí, notificar</div>
+          <div class="tcard" id="not-no" onclick="tog('notificar','no')">No es necesario</div>
+        </div>
+      </div>
+      <div class="fg"><label class="req">Operador ACEX que abre el caso</label><input type="text" id="in-operador" placeholder="Nombre del operador de turno"/></div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <button class="btn btn-secondary" onclick="goTo(3)">← Volver</button>
+    <button class="btn btn-primary" onclick="submitForm()" id="btn-submit">✅ Confirmar apertura del caso</button>
+  </div>
+</div>
+
+<!-- ─── PAGE 5: SUCCESS ─────────────────────────────────────────────────── -->
+<div class="page" id="page-5">
+  <div class="success-wrap">
+    <div class="sicon">✅</div>
+    <div style="font-size:13px;color:var(--muted);font-weight:500">Caso abierto exitosamente</div>
+    <div class="s-ticket" id="s-ticket" style="font-family:'DM Mono',monospace;font-size:26px;font-weight:700;color:var(--greenl);margin:8px 0;letter-spacing:1px"></div>
+    <div style="font-size:12px;color:var(--muted);max-width:400px;line-height:1.7">El técnico asignado fue notificado. ACEX realizará seguimiento cada 30 minutos hasta la reposición total de energía.</div>
+    <div id="s-guardado" style="width:100%;max-width:500px;margin-top:14px"></div>
+    <div class="scard" id="s-card"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button class="btn btn-secondary" onclick="window.print()">🖨 Imprimir resumen</button>
+      <button class="btn btn-primary" onclick="location.reload()">+ Nuevo caso</button>
+    </div>
+    <div style="font-size:11px;color:var(--faint);margin-top:20px">ACEX v2.0 · Electroterminales · Sistema activo 24/7</div>
+  </div>
+</div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════ RIGHT PANEL -->
+<aside class="rpanel">
+  <div class="psec">
+    <div class="ptitle">Resumen del caso</div>
+    <div class="irow"><span class="ikey">Ticket</span><span class="ival empty" id="pv-ticket">—</span></div>
+    <div class="irow"><span class="ikey">Cliente</span><span class="ival empty" id="pv-cliente">—</span></div>
+    <div class="irow"><span class="ikey">Terminal</span><span class="ival empty" id="pv-terminal">—</span></div>
+    <div class="irow"><span class="ikey">Ubicación</span><span class="ival empty" id="pv-ubic">—</span></div>
+    <div class="irow"><span class="ikey">Tipo equipo</span><span class="ival empty" id="pv-tipo">—</span></div>
+    <div class="irow"><span class="ikey">Región</span><span class="ival empty" id="pv-region">—</span></div>
+    <div class="irow"><span class="ikey">Meses PM</span><span class="ival empty" id="pv-pm">—</span></div>
+    <div class="irow"><span class="ikey">Apertura</span><span class="ival" id="pv-time">—</span></div>
+  </div>
+
+  <div class="psec">
+    <div class="ptitle">Garantía</div>
+    <div class="wresult" id="wr-right"><div class="wresult-title"></div><div class="wresult-desc"></div></div>
+    <div id="wr-right-pending" style="font-size:11px;color:var(--faint)">Completa el paso 2 para ver el resultado.</div>
+  </div>
+
+  <div class="psec">
+    <div class="ptitle">Completitud</div>
+    <div class="chk-item" id="ck-cliente"><div class="chk-box"></div>Cliente seleccionado</div>
+    <div class="chk-item" id="ck-terminal"><div class="chk-box"></div>Terminal identificado</div>
+    <div class="chk-item" id="ck-jefe"><div class="chk-box"></div>Jefe de patio confirmado</div>
+    <div class="chk-item" id="ck-garantia"><div class="chk-box"></div>Garantía evaluada</div>
+    <div class="chk-item" id="ck-falla"><div class="chk-box"></div>Falla clasificada</div>
+    <div class="chk-item" id="ck-recurso"><div class="chk-box"></div>Recurso asignado</div>
+  </div>
+
+  <div class="psec">
+    <div class="ptitle">Guía de este paso</div>
+    <div class="hint" id="hint-box"><strong>Terminal afectado</strong>Selecciona primero el cliente para cargar la lista de terminales. Al elegir el terminal, los campos se completan automáticamente desde el registro.</div>
+  </div>
+</aside>
+
+</div>
+
+<script>
+// Populate client dropdown on load
+const csel = document.getElementById('sel-cliente');
+DB.clientes.forEach(cl => {
+  const o = document.createElement('option');
+  o.value = cl.id;
+  o.textContent = cl.nombre;
+  csel.appendChild(o);
+});
+
+// Sync PM fields to page 2 mirror
+const observer = new MutationObserver(() => {
+  const pm = document.getElementById('af-pm')?.value;
+  const m  = document.getElementById('af-meses')?.value;
+  const p2pm = document.getElementById('af-pm2');
+  const p2m  = document.getElementById('af-meses2');
+  if(p2pm) { p2pm.value = pm || ''; p2pm.className = pm ? 'autofill' : ''; }
+  if(p2m)  { p2m.value  = m  || ''; p2m.className  = m  ? 'autofill' : ''; p2m.style.color = document.getElementById('af-meses')?.style.color || ''; }
+});
+const pmEl = document.getElementById('af-pm');
+if(pmEl) observer.observe(pmEl, { attributes:true, attributeFilter:['value'] });
+
+// Simpler sync via interval (more reliable cross-browser)
+setInterval(()=>{
+  const pm  = document.getElementById('af-pm')?.value;
+  const m   = document.getElementById('af-meses')?.value;
+  const mc  = document.getElementById('af-meses')?.style.color;
+  const p2p = document.getElementById('af-pm2');
+  const p2m = document.getElementById('af-meses2');
+  if(p2p && p2p.value !== pm) { p2p.value=pm||''; p2p.className=pm?'autofill':''; }
+  if(p2m && p2m.value !== m)  { p2m.value=m||'';  p2m.className=m?'autofill':'';  p2m.style.color=mc||''; }
+}, 300);
+</script>
+</body>
+</html>

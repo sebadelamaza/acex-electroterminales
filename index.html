@@ -199,29 +199,29 @@ const DB = {
   ],
   terminales: {
     TRB: [
-      { id:'ET-TRB-001', nombre:'Terminal Pudahuel Norte',    ubic:'Av. El Colorado 1240, Pudahuel',       region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:12, pm:'2022-11-15', jefe:'Carlos Muñoz',   tel:'+56 9 8765 4321', email:'c.munoz@transbus.cl' },
-      { id:'ET-TRB-002', nombre:'Terminal Lo Espejo',         ubic:'Av. Central 890, Lo Espejo',          region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:8,  pm:'2023-03-01', jefe:'Ana Soto',       tel:'+56 9 7654 3210', email:'a.soto@transbus.cl' },
-      { id:'ET-TRB-003', nombre:'Patio Renca',                ubic:'Av. Renca 450, Renca',                region:'Metropolitana', tipo:'Cargador rápido DC',              cargadores:4,  pm:'2024-01-10', jefe:'Pedro Vega',     tel:'+56 9 6543 2109', email:'p.vega@transbus.cl' },
+      { id:'ET-TRB-001', nombre:'Terminal Pudahuel Norte',    ubic:'Av. El Colorado 1240, Pudahuel',       region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:12, pm:'2022-11-15', garantiaExtendida:false, jefe:'Carlos Muñoz',   tel:'+56 9 8765 4321', email:'c.munoz@transbus.cl' },
+      { id:'ET-TRB-002', nombre:'Terminal Lo Espejo',         ubic:'Av. Central 890, Lo Espejo',          region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:8,  pm:'2023-03-01', garantiaExtendida:true,  jefe:'Ana Soto',       tel:'+56 9 7654 3210', email:'a.soto@transbus.cl' },
+      { id:'ET-TRB-003', nombre:'Patio Renca',                ubic:'Av. Renca 450, Renca',                region:'Metropolitana', tipo:'Cargador rápido DC',              cargadores:4,  pm:'2024-01-10', garantiaExtendida:false, jefe:'Pedro Vega',     tel:'+56 9 6543 2109', email:'p.vega@transbus.cl' },
     ],
     MBU: [
-      { id:'ET-MBU-001', nombre:'Terminal Maipú',             ubic:'Av. Rinconada 1500, Maipú',           region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:16, pm:'2022-06-20', jefe:'Luis Herrera',   tel:'+56 9 9876 5432', email:'l.herrera@metbus.cl' },
-      { id:'ET-MBU-002', nombre:'Terminal Quilicura',         ubic:'Av. Matta 2300, Quilicura',           region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:10, pm:'2023-08-14', jefe:'Rosa Díaz',      tel:'+56 9 8765 1234', email:'r.diaz@metbus.cl' },
-      { id:'ET-MBU-003', nombre:'Subestación Independencia',  ubic:'Av. Independencia 3400, Independencia',region:'Metropolitana',tipo:'Transformador MT/BT',             cargadores:0,  pm:'2021-12-01', jefe:'Jorge Palma',    tel:'+56 9 5432 1098', email:'j.palma@metbus.cl' },
+      { id:'ET-MBU-001', nombre:'Terminal Maipú',             ubic:'Av. Rinconada 1500, Maipú',           region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:16, pm:'2022-06-20', garantiaExtendida:false, jefe:'Luis Herrera',   tel:'+56 9 9876 5432', email:'l.herrera@metbus.cl' },
+      { id:'ET-MBU-002', nombre:'Terminal Quilicura',         ubic:'Av. Matta 2300, Quilicura',           region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:10, pm:'2023-08-14', garantiaExtendida:true,  jefe:'Rosa Díaz',      tel:'+56 9 8765 1234', email:'r.diaz@metbus.cl' },
+      { id:'ET-MBU-003', nombre:'Subestación Independencia',  ubic:'Av. Independencia 3400, Independencia',region:'Metropolitana',tipo:'Transformador MT/BT',             cargadores:0,  pm:'2021-12-01', garantiaExtendida:false, jefe:'Jorge Palma',    tel:'+56 9 5432 1098', email:'j.palma@metbus.cl' },
     ],
     SUB: [
-      { id:'ET-SUB-001', nombre:'Terminal Pudahuel Sur',      ubic:'Av. Américo Vespucio 8900, Pudahuel', region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:20, pm:'2023-02-28', jefe:'María Torres',   tel:'+56 9 7890 1234', email:'m.torres@subus.cl' },
-      { id:'ET-SUB-002', nombre:'Terminal San Bernardo',      ubic:'Av. Padre Hurtado 1200, San Bernardo',region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:14, pm:'2022-09-05', jefe:'Héctor Rojas',   tel:'+56 9 6789 0123', email:'h.rojas@subus.cl' },
+      { id:'ET-SUB-001', nombre:'Terminal Pudahuel Sur',      ubic:'Av. Américo Vespucio 8900, Pudahuel', region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:20, pm:'2023-02-28', garantiaExtendida:false, jefe:'María Torres',   tel:'+56 9 7890 1234', email:'m.torres@subus.cl' },
+      { id:'ET-SUB-002', nombre:'Terminal San Bernardo',      ubic:'Av. Padre Hurtado 1200, San Bernardo',region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:14, pm:'2022-09-05', garantiaExtendida:true,  jefe:'Héctor Rojas',   tel:'+56 9 6789 0123', email:'h.rojas@subus.cl' },
     ],
     RED: [
-      { id:'ET-RED-001', nombre:'Terminal Valparaíso Centro', ubic:'Av. Argentina 1800, Valparaíso',      region:'Valparaíso',    tipo:'Terminal de carga bus eléctrico', cargadores:8,  pm:'2023-11-20', jefe:'Sandra López',   tel:'+56 9 5678 9012', email:'s.lopez@redbus.cl' },
-      { id:'ET-RED-002', nombre:'Terminal Viña del Mar',      ubic:'Av. Sporting 180, Viña del Mar',     region:'Valparaíso',    tipo:'Cargador rápido DC',              cargadores:6,  pm:'2024-02-14', jefe:'Pablo Mora',     tel:'+56 9 4567 8901', email:'p.mora@redbus.cl' },
+      { id:'ET-RED-001', nombre:'Terminal Valparaíso Centro', ubic:'Av. Argentina 1800, Valparaíso',      region:'Valparaíso',    tipo:'Terminal de carga bus eléctrico', cargadores:8,  pm:'2023-11-20', garantiaExtendida:false, jefe:'Sandra López',   tel:'+56 9 5678 9012', email:'s.lopez@redbus.cl' },
+      { id:'ET-RED-002', nombre:'Terminal Viña del Mar',      ubic:'Av. Sporting 180, Viña del Mar',     region:'Valparaíso',    tipo:'Cargador rápido DC',              cargadores:6,  pm:'2024-02-14', garantiaExtendida:false, jefe:'Pablo Mora',     tel:'+56 9 4567 8901', email:'p.mora@redbus.cl' },
     ],
     SIT: [
-      { id:'ET-SIT-001', nombre:'Terminal La Florida',        ubic:'Av. Vicuña Mackenna 9800, La Florida',region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:18, pm:'2022-04-10', jefe:'Claudia Reyes',  tel:'+56 9 3456 7890', email:'c.reyes@sitsantiago.cl' },
-      { id:'ET-SIT-002', nombre:'Terminal Peñalolén',         ubic:'Av. Tobalaba 13500, Peñalolén',      region:'Metropolitana', tipo:'Equipo de respaldo / generador',  cargadores:2,  pm:'2023-06-30', jefe:'Roberto Castro', tel:'+56 9 2345 6789', email:'r.castro@sitsantiago.cl' },
+      { id:'ET-SIT-001', nombre:'Terminal La Florida',        ubic:'Av. Vicuña Mackenna 9800, La Florida',region:'Metropolitana', tipo:'Terminal de carga bus eléctrico', cargadores:18, pm:'2022-04-10', garantiaExtendida:false, jefe:'Claudia Reyes',  tel:'+56 9 3456 7890', email:'c.reyes@sitsantiago.cl' },
+      { id:'ET-SIT-002', nombre:'Terminal Peñalolén',         ubic:'Av. Tobalaba 13500, Peñalolén',      region:'Metropolitana', tipo:'Equipo de respaldo / generador',  cargadores:2,  pm:'2023-06-30', garantiaExtendida:false, jefe:'Roberto Castro', tel:'+56 9 2345 6789', email:'r.castro@sitsantiago.cl' },
     ],
     BUS: [
-      { id:'ET-BUS-001', nombre:'Terminal Ñuñoa',             ubic:'Av. Irarrazaval 5100, Ñuñoa',        region:'Metropolitana', tipo:'Cargador AC punto fijo',          cargadores:6,  pm:'2024-05-01', jefe:'Fernanda Silva', tel:'+56 9 1234 5678', email:'f.silva@busesvule.cl' },
+      { id:'ET-BUS-001', nombre:'Terminal Ñuñoa',             ubic:'Av. Irarrazaval 5100, Ñuñoa',        region:'Metropolitana', tipo:'Cargador AC punto fijo',          cargadores:6,  pm:'2024-05-01', garantiaExtendida:false, jefe:'Fernanda Silva', tel:'+56 9 1234 5678', email:'f.silva@busesvule.cl' },
     ],
   },
 };
@@ -331,20 +331,71 @@ function onTerminalChange() {
     setAF('af-tipo',       S.terminal.tipo);
     setAF('af-cargadores', S.terminal.cargadores);
     setAF('af-pm',         formatDate(S.terminal.pm));
+
     // PM months
     const meses = Math.floor((new Date()-new Date(S.terminal.pm))/(1000*60*60*24*30.44));
     const mEl = document.getElementById('af-meses');
     mEl.value = meses + ' meses';
     mEl.className = 'autofill';
     mEl.style.color = meses<=24 ? 'var(--greenl)' : 'var(--redl)';
+
     // Jefe de patio pre-fill (editable)
     document.getElementById('in-jefe').value  = S.terminal.jefe;
     document.getElementById('in-tel').value   = S.terminal.tel;
     document.getElementById('in-email').value = S.terminal.email;
+
+    // Garantía extendida — desde registro del terminal
+    S.extendida = S.terminal.garantiaExtendida ? 'si' : 'no';
+    const extDisplay = document.getElementById('wr-ext-display');
+    const extStatus  = document.getElementById('ext-status');
+    if (S.terminal.garantiaExtendida) {
+      extDisplay.style.display = 'block';
+      extDisplay.className = 'wresult show extendida';
+      document.getElementById('wr-ext-title').textContent = '✅ GARANTÍA EXTENDIDA ACTIVA';
+      document.getElementById('wr-ext-desc').textContent  = 'Este terminal tiene garantía extendida contratada. Cobertura total sin cargo al cliente.';
+      extStatus.textContent = 'Este terminal tiene garantía extendida.';
+    } else {
+      extDisplay.style.display = 'none';
+      extStatus.textContent = 'Este terminal no tiene garantía extendida — se evaluará por período estándar.';
+    }
   }
+
   calcWarranty();
+  calcDisponibilidad();
   updatePreview();
   updateComplete();
+}
+
+function calcDisponibilidad() {
+  const instalados = parseInt(document.getElementById('af-cargadores')?.value) || 0;
+  const afectados  = parseInt(document.getElementById('in-afectados')?.value)  || 0;
+  const pctEl   = document.getElementById('disp-pct');
+  const detEl   = document.getElementById('disp-detalle');
+
+  if (!pctEl) return;
+
+  if (instalados === 0) {
+    pctEl.textContent = '—';
+    pctEl.style.color = 'var(--muted)';
+    detEl.textContent = 'Selecciona un terminal para calcular';
+    return;
+  }
+  if (afectados === 0) {
+    pctEl.textContent = '0% inoperativo';
+    pctEl.style.color = 'var(--greenl)';
+    detEl.textContent = 'Sin cargadores afectados reportados';
+    return;
+  }
+
+  const pctInop = Math.round((afectados / instalados) * 100);
+  const pctOp   = 100 - pctInop;
+
+  pctEl.textContent = `${pctInop}% inoperativo`;
+  pctEl.style.color = pctInop >= 50 ? 'var(--redl)' : pctInop > 0 ? 'var(--amberl)' : 'var(--greenl)';
+  detEl.textContent = `${afectados} de ${instalados} cargadores con falla · ${pctOp}% operativo`;
+
+  // Guardar en state para enviar a Airtable
+  S.disponibilidad = `${pctInop}% inoperativo (${afectados}/${instalados} cargadores)`;
 }
 
 function setAF(id, val) {
@@ -518,13 +569,13 @@ async function submitForm(){
     "Garantia extendida":       S.extendida   || '',
     "Resultado garantia":       wl[S.warranty] || '',
     "Tipo falla":               fallaSel?.value || '',
-    "Disponibilidad":           document.getElementById('sel-disponibilidad')?.value || '',
+    "Disponibilidad":           S.disponibilidad || '',
     "Descripcion falla":        document.getElementById('in-desc')?.value  || '',
     "Resuelto telefonicamente": S.resuelto    || '',
     "Urgencia":                 urgSel?.value || '',
     "Fuente falla":             document.getElementById('sel-fuente')?.value || '',
     "Recurso asignado":         recursoSel?.value || '',
-    "ETA":                      document.getElementById('in-eta')?.value   || '',
+    "ETA":                      [document.getElementById('in-eta-fecha')?.value, document.getElementById('in-eta-hora')?.value].filter(Boolean).join(' ') || '',
     "Observaciones tecnico":    document.getElementById('in-obs')?.value   || '',
     "Notificar RRII":           S.notificar   || '',
     "Operador ACEX":            document.getElementById('in-operador')?.value || '',
@@ -811,7 +862,7 @@ window.onload=()=>{
       </div>
       <div class="fg">
         <label>Cargadores afectados en este evento</label>
-        <input type="number" id="in-afectados" placeholder="¿Cuántos no funcionan?" min="0" max="99" oninput="updateComplete()"/>
+        <input type="number" id="in-afectados" placeholder="¿Cuántos no funcionan?" min="0" max="99" oninput="updateComplete();calcDisponibilidad()"/>
       </div>
     </div>
   </div>
@@ -861,11 +912,14 @@ window.onload=()=>{
   </div>
 
   <div class="fblock">
-    <div class="btitle purple">② ¿Tiene garantía extendida contratada?</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:11px;line-height:1.6">Algunos proyectos tienen contrato especial con cobertura más allá de los 24 meses estándar.</div>
-    <div class="tgroup">
-      <div class="tcard" id="ext-si" onclick="tog('extendida','si')">✅ Sí, garantía extendida</div>
-      <div class="tcard" id="ext-no" onclick="tog('extendida','no')">No tiene garantía extendida</div>
+    <div class="btitle purple">② Garantía extendida</div>
+    <div class="info-note">
+      <span>🔄</span>
+      <div>La garantía extendida se determina automáticamente desde el registro del terminal seleccionado. <strong id="ext-status">Selecciona un terminal en el paso 1 para ver el estado.</strong></div>
+    </div>
+    <div class="wresult" id="wr-ext-display" style="display:none">
+      <div class="wresult-title" id="wr-ext-title"></div>
+      <div class="wresult-desc" id="wr-ext-desc"></div>
     </div>
   </div>
 
@@ -928,15 +982,11 @@ window.onload=()=>{
         </select>
       </div>
       <div class="fg">
-        <label>Disponibilidad actual del terminal</label>
-        <select id="sel-disponibilidad">
-          <option value="">Evaluar con jefe de patio…</option>
-          <option value="0">0% — Terminal completamente inoperativo</option>
-          <option value="25">Menos del 25% operativo</option>
-          <option value="50">Entre 25% y 50% operativo</option>
-          <option value="75">Más del 50% operativo</option>
-          <option value="100">100% — Falla menor / preventiva</option>
-        </select>
+        <label>Indisponibilidad del terminal</label>
+        <div style="background:var(--s3);border:1px solid var(--border2);border-radius:var(--rs);padding:9px 11px">
+          <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600" id="disp-pct">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px" id="disp-detalle">Ingresa cargadores instalados y afectados para calcular</div>
+        </div>
       </div>
     </div>
     <div class="fg" style="margin-top:0">
@@ -1035,7 +1085,14 @@ window.onload=()=>{
           </optgroup>
         </select>
       </div>
-      <div class="fg"><label>ETA estimada (hora de llegada)</label><input type="time" id="in-eta"/></div>
+      <div class="fg">
+        <label>Fecha y hora estimada de llegada (ETA)</label>
+        <div class="row c2" style="margin-bottom:0">
+          <input type="date" id="in-eta-fecha"/>
+          <input type="time" id="in-eta-hora"/>
+        </div>
+        <div style="font-size:10px;color:var(--faint);margin-top:4px">Puede ser un día posterior si la visita no es inmediata</div>
+      </div>
     </div>
     <div class="fg" style="margin-top:0">
       <label>Observaciones para el técnico</label>

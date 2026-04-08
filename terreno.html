@@ -182,7 +182,6 @@ input[type=file]{display:none}
     <div class="cb-item"><div class="cb-key">Ubicación</div><div class="cb-val" id="cb-ubic">—</div></div>
     <div class="cb-item"><div class="cb-key">Falla reportada</div><div class="cb-val" id="cb-falla">—</div></div>
   </div>
-  <div class="warranty-chip" id="cb-warranty">—</div>
 </div>
 
 <!-- SECCIÓN 1: REGISTRO DE TIEMPO -->
@@ -387,16 +386,6 @@ function mostrarCaso() {
   document.getElementById('cb-terminal').textContent = f['Terminal nombre'] || f['Terminal ID'] || '—';
   document.getElementById('cb-ubic').textContent     = f['Ubicacion'] || '—';
   document.getElementById('cb-falla').textContent    = f['Tipo falla'] || '—';
-
-  const wChip = document.getElementById('cb-warranty');
-  const wMap = {
-    'GARANTÍA VIGENTE':           { cls:'garantia',  txt:'✅ GARANTÍA VIGENTE' },
-    'GARANTÍA EXTENDIDA':         { cls:'extendida', txt:'✅ GARANTÍA EXTENDIDA' },
-    'FUERA DE GARANTÍA':          { cls:'fuera',     txt:'✗ FUERA DE GARANTÍA' },
-    'SINIESTRO — CARGO CLIENTE':  { cls:'siniestro', txt:'🚨 SINIESTRO' },
-  };
-  const w = wMap[f['Resultado garantia']];
-  if (w) { wChip.className = 'warranty-chip ' + w.cls; wChip.textContent = w.txt; }
 
   document.getElementById('case-banner').classList.add('show');
   document.getElementById('sec-tiempo').classList.add('show');

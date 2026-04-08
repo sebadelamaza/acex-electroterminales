@@ -308,7 +308,6 @@ window.onload = async () => {
     showError('Link inválido. Solicita un nuevo link al operador ACEX.');
     return;
   }
-  initCanvas();
   await cargarCaso();
 };
 
@@ -345,6 +344,9 @@ function mostrarDocumento() {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('doc-wrap').style.display = 'block';
   document.getElementById('bottom-bar').style.display = 'block';
+
+  // Inicializar canvas DESPUÉS de que el contenedor sea visible
+  setTimeout(() => initCanvas(), 50);
 
   const f = A.caso;
 

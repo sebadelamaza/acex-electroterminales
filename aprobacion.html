@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>ACEX · Aprobación de Intervención</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#f4f6f9; --white:#ffffff; --s1:#f8fafc;
+  --border:#e2e8f0; --border2:#cbd5e1;
+  --text:#1a2433; --muted:#64748b; --faint:#94a3b8;
+  --green:#007140; --greenl:#00a85e; --greenbg:#f0faf4; --greenbdr:#86efac;
+  --lime:#78be20;
+  --blue:#1a6fdb; --bluebg:#eff6ff; --bluebdr:#93c5fd;
+  --red:#c0392b; --redbg:#fef2f2; --redbdr:#fca5a5; --redl:#dc2626;
+  --amber:#d97706; --amberbg:#fffbeb; --amberbdr:#fcd34d;
+  --purple:#6d28d9; --purplebg:#faf5ff; --purplebdr:#c4b5fd;
+  --enel:#007140; --enel-dark:#004f2d;
+  --r:12px; --rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:120px}
+
+/* HEADER */
+.header{background:var(--enel-dark);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo-block{display:flex;align-items:center;gap:8px}
+.logo-sq{width:18px;height:18px;background:#5b4dc8;border-radius:3px}
+.logo-txt{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.logo-txt span{color:#78be20}
+.header-right{font-size:11px;color:#86efac;font-family:'DM Mono',monospace}
+
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px;text-align:center}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ERROR */
+.error-state{display:none;margin:20px;background:var(--redbg);border:1px solid var(--redbdr);border-radius:var(--r);padding:24px;text-align:center}
+.error-state.show{display:block}
+
+/* MAIN DOC */
+.doc-wrap{max-width:600px;margin:0 auto;padding:16px}
+
+/* DOCUMENT CARD */
+.doc-card{background:var(--white);border-radius:var(--r);box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);overflow:hidden;margin-bottom:16px}
+
+/* DOC HEADER */
+.doc-header{background:var(--enel-dark);padding:20px 24px;position:relative;overflow:hidden}
+.doc-header::after{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(120,190,32,.15)}
+.doc-header-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.doc-logo{display:flex;align-items:center;gap:8px}
+.doc-logo-sq{width:20px;height:20px;background:#5b4dc8;border-radius:3px}
+.doc-logo-txt{font-size:16px;font-weight:700;color:#fff}
+.doc-logo-txt span{color:#78be20}
+.doc-ticket{font-family:'DM Mono',monospace;font-size:11px;color:#86efac;background:rgba(255,255,255,.1);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.2)}
+.doc-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:4px}
+.doc-subtitle{font-size:12px;color:#86efac}
+.doc-meta{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.doc-meta-item{font-size:11px;color:rgba(255,255,255,.7)}
+.doc-meta-item strong{color:#fff;display:block;font-size:12px}
+
+/* SECTIONS */
+.doc-section{padding:20px 24px;border-bottom:1px solid var(--border)}
+.doc-section:last-child{border-bottom:none}
+.sec-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.sec-title::before{content:'';width:3px;height:11px;border-radius:2px;background:var(--green);flex-shrink:0}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-item{background:var(--s1);border-radius:var(--rs);padding:10px 12px}
+.info-key{font-size:10px;color:var(--muted);margin-bottom:3px;font-weight:500}
+.info-val{font-size:13px;font-weight:600;color:var(--text)}
+.info-item.full{grid-column:1/-1}
+
+/* ESTADO TERMINAL */
+.estado-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:700;margin-bottom:12px}
+.estado-badge.ok{background:var(--greenbg);border:1.5px solid var(--greenbdr);color:var(--green)}
+.estado-badge.parcial{background:var(--amberbg);border:1.5px solid var(--amberbdr);color:var(--amber)}
+.estado-badge.nok{background:var(--redbg);border:1.5px solid var(--redbdr);color:var(--redl)}
+
+/* DESCRIPCIÓN TÉCNICA */
+.desc-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);padding:14px;font-size:13px;line-height:1.7;color:var(--text)}
+
+/* MATERIALES TABLE */
+.mat-table{width:100%;border-collapse:collapse;font-size:12px}
+.mat-table th{background:var(--s1);padding:8px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+.mat-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text)}
+.mat-table tr:last-child td{border-bottom:none}
+.mat-table .total-row td{font-weight:700;background:var(--greenbg);color:var(--green)}
+.mat-empty{font-size:12px;color:var(--faint);font-style:italic;padding:8px 0}
+
+/* GARANTÍA */
+.garantia-card{border-radius:var(--rs);padding:16px;margin-bottom:0}
+.garantia-card.vigente{background:var(--greenbg);border:1.5px solid var(--greenbdr)}
+.garantia-card.extendida{background:var(--greenbg);border:1.5px solid var(--greenbdr)}
+.garantia-card.fuera{background:var(--amberbg);border:1.5px solid var(--amberbdr)}
+.garantia-card.siniestro{background:var(--amberbg);border:1.5px solid var(--amberbdr)}
+.garantia-icon{font-size:24px;margin-bottom:8px}
+.garantia-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.garantia-card.vigente .garantia-title,
+.garantia-card.extendida .garantia-title{color:var(--green)}
+.garantia-card.fuera .garantia-title,
+.garantia-card.siniestro .garantia-title{color:var(--amber)}
+.garantia-desc{font-size:12px;line-height:1.6;color:var(--muted)}
+.garantia-nota{font-size:11px;margin-top:10px;padding:8px 10px;border-radius:var(--rs);background:rgba(0,0,0,.04);color:var(--muted);font-style:italic}
+
+/* FIRMA */
+.firma-section{background:var(--white);border-radius:var(--r);box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);padding:20px 24px;margin-bottom:16px}
+.firma-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.firma-sub{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.canvas-wrap{border:2px solid var(--border2);border-radius:var(--rs);background:#fafbfc;position:relative;overflow:hidden;margin-bottom:10px;touch-action:none}
+canvas{display:block;width:100%;cursor:crosshair}
+.canvas-label{position:absolute;top:8px;left:12px;font-size:10px;color:var(--faint);pointer-events:none;font-style:italic}
+.canvas-actions{display:flex;justify-content:flex-end;margin-bottom:14px}
+.btn-clear{background:none;border:1px solid var(--border2);border-radius:var(--rs);padding:6px 12px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-clear:active{background:var(--bg)}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+label{font-size:12px;font-weight:600;color:var(--muted)}
+input{background:var(--s1);border:1.5px solid var(--border2);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 13px;width:100%;outline:none;-webkit-appearance:none;transition:border-color .15s}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,111,219,.1)}
+input::placeholder{color:var(--faint)}
+
+/* DECLARACIÓN */
+.declaracion{background:var(--bluebg);border:1px solid var(--bluebdr);border-radius:var(--rs);padding:14px;font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.declaracion strong{color:var(--text)}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:16px;background:var(--white);border-top:1px solid var(--border);z-index:50}
+.btn-firmar{width:100%;padding:16px;background:var(--green);border:none;border-radius:var(--rs);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-firmar:active{background:var(--greenl);transform:scale(.98)}
+.btn-firmar:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* SUCCESS */
+.success-screen{display:none;max-width:600px;margin:0 auto;padding:40px 20px;text-align:center}
+.success-screen.show{display:block}
+.s-icon{width:72px;height:72px;border-radius:50%;background:var(--greenbg);border:2px solid var(--greenbdr);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.s-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px}
+.s-sub{font-size:13px;color:var(--muted);max-width:320px;margin:0 auto;line-height:1.7}
+.s-card{background:var(--white);border-radius:var(--r);box-shadow:0 1px 3px rgba(0,0,0,.08);padding:20px;margin:20px auto;text-align:left;max-width:400px}
+.s-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.s-row:last-child{border-bottom:none}
+.s-key{color:var(--muted)}
+.s-val{font-weight:600;font-family:'DM Mono',monospace;font-size:11px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-block">
+    <div class="logo-sq"></div>
+    <div class="logo-txt">enel <span>x</span></div>
+  </div>
+  <div class="header-right">Informe de Intervención</div>
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div style="font-size:13px;color:var(--muted)">Cargando informe de intervención…</div>
+</div>
+
+<!-- ERROR -->
+<div class="error-state" id="error-state">
+  <div style="font-size:28px;margin-bottom:12px">⚠️</div>
+  <div style="font-size:15px;font-weight:700;margin-bottom:8px;color:var(--redl)">No se pudo cargar el informe</div>
+  <div style="font-size:13px;color:var(--muted);line-height:1.6" id="error-msg">Verifica que el link sea correcto o solicita uno nuevo al operador ACEX.</div>
+</div>
+
+<!-- DOCUMENTO PRINCIPAL -->
+<div class="doc-wrap" id="doc-wrap" style="display:none">
+
+  <!-- Cabecera del documento -->
+  <div class="doc-card">
+    <div class="doc-header">
+      <div class="doc-header-top">
+        <div class="doc-logo">
+          <div class="doc-logo-sq"></div>
+          <div class="doc-logo-txt">enel <span>x</span></div>
+        </div>
+        <div class="doc-ticket" id="dh-ticket">—</div>
+      </div>
+      <div class="doc-title">Informe de Intervención Técnica</div>
+      <div class="doc-subtitle">Registro formal de asistencia en electroterminal</div>
+      <div class="doc-meta">
+        <div class="doc-meta-item"><strong id="dh-fecha">—</strong>Fecha del evento</div>
+        <div class="doc-meta-item"><strong id="dh-cierre">—</strong>Fecha de cierre</div>
+        <div class="doc-meta-item"><strong id="dh-recurso">—</strong>Técnico asignado</div>
+      </div>
+    </div>
+
+    <!-- Datos del cliente y terminal -->
+    <div class="doc-section">
+      <div class="sec-title">Datos del terminal</div>
+      <div class="info-grid">
+        <div class="info-item"><div class="info-key">Cliente</div><div class="info-val" id="di-cliente">—</div></div>
+        <div class="info-item"><div class="info-key">Terminal</div><div class="info-val" id="di-terminal">—</div></div>
+        <div class="info-item full"><div class="info-key">Ubicación</div><div class="info-val" id="di-ubic">—</div></div>
+        <div class="info-item"><div class="info-key">Tipo de equipo</div><div class="info-val" id="di-tipo">—</div></div>
+        <div class="info-item"><div class="info-key">Falla reportada</div><div class="info-val" id="di-falla">—</div></div>
+      </div>
+    </div>
+
+    <!-- Resultado de la intervención -->
+    <div class="doc-section">
+      <div class="sec-title">Resultado de la intervención</div>
+      <div class="estado-badge" id="estado-badge">—</div>
+      <div class="desc-box" id="di-desc">—</div>
+      <div class="info-grid" style="margin-top:10px">
+        <div class="info-item"><div class="info-key">HH trabajadas</div><div class="info-val" id="di-hh">—</div></div>
+        <div class="info-item"><div class="info-key">Hora llegada → salida</div><div class="info-val" id="di-tiempo">—</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted)" id="di-obs"></div>
+    </div>
+
+    <!-- Materiales -->
+    <div class="doc-section" id="sec-materiales">
+      <div class="sec-title">Materiales utilizados</div>
+      <table class="mat-table" id="mat-table">
+        <thead><tr><th>Descripción</th><th style="text-align:right">Cant.</th><th style="text-align:right">Costo unit.</th><th style="text-align:right">Total</th></tr></thead>
+        <tbody id="mat-body"></tbody>
+      </table>
+      <div class="mat-empty" id="mat-empty" style="display:none">Sin materiales registrados en esta intervención.</div>
+    </div>
+
+    <!-- Garantía -->
+    <div class="doc-section">
+      <div class="sec-title">Cobertura de garantía</div>
+      <div class="garantia-card" id="garantia-card">
+        <div class="garantia-icon" id="gar-icon">—</div>
+        <div class="garantia-title" id="gar-title">—</div>
+        <div class="garantia-desc" id="gar-desc">—</div>
+        <div class="garantia-nota" id="gar-nota"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIRMA -->
+  <div class="firma-section">
+    <div class="firma-title">Confirmación y firma</div>
+    <div class="firma-sub">
+      Al firmar este documento, usted confirma haber recibido y verificado
+      la intervención técnica descrita anteriormente en las instalaciones indicadas.
+    </div>
+
+    <div class="fg">
+      <label>Nombre completo del firmante *</label>
+      <input type="text" id="in-nombre" placeholder="Nombre y apellido del jefe de patio" autocomplete="name"/>
+    </div>
+    <div class="fg">
+      <label>Cargo *</label>
+      <input type="text" id="in-cargo" placeholder="Ej: Jefe de Patio, Encargado de Terminal…"/>
+    </div>
+
+    <label style="margin-bottom:8px;display:block">Firma digital *</label>
+    <div class="canvas-wrap" id="canvas-wrap">
+      <canvas id="firma-canvas" height="160"></canvas>
+      <div class="canvas-label" id="canvas-label">Firme aquí con su dedo o mouse</div>
+    </div>
+    <div class="canvas-actions">
+      <button class="btn-clear" onclick="clearCanvas()">🗑 Limpiar firma</button>
+    </div>
+
+    <div class="declaracion">
+      Al firmar confirmo que: <strong>he verificado que los trabajos descritos fueron realizados</strong>
+      en el electroterminal indicado, y que el estado actual del terminal corresponde
+      a lo descrito en este informe. Entiendo que en caso de que la intervención
+      <strong>no esté cubierta por garantía</strong>, recibiré un presupuesto formal
+      dentro de las próximas 24 horas hábiles.
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar" id="bottom-bar" style="display:none">
+  <button class="btn-firmar" id="btn-firmar" onclick="firmarDocumento()">
+    ✍️ Firmar y confirmar intervención
+  </button>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="success-screen">
+  <div class="s-icon">✅</div>
+  <div class="s-title">Intervención confirmada</div>
+  <div class="s-sub">Su firma ha sido registrada exitosamente. Gracias por confirmar la intervención.</div>
+  <div class="s-card" id="s-card"></div>
+  <div style="font-size:11px;color:var(--faint);margin-top:24px">
+    ACEX · Enel X · Sistema de Asistencias Electroterminales 24/7
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+const A = {
+  ticket: null, token: null, recordId: null,
+  caso: null, firmaTrazada: false
+};
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search);
+  A.ticket = params.get('ticket');
+  A.token  = params.get('token');
+  if (!A.ticket || !A.token) {
+    showError('Link inválido. Solicita un nuevo link al operador ACEX.');
+    return;
+  }
+  initCanvas();
+  await cargarCaso();
+};
+
+// ── CARGAR CASO ────────────────────────────────────────────────────────────
+async function cargarCaso() {
+  try {
+    const resp = await fetch(
+      `/.netlify/functions/obtener-caso?ticket=${encodeURIComponent(A.ticket)}&token=${encodeURIComponent(A.token)}`
+    );
+    const data = await resp.json();
+    if (!resp.ok) {
+      showError(data.error === 'Token inválido'
+        ? 'Link no autorizado. Solicita un nuevo link al operador ACEX.'
+        : 'Caso no encontrado.');
+      return;
+    }
+    A.recordId = data.id;
+    A.caso     = data.fields;
+
+    // Verificar que el técnico ya cerró su parte
+    if (!A.caso['Descripcion tecnica']) {
+      showError('El técnico aún no ha completado el formulario de terreno. Por favor espera y vuelve a intentarlo en unos minutos.');
+      return;
+    }
+
+    mostrarDocumento();
+  } catch(e) {
+    showError('No se pudo conectar. Verifica tu conexión a internet.');
+  }
+}
+
+// ── MOSTRAR DOCUMENTO ──────────────────────────────────────────────────────
+function mostrarDocumento() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('doc-wrap').style.display = 'block';
+  document.getElementById('bottom-bar').style.display = 'block';
+
+  const f = A.caso;
+
+  // Header
+  document.getElementById('dh-ticket').textContent  = f['Ticket'] || '—';
+  document.getElementById('dh-fecha').textContent   = f['Fecha evento'] || '—';
+  document.getElementById('dh-cierre').textContent  = f['Fecha cierre terreno'] || '—';
+  document.getElementById('dh-recurso').textContent = f['Recurso asignado'] || '—';
+
+  // Datos terminal
+  document.getElementById('di-cliente').textContent  = f['Cliente nombre'] || '—';
+  document.getElementById('di-terminal').textContent = f['Terminal nombre'] || f['Terminal ID'] || '—';
+  document.getElementById('di-ubic').textContent     = f['Ubicacion'] || '—';
+  document.getElementById('di-tipo').textContent     = f['Tipo terminal'] || '—';
+  document.getElementById('di-falla').textContent    = f['Tipo falla'] || '—';
+
+  // Estado terminal
+  const estadoMap = {
+    'Operativo':                { cls:'ok',     icon:'✅', txt:'Terminal operativo — Falla resuelta correctamente' },
+    'Parcialmente operativo':   { cls:'parcial', icon:'⚠️', txt:'Terminal parcialmente operativo — Solución parcial aplicada' },
+    'No resuelto':              { cls:'nok',     icon:'❌', txt:'Terminal requiere intervención adicional' },
+    'Resuelto en terreno':      { cls:'ok',     icon:'✅', txt:'Terminal operativo — Falla resuelta correctamente' },
+    'Parcialmente resuelto':    { cls:'parcial', icon:'⚠️', txt:'Terminal parcialmente operativo' },
+    'Pendiente escalación':     { cls:'nok',     icon:'🔄', txt:'Caso escalado — pendiente intervención adicional' },
+  };
+  const est = estadoMap[f['Terminal operativo'] || f['Estado']] ||
+              { cls:'ok', icon:'✅', txt: f['Terminal operativo'] || '—' };
+  const badge = document.getElementById('estado-badge');
+  badge.className = 'estado-badge ' + est.cls;
+  badge.textContent = est.icon + '  ' + est.txt;
+
+  // Descripción técnica
+  document.getElementById('di-desc').textContent = f['Descripcion tecnica'] || '—';
+
+  // HH y tiempo
+  document.getElementById('di-hh').textContent    = f['HH total'] ? f['HH total'] + ' HH' : '—';
+  document.getElementById('di-tiempo').textContent =
+    (f['Hora llegada'] && f['Hora salida'])
+      ? f['Hora llegada'] + ' → ' + f['Hora salida']
+      : f['Hora llegada'] || '—';
+
+  if (f['Observaciones terreno']) {
+    document.getElementById('di-obs').textContent = '📝 ' + f['Observaciones terreno'];
+  }
+
+  // Materiales
+  const matStr = f['Materiales'] || '';
+  const matBody = document.getElementById('mat-body');
+  const matEmpty = document.getElementById('mat-empty');
+  const matTable = document.getElementById('mat-table');
+
+  if (!matStr || matStr === 'Sin materiales') {
+    matTable.style.display = 'none';
+    matEmpty.style.display = 'block';
+  } else {
+    const lines = matStr.split('\n').filter(l => l.trim());
+    let totalGeneral = 0;
+    lines.forEach(line => {
+      const tr = document.createElement('tr');
+      // Parse "Desc × qty = $total"
+      const match = line.match(/^(.+)\s×\s(\d+)\s=\s\$(.+)$/);
+      if (match) {
+        const total = parseInt(match[3].replace(/\./g,'').replace(',',''));
+        totalGeneral += isNaN(total) ? 0 : total;
+        tr.innerHTML = `<td>${match[1]}</td><td style="text-align:right">${match[2]}</td><td style="text-align:right">—</td><td style="text-align:right">$${match[3]}</td>`;
+      } else {
+        tr.innerHTML = `<td colspan="4">${line}</td>`;
+      }
+      matBody.appendChild(tr);
+    });
+    if (totalGeneral > 0) {
+      const totalRow = document.createElement('tr');
+      totalRow.className = 'total-row';
+      totalRow.innerHTML = `<td colspan="3"><strong>Total materiales</strong></td><td style="text-align:right"><strong>$${totalGeneral.toLocaleString('es-CL')}</strong></td>`;
+      matBody.appendChild(totalRow);
+    }
+  }
+
+  // Garantía — lenguaje comercial apropiado
+  const wRes = f['Resultado garantia'] || '';
+  const garCard = document.getElementById('garantia-card');
+  const garMap = {
+    'GARANTÍA VIGENTE': {
+      cls: 'vigente', icon: '✅',
+      title: 'Intervención cubierta por garantía',
+      desc:  'Esta intervención está cubierta por el contrato de garantía estándar vigente. No tiene costo para usted.',
+      nota:  'Garantía estándar: 24 meses desde la puesta en marcha del equipo.',
+    },
+    'GARANTÍA EXTENDIDA': {
+      cls: 'extendida', icon: '✅',
+      title: 'Intervención cubierta por garantía extendida',
+      desc:  'Esta intervención está cubierta por su contrato de garantía extendida. No tiene costo para usted.',
+      nota:  'Garantía extendida contratada: cobertura total.',
+    },
+    'FUERA DE GARANTÍA': {
+      cls: 'fuera', icon: '📋',
+      title: 'Intervención fuera del período de garantía',
+      desc:  'Esta intervención no está cubierta por garantía. Recibirá un presupuesto formal con el detalle de costos dentro de las próximas 24 horas hábiles.',
+      nota:  'El presupuesto será enviado por el área comercial de Enel X para su aprobación.',
+    },
+    'SINIESTRO — CARGO CLIENTE': {
+      cls: 'siniestro', icon: '📋',
+      title: 'Intervención por siniestro — fuera de cobertura',
+      desc:  'Esta intervención corresponde a un siniestro y no está cubierta por la garantía del producto. Recibirá un presupuesto formal dentro de las próximas 24 horas hábiles.',
+      nota:  'El presupuesto incluirá los costos de reparación y materiales utilizados.',
+    },
+  };
+  const gar = garMap[wRes] || {
+    cls:'vigente', icon:'📋',
+    title: 'Cobertura en evaluación',
+    desc:  'El estado de cobertura de esta intervención está siendo evaluado. El equipo de Enel X se pondrá en contacto a la brevedad.',
+    nota:  '',
+  };
+  garCard.className = 'garantia-card ' + gar.cls;
+  document.getElementById('gar-icon').textContent  = gar.icon;
+  document.getElementById('gar-title').textContent = gar.title;
+  document.getElementById('gar-desc').textContent  = gar.desc;
+  document.getElementById('gar-nota').textContent  = gar.nota;
+}
+
+function showError(msg) {
+  document.getElementById('loading').style.display = 'none';
+  const el = document.getElementById('error-state');
+  el.classList.add('show');
+  document.getElementById('error-msg').textContent = msg;
+}
+
+// ── CANVAS FIRMA ───────────────────────────────────────────────────────────
+function initCanvas() {
+  const canvas = document.getElementById('firma-canvas');
+  const wrap   = document.getElementById('canvas-wrap');
+  canvas.width = wrap.offsetWidth * window.devicePixelRatio;
+  canvas.height = 160 * window.devicePixelRatio;
+  canvas.style.height = '160px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  ctx.strokeStyle = '#1a2433';
+  ctx.lineWidth   = 2.5;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+
+  let drawing = false;
+  let lastX = 0, lastY = 0;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    return {
+      x: (src.clientX - rect.left),
+      y: (src.clientY - rect.top),
+    };
+  }
+
+  function start(e) {
+    e.preventDefault();
+    drawing = true;
+    const pos = getPos(e);
+    lastX = pos.x; lastY = pos.y;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    document.getElementById('canvas-label').style.display = 'none';
+  }
+
+  function draw(e) {
+    e.preventDefault();
+    if (!drawing) return;
+    const pos = getPos(e);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    lastX = pos.x; lastY = pos.y;
+    A.firmaTrazada = true;
+  }
+
+  function stop(e) { e.preventDefault(); drawing = false; }
+
+  canvas.addEventListener('mousedown',  start);
+  canvas.addEventListener('mousemove',  draw);
+  canvas.addEventListener('mouseup',    stop);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove',  draw,  { passive: false });
+  canvas.addEventListener('touchend',   stop,  { passive: false });
+}
+
+function clearCanvas() {
+  const canvas = document.getElementById('firma-canvas');
+  const ctx    = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  A.firmaTrazada = false;
+  document.getElementById('canvas-label').style.display = 'block';
+}
+
+// ── FIRMAR ─────────────────────────────────────────────────────────────────
+async function firmarDocumento() {
+  const nombre = document.getElementById('in-nombre').value.trim();
+  const cargo  = document.getElementById('in-cargo').value.trim();
+
+  if (!nombre)         { alert('Por favor ingresa tu nombre completo.'); return; }
+  if (!cargo)          { alert('Por favor ingresa tu cargo.'); return; }
+  if (!A.firmaTrazada) { alert('Por favor dibuja tu firma en el recuadro.'); return; }
+
+  const btn = document.getElementById('btn-firmar');
+  btn.disabled = true;
+  btn.textContent = '⏳ Registrando firma…';
+
+  // Capturar imagen de la firma
+  const canvas   = document.getElementById('firma-canvas');
+  const firmaImg = canvas.toDataURL('image/png');
+
+  const campos = {
+    "Firma cliente (imagen)": firmaImg.substring(0, 50000), // Airtable long text limit
+    "Nombre firmante":        nombre + ' — ' + cargo,
+    "Fecha firma":            new Date().toLocaleString('es-CL', {
+                                timeZone:'America/Santiago',
+                                year:'numeric', month:'2-digit', day:'2-digit',
+                                hour:'2-digit', minute:'2-digit'
+                              }),
+    "Estado aprobacion":      "Aprobado por cliente",
+    "Estado":                 "Cerrado — Aprobado",
+  };
+
+  try {
+    const resp = await fetch('/.netlify/functions/actualizar-caso', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recordId: A.recordId, token: A.token, campos }),
+    });
+
+    const data = await resp.json();
+
+    if (resp.ok) {
+      mostrarExito(nombre, cargo);
+    } else {
+      alert('Error al registrar la firma. Por favor intenta de nuevo.');
+      btn.disabled = false;
+      btn.textContent = '✍️ Firmar y confirmar intervención';
+    }
+  } catch(e) {
+    alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
+    btn.disabled = false;
+    btn.textContent = '✍️ Firmar y confirmar intervención';
+  }
+}
+
+function mostrarExito(nombre, cargo) {
+  document.getElementById('doc-wrap').style.display    = 'none';
+  document.getElementById('bottom-bar').style.display  = 'none';
+
+  const f = A.caso;
+  document.getElementById('s-card').innerHTML = `
+    <div class="s-row"><span class="s-key">Ticket</span><span class="s-val">${f['Ticket']||'—'}</span></div>
+    <div class="s-row"><span class="s-key">Terminal</span><span class="s-val">${f['Terminal nombre']||'—'}</span></div>
+    <div class="s-row"><span class="s-key">Firmado por</span><span class="s-val">${nombre}</span></div>
+    <div class="s-row"><span class="s-key">Cargo</span><span class="s-val">${cargo}</span></div>
+    <div class="s-row"><span class="s-key">Fecha firma</span><span class="s-val">${new Date().toLocaleString('es-CL')}</span></div>
+    <div class="s-row"><span class="s-key">Estado</span><span class="s-val" style="color:var(--green)">✅ Cerrado — Aprobado</span></div>
+  `;
+  document.getElementById('success-screen').classList.add('show');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

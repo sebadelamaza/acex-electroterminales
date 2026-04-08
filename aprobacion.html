@@ -476,25 +476,29 @@ function showError(msg) {
 function initCanvas() {
   const canvas = document.getElementById('firma-canvas');
   const wrap   = document.getElementById('canvas-wrap');
-  canvas.width = wrap.offsetWidth * window.devicePixelRatio;
-  canvas.height = 160 * window.devicePixelRatio;
-  canvas.style.height = '160px';
+
+  // Set canvas size matching display size exactly — no devicePixelRatio scaling
+  const W = wrap.offsetWidth;
+  const H = 160;
+  canvas.width  = W;
+  canvas.height = H;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+
   const ctx = canvas.getContext('2d');
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   ctx.strokeStyle = '#1a2433';
   ctx.lineWidth   = 2.5;
   ctx.lineCap     = 'round';
   ctx.lineJoin    = 'round';
 
   let drawing = false;
-  let lastX = 0, lastY = 0;
 
   function getPos(e) {
     const rect = canvas.getBoundingClientRect();
     const src  = e.touches ? e.touches[0] : e;
     return {
-      x: (src.clientX - rect.left),
-      y: (src.clientY - rect.top),
+      x: src.clientX - rect.left,
+      y: src.clientY - rect.top,
     };
   }
 
@@ -502,9 +506,8 @@ function initCanvas() {
     e.preventDefault();
     drawing = true;
     const pos = getPos(e);
-    lastX = pos.x; lastY = pos.y;
     ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
+    ctx.moveTo(pos.x, pos.y);
     document.getElementById('canvas-label').style.display = 'none';
   }
 
@@ -514,15 +517,21 @@ function initCanvas() {
     const pos = getPos(e);
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
-    lastX = pos.x; lastY = pos.y;
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
     A.firmaTrazada = true;
   }
 
-  function stop(e) { e.preventDefault(); drawing = false; }
+  function stop(e) {
+    e.preventDefault();
+    drawing = false;
+    ctx.beginPath();
+  }
 
   canvas.addEventListener('mousedown',  start);
   canvas.addEventListener('mousemove',  draw);
   canvas.addEventListener('mouseup',    stop);
+  canvas.addEventListener('mouseleave', stop);
   canvas.addEventListener('touchstart', start, { passive: false });
   canvas.addEventListener('touchmove',  draw,  { passive: false });
   canvas.addEventListener('touchend',   stop,  { passive: false });

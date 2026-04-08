@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ACEX · Reporte de Intervención</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── PANTALLA ── */
+:root {
+  --green:#007140; --green-d:#004f2d; --lime:#78be20;
+  --blue:#1a6fdb; --red:#c0392b; --amber:#d97706;
+  --text:#1a2433; --muted:#64748b; --faint:#94a3b8;
+  --border:#e2e8f0; --bg:#f4f6f9; --white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* LOADING / ERROR */
+.screen-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px;text-align:center;gap:14px}
+.spinner{width:36px;height:36px;border:3px solid #e2e8f0;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOP ACTION BAR (solo en pantalla, no en print) */
+.action-bar{background:var(--green-d);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.action-bar-left{display:flex;align-items:center;gap:10px}
+.logo-sq{width:16px;height:16px;background:#5b4dc8;border-radius:3px}
+.logo-txt{font-size:14px;font-weight:700;color:#fff}
+.logo-txt span{color:var(--lime)}
+.action-right{display:flex;gap:8px}
+.btn-dl{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-dl.primary{background:var(--lime);color:var(--green-d)}
+.btn-dl.primary:hover{background:#8ed422;transform:translateY(-1px)}
+.btn-dl.secondary{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn-dl.secondary:hover{background:rgba(255,255,255,.2)}
+.report-id{font-family:'DM Mono',monospace;font-size:11px;color:#86efac}
+
+/* ── DOCUMENTO PDF ── */
+.doc-outer{max-width:800px;margin:24px auto;padding:0 16px 40px}
+.doc{background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.07);overflow:hidden}
+
+/* CABECERA */
+.doc-hdr{background:var(--green-d);padding:28px 32px;position:relative;overflow:hidden}
+.doc-hdr::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(120,190,32,.12)}
+.doc-hdr::after{content:'';position:absolute;right:60px;bottom:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.hdr-logo{display:flex;align-items:center;gap:9px}
+.hdr-logo-sq{width:22px;height:22px;background:#5b4dc8;border-radius:4px}
+.hdr-logo-txt{font-size:18px;font-weight:700;color:#fff}
+.hdr-logo-txt span{color:var(--lime)}
+.hdr-badge{font-family:'DM Mono',monospace;font-size:10px;color:#86efac;background:rgba(255,255,255,.1);padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.2);text-align:right}
+.hdr-badge-num{font-size:14px;font-weight:700;color:#fff;display:block}
+.hdr-title{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.hdr-sub{font-size:12px;color:#86efac;margin-bottom:16px}
+.hdr-meta{display:flex;gap:24px;flex-wrap:wrap}
+.hdr-meta-item{font-size:11px}
+.hdr-meta-item .mk{color:rgba(255,255,255,.55);margin-bottom:2px}
+.hdr-meta-item .mv{color:#fff;font-weight:600;font-size:12px}
+
+/* BODY SECTIONS */
+.doc-body{padding:0}
+.sec{padding:24px 32px;border-bottom:1px solid var(--border)}
+.sec:last-child{border-bottom:none}
+.sec-title{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-title::before{content:'';width:3px;height:11px;border-radius:2px;background:var(--green);flex-shrink:0}
+
+/* GRIDS */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.info-box{background:#f8fafc;border-radius:6px;padding:11px 13px;border:1px solid var(--border)}
+.info-box.full{grid-column:1/-1}
+.ib-key{font-size:10px;color:var(--muted);font-weight:500;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+.ib-val{font-size:13px;font-weight:600;color:var(--text)}
+
+/* ESTADO */
+.estado-wrap{margin-bottom:14px}
+.estado-badge{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:700}
+.estado-badge.ok{background:#f0faf4;border:1.5px solid #86efac;color:var(--green)}
+.estado-badge.parcial{background:#fffbeb;border:1.5px solid #fcd34d;color:var(--amber)}
+.estado-badge.nok{background:#fef2f2;border:1.5px solid #fca5a5;color:var(--red)}
+
+/* DESCRIPCIÓN */
+.desc-text{font-size:13px;line-height:1.75;color:var(--text);white-space:pre-wrap;background:#f8fafc;border-radius:6px;padding:14px;border:1px solid var(--border)}
+
+/* TABLA MATERIALES */
+.mat-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}
+.mat-table th{background:#f1f5f9;padding:9px 12px;text-align:left;font-weight:700;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border)}
+.mat-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text)}
+.mat-table tr:last-child td{border-bottom:none}
+.mat-table .tr-total td{background:#f0faf4;font-weight:700;color:var(--green);border-top:2px solid #86efac}
+.mat-table .tr-total td:last-child{font-size:14px}
+.mat-empty{font-size:12px;color:var(--faint);font-style:italic}
+.mat-align-r{text-align:right}
+
+/* GARANTÍA */
+.gar-card{border-radius:6px;padding:16px;display:flex;gap:14px;align-items:flex-start}
+.gar-card.vigente,.gar-card.extendida{background:#f0faf4;border:1.5px solid #86efac}
+.gar-card.fuera,.gar-card.siniestro{background:#fffbeb;border:1.5px solid #fcd34d}
+.gar-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.gar-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.gar-card.vigente .gar-title,.gar-card.extendida .gar-title{color:var(--green)}
+.gar-card.fuera .gar-title,.gar-card.siniestro .gar-title{color:var(--amber)}
+.gar-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.gar-nota{font-size:11px;color:var(--faint);margin-top:6px;font-style:italic}
+
+/* FIRMA */
+.firma-wrap{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.firma-img-box{flex-shrink:0;border:1.5px solid var(--border);border-radius:6px;background:#f8fafc;overflow:hidden;width:220px;height:110px;display:flex;align-items:center;justify-content:center}
+.firma-img-box img{max-width:100%;max-height:100%;object-fit:contain}
+.firma-sin{font-size:11px;color:var(--faint);font-style:italic}
+.firma-datos{flex:1;min-width:180px}
+.firma-dato{margin-bottom:10px}
+.firma-dato .fd-key{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px}
+.firma-dato .fd-val{font-size:13px;font-weight:600;color:var(--text)}
+.firma-valida{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:#f0faf4;border:1.5px solid #86efac;color:var(--green);margin-top:8px}
+
+/* PIE */
+.doc-footer{background:#f8fafc;border-top:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.footer-left{font-size:10px;color:var(--faint);line-height:1.6}
+.footer-left strong{color:var(--muted)}
+.footer-right{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint)}
+
+/* ══════════════════════════════════════════════
+   PRINT STYLES
+══════════════════════════════════════════════ */
+@media print {
+  @page { margin: 12mm 14mm; size: A4; }
+  body  { background: #fff; }
+  .action-bar { display: none !important; }
+  .doc-outer  { max-width:100%; margin:0; padding:0; }
+  .doc        { box-shadow:none; border-radius:0; }
+  .sec        { break-inside: avoid; }
+  .mat-table  { break-inside: avoid; }
+  .firma-wrap { break-inside: avoid; }
+  .doc-hdr    { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .estado-badge,.gar-card,.firma-valida { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="screen-state" id="state-loading">
+  <div class="spinner"></div>
+  <div style="font-size:13px;color:var(--muted)">Cargando reporte…</div>
+</div>
+
+<!-- ERROR -->
+<div class="screen-state" id="state-error" style="display:none">
+  <div style="font-size:36px">⚠️</div>
+  <div style="font-size:16px;font-weight:700;color:var(--red)">No se pudo cargar el reporte</div>
+  <div style="font-size:13px;color:var(--muted);max-width:320px;line-height:1.6" id="error-msg">—</div>
+</div>
+
+<!-- ACTION BAR -->
+<div class="action-bar" id="action-bar" style="display:none">
+  <div class="action-bar-left">
+    <div class="logo-sq"></div>
+    <div class="logo-txt">enel <span>x</span></div>
+    <div class="report-id" id="ab-ticket">—</div>
+  </div>
+  <div class="action-right">
+    <button class="btn-dl secondary" onclick="window.history.back()">← Volver</button>
+    <button class="btn-dl primary" onclick="window.print()">⬇ Descargar PDF</button>
+  </div>
+</div>
+
+<!-- DOCUMENTO -->
+<div class="doc-outer" id="doc-outer" style="display:none">
+<div class="doc">
+
+  <!-- CABECERA -->
+  <div class="doc-hdr">
+    <div class="hdr-top">
+      <div class="hdr-logo">
+        <div class="hdr-logo-sq"></div>
+        <div class="hdr-logo-txt">enel <span>x</span></div>
+      </div>
+      <div class="hdr-badge">
+        Reporte N°
+        <span class="hdr-badge-num" id="rpt-num">—</span>
+      </div>
+    </div>
+    <div class="hdr-title">Informe de Intervención Técnica</div>
+    <div class="hdr-sub">Registro oficial de asistencia en electroterminal</div>
+    <div class="hdr-meta">
+      <div class="hdr-meta-item"><div class="mk">N° Ticket</div><div class="mv" id="hm-ticket">—</div></div>
+      <div class="hdr-meta-item"><div class="mk">Fecha del evento</div><div class="mv" id="hm-fecha">—</div></div>
+      <div class="hdr-meta-item"><div class="mk">Fecha de cierre</div><div class="mv" id="hm-cierre">—</div></div>
+      <div class="hdr-meta-item"><div class="mk">Técnico asignado</div><div class="mv" id="hm-tecnico">—</div></div>
+      <div class="hdr-meta-item"><div class="mk">Operador ACEX</div><div class="mv" id="hm-operador">—</div></div>
+    </div>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- DATOS DEL CLIENTE Y TERMINAL -->
+    <div class="sec">
+      <div class="sec-title">Datos del cliente y terminal</div>
+      <div class="grid2">
+        <div class="info-box"><div class="ib-key">Cliente</div><div class="ib-val" id="di-cliente">—</div></div>
+        <div class="info-box"><div class="ib-key">ID Terminal</div><div class="ib-val" id="di-terminal-id">—</div></div>
+        <div class="info-box full"><div class="ib-key">Nombre del terminal</div><div class="ib-val" id="di-terminal">—</div></div>
+        <div class="info-box full"><div class="ib-key">Ubicación</div><div class="ib-val" id="di-ubic">—</div></div>
+        <div class="info-box"><div class="ib-key">Región</div><div class="ib-val" id="di-region">—</div></div>
+        <div class="info-box"><div class="ib-key">Tipo de equipo</div><div class="ib-val" id="di-tipo">—</div></div>
+        <div class="info-box"><div class="ib-key">Jefe de patio</div><div class="ib-val" id="di-jefe">—</div></div>
+        <div class="info-box"><div class="ib-key">Contacto</div><div class="ib-val" id="di-tel">—</div></div>
+      </div>
+    </div>
+
+    <!-- FALLA REPORTADA -->
+    <div class="sec">
+      <div class="sec-title">Falla reportada</div>
+      <div class="grid3">
+        <div class="info-box"><div class="ib-key">Tipo de falla</div><div class="ib-val" id="fi-tipo">—</div></div>
+        <div class="info-box"><div class="ib-key">Urgencia</div><div class="ib-val" id="fi-urgencia">—</div></div>
+        <div class="info-box"><div class="ib-key">Indisponibilidad</div><div class="ib-val" id="fi-disp">—</div></div>
+        <div class="info-box full"><div class="ib-key">Descripción del operador</div><div class="ib-val" id="fi-desc">—</div></div>
+      </div>
+    </div>
+
+    <!-- RESULTADO DE LA INTERVENCIÓN -->
+    <div class="sec">
+      <div class="sec-title">Resultado de la intervención</div>
+      <div class="estado-wrap">
+        <div class="estado-badge" id="estado-badge">—</div>
+      </div>
+      <div class="grid2" style="margin-bottom:14px">
+        <div class="info-box"><div class="ib-key">Hora llegada</div><div class="ib-val" id="ri-llegada">—</div></div>
+        <div class="info-box"><div class="ib-key">Hora salida</div><div class="ib-val" id="ri-salida">—</div></div>
+        <div class="info-box"><div class="ib-key">HH trabajadas</div><div class="ib-val" id="ri-hh">—</div></div>
+        <div class="info-box"><div class="ib-key">Fotos registradas</div><div class="ib-val" id="ri-fotos">—</div></div>
+      </div>
+      <div class="ib-key" style="margin-bottom:6px">Descripción técnica de la intervención</div>
+      <div class="desc-text" id="ri-desc">—</div>
+      <div id="ri-obs-wrap" style="margin-top:12px;display:none">
+        <div class="ib-key" style="margin-bottom:6px">Observaciones adicionales</div>
+        <div class="desc-text" id="ri-obs" style="background:#fffbeb;border-color:#fcd34d"></div>
+      </div>
+    </div>
+
+    <!-- MATERIALES -->
+    <div class="sec">
+      <div class="sec-title">Materiales utilizados</div>
+      <table class="mat-table" id="mat-table">
+        <thead>
+          <tr>
+            <th>Descripción del material</th>
+            <th class="mat-align-r">Cantidad</th>
+            <th class="mat-align-r">Costo unit.</th>
+            <th class="mat-align-r">Total</th>
+          </tr>
+        </thead>
+        <tbody id="mat-body"></tbody>
+      </table>
+      <div class="mat-empty" id="mat-empty" style="display:none">
+        No se utilizaron materiales en esta intervención.
+      </div>
+    </div>
+
+    <!-- GARANTÍA -->
+    <div class="sec">
+      <div class="sec-title">Cobertura de garantía</div>
+      <div class="gar-card" id="gar-card">
+        <div class="gar-icon" id="gar-icon">—</div>
+        <div>
+          <div class="gar-title" id="gar-title">—</div>
+          <div class="gar-desc"  id="gar-desc">—</div>
+          <div class="gar-nota"  id="gar-nota"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIRMA DEL CLIENTE -->
+    <div class="sec">
+      <div class="sec-title">Conformidad del cliente</div>
+      <div class="firma-wrap">
+        <div class="firma-img-box" id="firma-img-box">
+          <span class="firma-sin" id="firma-sin">Sin firma registrada</span>
+        </div>
+        <div class="firma-datos">
+          <div class="firma-dato"><div class="fd-key">Firmado por</div><div class="fd-val" id="fd-nombre">—</div></div>
+          <div class="firma-dato"><div class="fd-key">Fecha de firma</div><div class="fd-val" id="fd-fecha">—</div></div>
+          <div class="firma-dato"><div class="fd-key">Estado</div><div class="fd-val" id="fd-estado">—</div></div>
+          <div class="firma-valida" id="firma-valida" style="display:none">✅ Intervención aprobada por el cliente</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end doc-body -->
+
+  <!-- PIE DE PÁGINA -->
+  <div class="doc-footer">
+    <div class="footer-left">
+      <strong>Enel X — Servicio de Asistencias Electroterminales</strong><br>
+      Sistema ACEX · Atención 24/7<br>
+      Este documento es el registro oficial de la intervención técnica realizada.
+    </div>
+    <div class="footer-right" id="footer-rpt">—</div>
+  </div>
+
+</div><!-- end doc -->
+</div><!-- end doc-outer -->
+
+<script>
+// ── INIT ───────────────────────────────────────────────────────────────────
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const ticket = params.get('ticket');
+  const token  = params.get('token');
+
+  if (!ticket || !token) {
+    showError('Link inválido. Solicita el reporte al operador ACEX.');
+    return;
+  }
+  await cargarCaso(ticket, token);
+};
+
+async function cargarCaso(ticket, token) {
+  try {
+    const resp = await fetch(
+      `/.netlify/functions/obtener-caso?ticket=${encodeURIComponent(ticket)}&token=${encodeURIComponent(token)}`
+    );
+    const data = await resp.json();
+    if (!resp.ok) {
+      showError(data.error || 'No se pudo cargar el caso.');
+      return;
+    }
+    renderReporte(data.fields, ticket);
+  } catch(e) {
+    showError('Error de conexión. Verifica tu internet.');
+  }
+}
+
+function showError(msg) {
+  document.getElementById('state-loading').style.display = 'none';
+  document.getElementById('state-error').style.display   = 'flex';
+  document.getElementById('error-msg').textContent       = msg;
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function renderReporte(f, ticket) {
+  document.getElementById('state-loading').style.display = 'none';
+  document.getElementById('action-bar').style.display    = 'flex';
+  document.getElementById('doc-outer').style.display     = 'block';
+
+  // Número de reporte
+  const rptNum = 'RPT-' + ticket.replace('TKT-','');
+  document.getElementById('rpt-num').textContent    = rptNum;
+  document.getElementById('footer-rpt').textContent = rptNum;
+  document.getElementById('ab-ticket').textContent  = ticket;
+
+  // Header meta
+  set('hm-ticket',   f['Ticket']              || '—');
+  set('hm-fecha',    f['Fecha evento']         || '—');
+  set('hm-cierre',   f['Fecha cierre terreno'] || f['Fecha creacion'] || '—');
+  set('hm-tecnico',  f['Recurso asignado']     || '—');
+  set('hm-operador', f['Operador ACEX']        || '—');
+
+  // Datos cliente/terminal
+  set('di-cliente',    f['Cliente nombre']  || '—');
+  set('di-terminal-id',f['Terminal ID']     || '—');
+  set('di-terminal',   f['Terminal nombre'] || '—');
+  set('di-ubic',       f['Ubicacion']       || '—');
+  set('di-region',     f['Region']          || '—');
+  set('di-tipo',       f['Tipo terminal']   || '—');
+  set('di-jefe',       f['Jefe patio']      || '—');
+  set('di-tel',        f['Tel contacto']    || '—');
+
+  // Falla
+  set('fi-tipo',    f['Tipo falla']     || '—');
+  set('fi-urgencia',f['Urgencia']       || '—');
+  set('fi-disp',    f['Disponibilidad'] || '—');
+  set('fi-desc',    f['Descripcion falla'] || '—');
+
+  // Estado terminal
+  const estadoMap = {
+    'Operativo':              { cls:'ok',     txt:'✅  Terminal operativo — Falla resuelta correctamente' },
+    'Resuelto en terreno':    { cls:'ok',     txt:'✅  Terminal operativo — Falla resuelta correctamente' },
+    'Parcialmente operativo': { cls:'parcial',txt:'⚠️  Terminal parcialmente operativo' },
+    'Parcialmente resuelto':  { cls:'parcial',txt:'⚠️  Terminal parcialmente operativo' },
+    'No resuelto':            { cls:'nok',    txt:'❌  Terminal requiere intervención adicional' },
+    'Pendiente escalación':   { cls:'nok',    txt:'🔄  Caso escalado — pendiente intervención adicional' },
+  };
+  const est = estadoMap[f['Terminal operativo'] || f['Estado']] ||
+              { cls:'ok', txt: f['Terminal operativo'] || '—' };
+  const badge = document.getElementById('estado-badge');
+  badge.className   = 'estado-badge ' + est.cls;
+  badge.textContent = est.txt;
+
+  // Intervención
+  set('ri-llegada', f['Hora llegada'] || '—');
+  set('ri-salida',  f['Hora salida']  || '—');
+  set('ri-hh',      f['HH total'] ? f['HH total'] + ' HH' : '—');
+  set('ri-fotos',   f['Fotos count'] !== undefined ? f['Fotos count'] + ' foto(s)' : '—');
+  set('ri-desc',    f['Descripcion tecnica'] || '—');
+
+  if (f['Observaciones terreno']) {
+    set('ri-obs', f['Observaciones terreno']);
+    document.getElementById('ri-obs-wrap').style.display = 'block';
+  }
+
+  // Materiales
+  const matStr  = f['Materiales'] || '';
+  const matBody = document.getElementById('mat-body');
+  if (!matStr || matStr === 'Sin materiales') {
+    document.getElementById('mat-table').style.display = 'none';
+    document.getElementById('mat-empty').style.display = 'block';
+  } else {
+    const lines = matStr.split('\n').filter(l => l.trim());
+    let totalG = 0;
+    lines.forEach(line => {
+      const m = line.match(/^(.+)\s×\s(\d+)\s=\s\$(.+)$/);
+      const tr = document.createElement('tr');
+      if (m) {
+        const val = parseInt(m[3].replace(/\./g,'').replace(',',''));
+        totalG += isNaN(val) ? 0 : val;
+        tr.innerHTML = `<td>${m[1]}</td><td class="mat-align-r">${m[2]}</td><td class="mat-align-r">—</td><td class="mat-align-r">$${m[3]}</td>`;
+      } else {
+        tr.innerHTML = `<td colspan="4">${line}</td>`;
+      }
+      matBody.appendChild(tr);
+    });
+    if (totalG > 0) {
+      const tr = document.createElement('tr');
+      tr.className = 'tr-total';
+      tr.innerHTML = `<td colspan="3"><strong>Total materiales</strong></td><td class="mat-align-r"><strong>$${totalG.toLocaleString('es-CL')}</strong></td>`;
+      matBody.appendChild(tr);
+    }
+  }
+
+  // Garantía
+  const garMap = {
+    'GARANTÍA VIGENTE': {
+      cls:'vigente', icon:'✅',
+      title:'Intervención cubierta por garantía',
+      desc:'Esta intervención está cubierta por el contrato de garantía estándar vigente. Sin costo para el cliente.',
+      nota:'Garantía estándar: 24 meses desde la puesta en marcha.',
+    },
+    'GARANTÍA EXTENDIDA': {
+      cls:'extendida', icon:'✅',
+      title:'Intervención cubierta por garantía extendida',
+      desc:'Esta intervención está cubierta por el contrato de garantía extendida. Sin costo para el cliente.',
+      nota:'Garantía extendida contratada: cobertura total vigente.',
+    },
+    'FUERA DE GARANTÍA': {
+      cls:'fuera', icon:'📋',
+      title:'Intervención fuera del período de garantía',
+      desc:'Esta intervención no está cubierta por garantía. Se emitirá un presupuesto formal dentro de las próximas 24 horas hábiles.',
+      nota:'El presupuesto será enviado por el área comercial de Enel X para su revisión y aprobación.',
+    },
+    'SINIESTRO — CARGO CLIENTE': {
+      cls:'siniestro', icon:'📋',
+      title:'Intervención por siniestro — fuera de cobertura',
+      desc:'Esta intervención corresponde a un siniestro y no está cubierta por garantía. Se emitirá un presupuesto formal dentro de las próximas 24 horas hábiles.',
+      nota:'El presupuesto incluirá los costos de reparación y materiales utilizados.',
+    },
+  };
+  const gar = garMap[f['Resultado garantia']] || {
+    cls:'vigente', icon:'📋',
+    title:'Cobertura en evaluación',
+    desc:'El estado de cobertura está siendo evaluado. El equipo de Enel X se pondrá en contacto a la brevedad.',
+    nota:'',
+  };
+  document.getElementById('gar-card').className  = 'gar-card ' + gar.cls;
+  set('gar-icon',  gar.icon);
+  set('gar-title', gar.title);
+  set('gar-desc',  gar.desc);
+  set('gar-nota',  gar.nota);
+
+  // Firma
+  const firmaData = f['Firma cliente (imagen)'];
+  if (firmaData && firmaData.startsWith('data:image')) {
+    const img = document.createElement('img');
+    img.src = firmaData;
+    const box = document.getElementById('firma-img-box');
+    document.getElementById('firma-sin').style.display = 'none';
+    box.appendChild(img);
+  }
+  set('fd-nombre', f['Nombre firmante'] || '—');
+  set('fd-fecha',  f['Fecha firma']     || '—');
+  set('fd-estado', f['Estado aprobacion'] || f['Estado'] || '—');
+
+  if (f['Estado aprobacion'] === 'Aprobado por cliente') {
+    document.getElementById('firma-valida').style.display = 'inline-flex';
+  }
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+</script>
+</body>
+</html>

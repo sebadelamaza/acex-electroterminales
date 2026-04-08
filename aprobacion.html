@@ -593,6 +593,9 @@ function mostrarExito(nombre, cargo) {
   document.getElementById('bottom-bar').style.display  = 'none';
 
   const f = A.caso;
+  const BASE_URL   = 'https://snazzy-starship-8e4240.netlify.app';
+  const linkReporte = `${BASE_URL}/reporte.html?ticket=${encodeURIComponent(A.ticket)}&token=${encodeURIComponent(A.token)}`;
+
   document.getElementById('s-card').innerHTML = `
     <div class="s-row"><span class="s-key">Ticket</span><span class="s-val">${f['Ticket']||'—'}</span></div>
     <div class="s-row"><span class="s-key">Terminal</span><span class="s-val">${f['Terminal nombre']||'—'}</span></div>
@@ -600,7 +603,22 @@ function mostrarExito(nombre, cargo) {
     <div class="s-row"><span class="s-key">Cargo</span><span class="s-val">${cargo}</span></div>
     <div class="s-row"><span class="s-key">Fecha firma</span><span class="s-val">${new Date().toLocaleString('es-CL')}</span></div>
     <div class="s-row"><span class="s-key">Estado</span><span class="s-val" style="color:var(--green)">✅ Cerrado — Aprobado</span></div>
-  `;
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">
+        Reporte oficial de intervención
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5">
+        Puede descargar el informe completo con todos los detalles de la intervención.
+      </div>
+      <a href="${linkReporte}" target="_blank"
+         style="display:flex;align-items:center;justify-content:center;gap:8px;
+                padding:12px 16px;background:var(--green);border-radius:var(--rs);
+                color:#fff;font-size:13px;font-weight:700;text-decoration:none;
+                border:none;width:100%">
+        📄 Ver y descargar reporte PDF
+      </a>
+    </div>`;
+
   document.getElementById('success-screen').classList.add('show');
   window.scrollTo(0, 0);
 }

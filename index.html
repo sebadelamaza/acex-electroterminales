@@ -553,6 +553,66 @@ async function submitForm(){
     console.error('Error de conexión:', e);
   }
 
+  // ── Armar link de terreno ──
+  const BASE_URL    = 'https://snazzy-starship-8e4240.netlify.app';
+  const linkTerreno = `${BASE_URL}/terreno.html?ticket=${encodeURIComponent(S.ticket)}&token=${encodeURIComponent(tokenCaso)}`;
+
+  // Recurso y teléfono asignado
+  const recursoNombre = recursoSel?.value || '—';
+  const telRecurso = (() => {
+    const recursos = {
+      'Rodrigo Jerez (Inspector)':       '+56912345678',
+      'Eddic Monzart (Inspector)':       '+56912345679',
+      'DCC — Emergencia grupos electrógenos': '+56912345680',
+      'RAICA — Emergencia cargadores':   '+56912345681',
+      'LARI':    '+56912345682',
+      'SOLGEC':  '+56912345683',
+      'AINEL':   '+56912345684',
+    };
+    return recursos[recursoNombre] || null;
+  })();
+
+  // Mensaje WhatsApp
+  const msgWA = encodeURIComponent(
+`*ACEX · Asistencia Electroterminales 24/7*
+─────────────────────────
+*Ticket:* ${S.ticket}
+*Cliente:* ${cname}
+*Terminal:* ${S.terminal?.nombre||'—'}
+*Ubicación:* ${S.terminal?.ubic||'—'}
+*Falla:* ${fallaSel?.value||'—'}
+*Urgencia:* ${urgSel?.options[urgSel.selectedIndex]?.text||'—'}
+*Garantía:* ${wl[S.warranty]||'—'}
+─────────────────────────
+📋 *Completa el formulario de terreno aquí:*
+${linkTerreno}`);
+
+  const urlWA = telRecurso
+    ? `https://wa.me/${telRecurso.replace(/\D/g,'')}?text=${msgWA}`
+    : `https://wa.me/?text=${msgWA}`;
+
+  // Mensaje correo
+  const asunto = encodeURIComponent(`[ACEX] Asistencia asignada — ${S.ticket}`);
+  const cuerpo = encodeURIComponent(
+`Estimado/a ${recursoNombre},
+
+Se te ha asignado la siguiente asistencia:
+
+Ticket: ${S.ticket}
+Cliente: ${cname}
+Terminal: ${S.terminal?.nombre||'—'}
+Ubicación: ${S.terminal?.ubic||'—'}
+Falla reportada: ${fallaSel?.value||'—'}
+Urgencia: ${urgSel?.options[urgSel.selectedIndex]?.text||'—'}
+Garantía: ${wl[S.warranty]||'—'}
+
+Por favor completa el formulario de terreno al llegar al sitio:
+${linkTerreno}
+
+ACEX · Sistema de Asistencias 24/7`);
+
+  const urlCorreo = `mailto:?subject=${asunto}&body=${cuerpo}`;
+
   // ── Mostrar pantalla de éxito ──
   document.getElementById('s-ticket').textContent = S.ticket || '—';
   document.getElementById('s-guardado').innerHTML = guardadoOk
@@ -571,11 +631,32 @@ async function submitForm(){
     <div class="srow"><span class="sk">Tipo falla</span><span class="sv">${fallaSel?.value||'—'}</span></div>
     <div class="srow"><span class="sk">Urgencia</span><span class="sv">${urgSel?.options[urgSel.selectedIndex]?.text||'—'}</span></div>
     <div class="srow"><span class="sk">Garantía</span><span class="sv" style="color:${wc[S.warranty]||'var(--muted)'};font-weight:700">${wl[S.warranty]||'—'}</span></div>
-    <div class="srow"><span class="sk">Recurso</span><span class="sv">${recursoSel?.value||'—'}</span></div>
+    <div class="srow"><span class="sk">Recurso</span><span class="sv">${recursoNombre}</span></div>
     <div class="srow"><span class="sk">Estado</span><span class="sv" style="color:var(--greenl)">Abierto</span></div>
     <div class="srow"><span class="sk">Apertura</span><span class="sv">${new Date().toLocaleString('es-CL')}</span></div>
-    ${guardadoOk ? `<div class="srow"><span class="sk">Token caso</span><span class="sv" style="color:var(--muted);font-size:10px">${tokenCaso}</span></div>` : ''}
   `;
+
+  // ── Botones de notificación ──
+  document.getElementById('s-notif').innerHTML = `
+    <div style="width:100%;max-width:500px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-top:4px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">
+        Notificar al técnico asignado
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        Envía el link del formulario de terreno a <strong style="color:var(--text)">${recursoNombre}</strong>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="${urlWA}" target="_blank" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:#075e54;border:1px solid #25d366;border-radius:var(--rs);color:#25d366;font-size:13px;font-weight:700;text-decoration:none;transition:all .15s">
+          <span style="font-size:18px">💬</span> WhatsApp
+        </a>
+        <a href="${urlCorreo}" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:var(--bluebg);border:1px solid var(--blue);border-radius:var(--rs);color:var(--bluel);font-size:13px;font-weight:700;text-decoration:none;transition:all .15s">
+          <span style="font-size:18px">📧</span> Correo
+        </a>
+        <button onclick="copiarLink('${linkTerreno}')" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:var(--s3);border:1px solid var(--border2);border-radius:var(--rs);color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" id="btn-copiar">
+          <span style="font-size:18px">🔗</span> Copiar link
+        </button>
+      </div>
+    </div>`;
 
   document.querySelectorAll('.step').forEach(el=>el.classList.add('done'));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -584,6 +665,20 @@ async function submitForm(){
 
   btnSubmit.disabled = false;
   btnSubmit.textContent = '✅ Confirmar apertura del caso';
+}
+
+function copiarLink(link) {
+  navigator.clipboard.writeText(link).then(() => {
+    const btn = document.getElementById('btn-copiar');
+    btn.innerHTML = '<span style="font-size:18px">✅</span> ¡Copiado!';
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--greenl)';
+    setTimeout(() => {
+      btn.innerHTML = '<span style="font-size:18px">🔗</span> Copiar link';
+      btn.style.borderColor = 'var(--border2)';
+      btn.style.color = 'var(--muted)';
+    }, 2000);
+  });
 }
 
 function cc(el,id,max){ document.getElementById(id).textContent=el.value.length+' / '+max+' caracteres'; if(el.value.length>max)el.value=el.value.slice(0,max); }
@@ -978,7 +1073,8 @@ window.onload=()=>{
     <div style="font-size:12px;color:var(--muted);max-width:400px;line-height:1.7">El técnico asignado fue notificado. ACEX realizará seguimiento cada 30 minutos hasta la reposición total de energía.</div>
     <div id="s-guardado" style="width:100%;max-width:500px;margin-top:14px"></div>
     <div class="scard" id="s-card"></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+    <div id="s-notif"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px">
       <button class="btn btn-secondary" onclick="window.print()">🖨 Imprimir resumen</button>
       <button class="btn btn-primary" onclick="location.reload()">+ Nuevo caso</button>
     </div>

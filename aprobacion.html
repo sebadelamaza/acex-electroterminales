@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>ACEX · Aprobación de Intervención</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg:#f4f6f9; --white:#ffffff; --s1:#f8fafc;
@@ -16,19 +16,17 @@
   --red:#c0392b; --redbg:#fef2f2; --redbdr:#fca5a5; --redl:#dc2626;
   --amber:#d97706; --amberbg:#fffbeb; --amberbdr:#fcd34d;
   --purple:#6d28d9; --purplebg:#faf5ff; --purplebdr:#c4b5fd;
-  --enel:#007140; --enel-dark:#004f2d;
+  --enel:#007140; --enel-dark:#1D6FD1;
   --r:12px; --rs:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:120px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:120px}
 
 /* HEADER */
 .header{background:var(--enel-dark);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
 .logo-block{display:flex;align-items:center;gap:8px}
-.logo-sq{width:18px;height:18px;background:#5b4dc8;border-radius:3px}
 .logo-txt{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.3px}
-.logo-txt span{color:#78be20}
-.header-right{font-size:11px;color:#86efac;font-family:'DM Mono',monospace}
+.header-right{font-size:11px;color:rgba(255,255,255,.8);font-family:'JetBrains Mono',monospace}
 
 /* LOADING */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px;text-align:center}
@@ -50,12 +48,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .doc-header::after{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(120,190,32,.15)}
 .doc-header-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
 .doc-logo{display:flex;align-items:center;gap:8px}
-.doc-logo-sq{width:20px;height:20px;background:#5b4dc8;border-radius:3px}
 .doc-logo-txt{font-size:16px;font-weight:700;color:#fff}
-.doc-logo-txt span{color:#78be20}
-.doc-ticket{font-family:'DM Mono',monospace;font-size:11px;color:#86efac;background:rgba(255,255,255,.1);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.2)}
+.doc-ticket{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.9);background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.3)}
 .doc-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:4px}
-.doc-subtitle{font-size:12px;color:#86efac}
+.doc-subtitle{font-size:12px;color:rgba(255,255,255,.8)}
 .doc-meta{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
 .doc-meta-item{font-size:11px;color:rgba(255,255,255,.7)}
 .doc-meta-item strong{color:#fff;display:block;font-size:12px}
@@ -113,11 +109,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 canvas{display:block;width:100%;cursor:crosshair}
 .canvas-label{position:absolute;top:8px;left:12px;font-size:10px;color:var(--faint);pointer-events:none;font-style:italic}
 .canvas-actions{display:flex;justify-content:flex-end;margin-bottom:14px}
-.btn-clear{background:none;border:1px solid var(--border2);border-radius:var(--rs);padding:6px 12px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-clear{background:none;border:1px solid var(--border2);border-radius:var(--rs);padding:6px 12px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif}
 .btn-clear:active{background:var(--bg)}
 .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
 label{font-size:12px;font-weight:600;color:var(--muted)}
-input{background:var(--s1);border:1.5px solid var(--border2);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 13px;width:100%;outline:none;-webkit-appearance:none;transition:border-color .15s}
+input{background:var(--s1);border:1.5px solid var(--border2);border-radius:var(--rs);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;padding:12px 13px;width:100%;outline:none;-webkit-appearance:none;transition:border-color .15s}
 input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,111,219,.1)}
 input::placeholder{color:var(--faint)}
 
@@ -127,7 +123,7 @@ input::placeholder{color:var(--faint)}
 
 /* BOTTOM BAR */
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:16px;background:var(--white);border-top:1px solid var(--border);z-index:50}
-.btn-firmar{width:100%;padding:16px;background:var(--green);border:none;border-radius:var(--rs);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-firmar{width:100%;padding:16px;background:var(--green);border:none;border-radius:var(--rs);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-firmar:active{background:var(--greenl);transform:scale(.98)}
 .btn-firmar:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
@@ -142,7 +138,7 @@ input::placeholder{color:var(--faint)}
 .s-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
 .s-row:last-child{border-bottom:none}
 .s-key{color:var(--muted)}
-.s-val{font-weight:600;font-family:'DM Mono',monospace;font-size:11px}
+.s-val{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px}
 </style>
 </head>
 <body>
@@ -150,8 +146,7 @@ input::placeholder{color:var(--faint)}
 <!-- HEADER -->
 <div class="header">
   <div class="logo-block">
-    <div class="logo-sq"></div>
-    <div class="logo-txt">enel <span>x</span></div>
+    <div class="logo-txt">enel</div>
   </div>
   <div class="header-right">Informe de Intervención</div>
 </div>
@@ -177,8 +172,7 @@ input::placeholder{color:var(--faint)}
     <div class="doc-header">
       <div class="doc-header-top">
         <div class="doc-logo">
-          <div class="doc-logo-sq"></div>
-          <div class="doc-logo-txt">enel <span>x</span></div>
+          <div class="doc-logo-txt">enel</div>
         </div>
         <div class="doc-ticket" id="dh-ticket">—</div>
       </div>
@@ -288,7 +282,7 @@ input::placeholder{color:var(--faint)}
   <div class="s-sub">Su firma ha sido registrada exitosamente. Gracias por confirmar la intervención.</div>
   <div class="s-card" id="s-card"></div>
   <div style="font-size:11px;color:var(--faint);margin-top:24px">
-    ACEX · Enel X · Sistema de Asistencias Electroterminales 24/7
+    ACEX · Enel · Sistema de Asistencias Electroterminales 24/7
   </div>
 </div>
 
@@ -305,7 +299,32 @@ window.onload = async () => {
   A.ticket = params.get('ticket');
   A.token  = params.get('token');
   if (!A.ticket || !A.token) {
-    showError('Link inválido. Solicita un nuevo link al operador ACEX.');
+    // MODO DEMO
+    A.ticket = 'DEMO-001';
+    A.token  = 'demo';
+    A.recordId = 'rec_demo';
+    A.caso = {
+      'Ticket': 'DEMO-001',
+      'Cliente nombre': 'Buses Metropolitanos S.A.',
+      'Terminal nombre': 'Terminal Pudahuel Norte',
+      'Terminal ID': 'TRM-042',
+      'Contratista nombre': 'Electroservice Ltda.',
+      'Tecnico nombre': 'Carlos Mendoza',
+      'Tipo falla': 'Cargador no entrega potencia',
+      'Descripcion falla': 'Equipo ABB Terra 124 no entrega corriente DC. Display muestra Error E-005.',
+      'Estado': 'Pendiente aprobación',
+      'Resultado garantia': 'GARANTÍA VIGENTE',
+      'HH llegada': '08:30',
+      'HH salida': '11:45',
+      'HH total': '3.25',
+      'Diagnostico': 'Módulo de potencia DC defectuoso. Se reemplazó componente y se realizaron pruebas de carga exitosas.',
+      'Materiales': JSON.stringify([{desc:'Módulo DC ABB Terra 124',qty:1,unit:'unidad'},{desc:'Fusible 63A',qty:2,unit:'unidad'}]),
+    };
+    mostrarDocumento();
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:#FEF3E2;color:#C96D00;text-align:center;padding:8px 16px;font-size:12px;font-family:JetBrains Mono,monospace;font-weight:500';
+    banner.textContent = '⚠ MODO DEMO — datos de ejemplo, sin conexión a Airtable';
+    document.body.insertBefore(banner, document.body.firstChild);
     return;
   }
   await cargarCaso();
@@ -445,7 +464,7 @@ function mostrarDocumento() {
       cls: 'fuera', icon: '📋',
       title: 'Intervención fuera del período de garantía',
       desc:  'Esta intervención no está cubierta por garantía. Recibirá un presupuesto formal con el detalle de costos dentro de las próximas 24 horas hábiles.',
-      nota:  'El presupuesto será enviado por el área comercial de Enel X para su aprobación.',
+      nota:  'El presupuesto será enviado por el área comercial de Enel para su aprobación.',
     },
     'SINIESTRO — CARGO CLIENTE': {
       cls: 'siniestro', icon: '📋',

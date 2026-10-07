@@ -4,17 +4,17 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ACEX · Reporte de Intervención</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 /* ── PANTALLA ── */
 :root {
-  --green:#007140; --green-d:#004f2d; --lime:#78be20;
-  --blue:#1a6fdb; --red:#c0392b; --amber:#d97706;
+  --green:#007140; --green-d:#1D6FD1; --lime:#78be20;
+  --blue:#1D6FD1; --red:#c0392b; --amber:#d97706;
   --text:#1a2433; --muted:#64748b; --faint:#94a3b8;
   --border:#e2e8f0; --bg:#f4f6f9; --white:#ffffff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 
 /* LOADING / ERROR */
 .screen-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px;text-align:center;gap:14px}
@@ -24,16 +24,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 /* TOP ACTION BAR (solo en pantalla, no en print) */
 .action-bar{background:var(--green-d);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .action-bar-left{display:flex;align-items:center;gap:10px}
-.logo-sq{width:16px;height:16px;background:#5b4dc8;border-radius:3px}
 .logo-txt{font-size:14px;font-weight:700;color:#fff}
-.logo-txt span{color:var(--lime)}
+.logo-divider{width:1px;height:14px;background:rgba(255,255,255,.4)}
+.logo-sub{font-size:11px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.5px}
 .action-right{display:flex;gap:8px}
-.btn-dl{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
-.btn-dl.primary{background:var(--lime);color:var(--green-d)}
+.btn-dl{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-dl.primary{background:var(--lime);color:#004f2d}
 .btn-dl.primary:hover{background:#8ed422;transform:translateY(-1px)}
 .btn-dl.secondary{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25)}
 .btn-dl.secondary:hover{background:rgba(255,255,255,.2)}
-.report-id{font-family:'DM Mono',monospace;font-size:11px;color:#86efac}
+.report-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.85)}
 
 /* ── DOCUMENTO PDF ── */
 .doc-outer{max-width:800px;margin:24px auto;padding:0 16px 40px}
@@ -45,13 +45,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .doc-hdr::after{content:'';position:absolute;right:60px;bottom:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.05)}
 .hdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
 .hdr-logo{display:flex;align-items:center;gap:9px}
-.hdr-logo-sq{width:22px;height:22px;background:#5b4dc8;border-radius:4px}
 .hdr-logo-txt{font-size:18px;font-weight:700;color:#fff}
-.hdr-logo-txt span{color:var(--lime)}
-.hdr-badge{font-family:'DM Mono',monospace;font-size:10px;color:#86efac;background:rgba(255,255,255,.1);padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.2);text-align:right}
+.hdr-logo-divider{width:1px;height:18px;background:rgba(255,255,255,.4)}
+.hdr-logo-sub{font-size:12px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.5px}
+.hdr-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.9);background:rgba(255,255,255,.12);padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.25);text-align:right}
 .hdr-badge-num{font-size:14px;font-weight:700;color:#fff;display:block}
 .hdr-title{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
-.hdr-sub{font-size:12px;color:#86efac;margin-bottom:16px}
+.hdr-sub{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:16px}
 .hdr-meta{display:flex;gap:24px;flex-wrap:wrap}
 .hdr-meta-item{font-size:11px}
 .hdr-meta-item .mk{color:rgba(255,255,255,.55);margin-bottom:2px}
@@ -118,7 +118,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .doc-footer{background:#f8fafc;border-top:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .footer-left{font-size:10px;color:var(--faint);line-height:1.6}
 .footer-left strong{color:var(--muted)}
-.footer-right{font-family:'DM Mono',monospace;font-size:10px;color:var(--faint)}
+.footer-right{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint)}
 
 /* ══════════════════════════════════════════════
    PRINT STYLES
@@ -155,8 +155,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 <!-- ACTION BAR -->
 <div class="action-bar" id="action-bar" style="display:none">
   <div class="action-bar-left">
-    <div class="logo-sq"></div>
-    <div class="logo-txt">enel <span>x</span></div>
+    <div class="logo-txt">enel</div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub">ACEX</div>
     <div class="report-id" id="ab-ticket">—</div>
   </div>
   <div class="action-right">
@@ -173,8 +174,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
   <div class="doc-hdr">
     <div class="hdr-top">
       <div class="hdr-logo">
-        <div class="hdr-logo-sq"></div>
-        <div class="hdr-logo-txt">enel <span>x</span></div>
+        <div class="hdr-logo-txt">enel</div>
+        <div class="hdr-logo-divider"></div>
+        <div class="hdr-logo-sub">ACEX</div>
       </div>
       <div class="hdr-badge">
         Reporte N°
@@ -293,7 +295,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
   <!-- PIE DE PÁGINA -->
   <div class="doc-footer">
     <div class="footer-left">
-      <strong>Enel X — Servicio de Asistencias Electroterminales</strong><br>
+      <strong>Enel — Servicio de Asistencias Electroterminales</strong><br>
       Sistema ACEX · Atención 24/7<br>
       Este documento es el registro oficial de la intervención técnica realizada.
     </div>
@@ -311,7 +313,34 @@ window.onload = async () => {
   const token  = params.get('token');
 
   if (!ticket || !token) {
-    showError('Link inválido. Solicita el reporte al operador ACEX.');
+    // MODO DEMO
+    const demoFields = {
+      'Ticket': 'DEMO-001',
+      'Cliente nombre': 'Buses Metropolitanos S.A.',
+      'Terminal nombre': 'Terminal Pudahuel Norte',
+      'Terminal ID': 'TRM-042',
+      'Ubicacion': 'Av. Américo Vespucio 1234, Pudahuel',
+      'Contratista nombre': 'Electroservice Ltda.',
+      'Tecnico nombre': 'Carlos Mendoza',
+      'Tipo falla': 'Cargador no entrega potencia',
+      'Descripcion falla': 'Equipo ABB Terra 124 no entrega corriente DC. Display muestra Error E-005.',
+      'Estado': 'Cerrado',
+      'Resultado garantia': 'GARANTÍA VIGENTE',
+      'HH llegada': '08:30',
+      'HH salida': '11:45',
+      'HH total': '3.25',
+      'Fecha apertura': new Date().toISOString(),
+      'Diagnostico': 'Módulo de potencia DC defectuoso. Se reemplazó componente y se realizaron pruebas de carga exitosas.',
+      'Materiales': JSON.stringify([{desc:'Módulo DC ABB Terra 124',qty:1,unit:'unidad'},{desc:'Fusible 63A',qty:2,unit:'unidad'}]),
+      'Resolucion': 'Equipo operativo al 100%. Se recomienda revisión preventiva en 90 días.',
+      'Cliente firma': '',
+      'Aprobado por': 'Juan Pérez (Jefe de Terminal)',
+    };
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:#FEF3E2;color:#C96D00;text-align:center;padding:8px 16px;font-size:12px;font-family:JetBrains Mono,monospace;font-weight:500';
+    banner.textContent = '⚠ MODO DEMO — datos de ejemplo, sin conexión a Airtable';
+    document.body.insertBefore(banner, document.body.firstChild);
+    renderReporte(demoFields, 'DEMO-001');
     return;
   }
   await cargarCaso(ticket, token);
@@ -448,7 +477,7 @@ function renderReporte(f, ticket) {
       cls:'fuera', icon:'📋',
       title:'Intervención fuera del período de garantía',
       desc:'Esta intervención no está cubierta por garantía. Se emitirá un presupuesto formal dentro de las próximas 24 horas hábiles.',
-      nota:'El presupuesto será enviado por el área comercial de Enel X para su revisión y aprobación.',
+      nota:'El presupuesto será enviado por el área comercial de Enel para su revisión y aprobación.',
     },
     'SINIESTRO — CARGO CLIENTE': {
       cls:'siniestro', icon:'📋',
@@ -460,7 +489,7 @@ function renderReporte(f, ticket) {
   const gar = garMap[f['Resultado garantia']] || {
     cls:'vigente', icon:'📋',
     title:'Cobertura en evaluación',
-    desc:'El estado de cobertura está siendo evaluado. El equipo de Enel X se pondrá en contacto a la brevedad.',
+    desc:'El estado de cobertura está siendo evaluado. El equipo de Enel se pondrá en contacto a la brevedad.',
     nota:'',
   };
   document.getElementById('gar-card').className  = 'gar-card ' + gar.cls;

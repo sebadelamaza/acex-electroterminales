@@ -2,191 +2,386 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>ACEX · Apertura de Caso — Electroterminales</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>ACEX · Apertura de Caso</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
+/* ═══════════════════════════════════════════════════
+   TOKENS — ENEL CORPORATE PALETTE
+   ═══════════════════════════════════════════════════ */
 :root {
-  --bg:#0b0f14; --s1:#111720; --s2:#18202c; --s3:#1e2a38; --s4:#263548;
-  --border:#263040; --border2:#2e3d52; --text:#dde6f0; --muted:#6b839e; --faint:#3a4f66;
-  --green:#007140; --greenl:#00a85e; --greenbg:#071a0f; --greenb:#0d3320; --lime:#78be20;
-  --blue:#1a6fdb; --bluel:#4d9fff; --bluebg:#06152a;
-  --amber:#c96d00; --amberl:#f59e0b; --amberbg:#1a0e00;
-  --red:#c0392b; --redl:#f05040; --redbg:#1a0505;
-  --purple:#6d28d9; --purplel:#a78bfa; --purplebg:#120a24;
-  --teal:#0d7377; --teall:#2ea09a; --tealbg:#041415;
-  --r:10px; --rs:6px;
+  --bg:        #FFFFFF;
+  --bg2:       #F5F7FA;
+  --bg3:       #EBF0F7;
+  --surface:   #FFFFFF;
+  --border:    #D8E2EE;
+  --border2:   #B8CAE0;
+  --text:      #1A1F2B;
+  --muted:     #637181;
+  --faint:     #9BAAB8;
+
+  --blue:      #1D6FD1;
+  --blue-dk:   #1558A8;
+  --blue-lt:   #4A96E8;
+  --blue-bg:   #EBF3FD;
+  --blue-bdr:  #B3D4F5;
+
+  --green:     #007140;
+  --green-dk:  #005C33;
+  --green-lt:  #00A35E;
+  --green-bg:  #E6F4EC;
+  --green-bdr: #99D4B4;
+
+  --amber:     #C96D00;
+  --amber-bg:  #FEF3E2;
+  --amber-bdr: #FABB67;
+
+  --red:       #C0392B;
+  --red-bg:    #FEECEB;
+  --red-bdr:   #F0A09A;
+  --red-lt:    #D94432;
+
+  --teal:      #0D7377;
+  --teal-bg:   #E5F4F5;
+  --teal-bdr:  #80C8CB;
+  --teal-lt:   #129B9F;
+
+  --r:         8px;
+  --rs:        6px;
+  --shadow-sm: 0 1px 3px rgba(29,111,209,.07), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:    0 4px 12px rgba(29,111,209,.10), 0 1px 3px rgba(0,0,0,.06);
 }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#0E1420; --bg2:#141C2C; --bg3:#1A2438; --surface:#141C2C;
+    --border:#233148; --border2:#2E4060; --text:#E2EAF4; --muted:#7A93B0; --faint:#3D5570;
+    --blue:#3D8FE0; --blue-dk:#2270C0; --blue-lt:#6AAEF0; --blue-bg:#0A1E38; --blue-bdr:#1E4A80;
+    --green:#00A35E; --green-dk:#007140; --green-lt:#2DC87A; --green-bg:#071E12; --green-bdr:#0D4A28;
+    --amber:#E0881A; --amber-bg:#1C1000; --amber-bdr:#7A4A00;
+    --red:#E04038; --red-bg:#1C0808; --red-bdr:#7A1A18; --red-lt:#F05A50;
+    --teal:#20AEBE; --teal-bg:#041416; --teal-bdr:#0A4850; --teal-lt:#30C8D8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#0E1420; --bg2:#141C2C; --bg3:#1A2438; --surface:#141C2C;
+  --border:#233148; --border2:#2E4060; --text:#E2EAF4; --muted:#7A93B0; --faint:#3D5570;
+  --blue:#3D8FE0; --blue-dk:#2270C0; --blue-lt:#6AAEF0; --blue-bg:#0A1E38; --blue-bdr:#1E4A80;
+  --green:#00A35E; --green-dk:#007140; --green-lt:#2DC87A; --green-bg:#071E12; --green-bdr:#0D4A28;
+  --amber:#E0881A; --amber-bg:#1C1000; --amber-bdr:#7A4A00;
+  --red:#E04038; --red-bg:#1C0808; --red-bdr:#7A1A18; --red-lt:#F05A50;
+  --teal:#20AEBE; --teal-bg:#041416; --teal-bdr:#0A4850; --teal-lt:#30C8D8;
+  color-scheme: dark;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;line-height:1.5}
 
-/* TOPBAR */
-.topbar{position:sticky;top:0;z-index:100;background:var(--s1);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px}
-.logo-block{display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rs)}
-.logo-sq{width:18px;height:18px;background:#5b4dc8;border-radius:3px}
-.logo-txt{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.3px}
-.logo-txt span{color:#5b4dc8}
-.topbar-title{font-size:13px;color:var(--muted);margin-left:14px}
+/* ═══════════════════════════════════════════════════
+   TOPBAR
+   ═══════════════════════════════════════════════════ */
+.topbar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:100;
+  background:var(--blue);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;height:52px;
+  box-shadow:0 2px 8px rgba(29,111,209,.25);
+}
+
+.logo-block{display:flex;align-items:center;gap:10px}
+.logo-svg{height:22px;width:auto;filter:brightness(0) invert(1)}
+.logo-divider{width:1px;height:20px;background:rgba(255,255,255,.25);margin:0 4px}
+.logo-sub{font-size:12px;font-weight:600;color:rgba(255,255,255,.85);letter-spacing:.3px}
+
+.topbar-title{font-size:12px;color:rgba(255,255,255,.7);margin-left:6px;padding-left:14px;border-left:1px solid rgba(255,255,255,.2)}
+
 .topbar-right{display:flex;align-items:center;gap:10px}
-.live{display:flex;align-items:center;gap:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--greenl)}
-.live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--greenl);animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.ticket-chip{font-family:'DM Mono',monospace;font-size:12px;padding:5px 12px;background:var(--s2);border:1px solid var(--border2);border-radius:20px;color:var(--text);font-weight:500;transition:all .3s}
-.ticket-chip.ready{border-color:var(--greenl);color:var(--greenl);background:var(--greenbg)}
+.live{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.8);font-weight:500}
+.live::before{content:'';width:7px;height:7px;border-radius:50%;background:#4AE08A;flex-shrink:0;box-shadow:0 0 0 2px rgba(74,224,138,.3);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 
-.progress-bar{height:2px;background:var(--border)}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--lime));transition:width .4s ease}
+.ticket-chip{
+  font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:20px;color:#fff;font-weight:500;transition:all .3s
+}
+.ticket-chip.ready{background:rgba(74,224,138,.15);border-color:rgba(74,224,138,.45);color:#4AE08A}
 
-/* LAYOUT */
-.layout{display:grid;grid-template-columns:240px 1fr 272px;min-height:calc(100vh - 54px)}
+/* Progress */
+.progress-bar{height:3px;background:var(--border)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .4s ease}
 
-/* SIDEBAR */
-.sidebar{background:var(--s1);border-right:1px solid var(--border);padding:18px 14px;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto}
-.slabel{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--faint);text-transform:uppercase;margin-bottom:8px}
-.step{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--rs);margin-bottom:2px;cursor:pointer;transition:background .15s}
-.step.active{background:var(--s3)}
-.step:hover:not(.active){background:var(--s2)}
-.snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:var(--s3);border:1px solid var(--border2);color:var(--muted);font-family:'DM Mono',monospace}
-.step.active .snum,.step.done .snum{background:var(--greenbg);border-color:var(--green);color:var(--greenl)}
-.step.done .snum{font-size:11px}
-.slabel2{font-size:12px;font-weight:500;color:var(--muted)}
-.step.active .slabel2{color:var(--text)}
-.sconn{width:1px;height:8px;background:var(--border);margin:1px 0 1px 20px}
+/* ═══════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════ */
+.layout{display:grid;grid-template-columns:236px 1fr 264px;min-height:calc(100vh - 55px)}
 
-.wbox{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-top:6px}
-.wbadge{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:var(--rs);font-size:11px;font-weight:700;margin-bottom:6px;font-family:'DM Mono',monospace}
-.wbadge.garantia{background:var(--greenbg);border:1px solid var(--green);color:var(--greenl)}
-.wbadge.extendida{background:var(--greenbg);border:1px solid var(--lime);color:var(--lime)}
-.wbadge.fuera,.wbadge.siniestro{background:var(--redbg);border:1px solid var(--red);color:var(--redl)}
+/* ═══════════════════════════════════════════════════
+   SIDEBAR
+   ═══════════════════════════════════════════════════ */
+.sidebar{
+  background:var(--bg2);border-right:1px solid var(--border);
+  padding:18px 14px;position:sticky;top:55px;height:calc(100vh - 55px);overflow-y:auto
+}
+.slabel{font-size:9px;font-weight:700;letter-spacing:1.4px;color:var(--faint);text-transform:uppercase;margin-bottom:10px}
+
+.step{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--rs);margin-bottom:2px;cursor:pointer;transition:background .15s}
+.step:hover:not(.active){background:var(--bg3)}
+.step.active{background:var(--blue-bg);border:1px solid var(--blue-bdr)}
+.step.active .snum{background:var(--blue);border-color:var(--blue);color:#fff}
+.step.done .snum{background:var(--green-bg);border-color:var(--green-bdr);color:var(--green)}
+
+.snum{
+  width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;
+  background:var(--bg3);border:1.5px solid var(--border2);color:var(--faint);
+  font-family:'JetBrains Mono',monospace;transition:all .2s
+}
+.slabel2{font-size:12px;font-weight:500;color:var(--muted);transition:color .15s}
+.step.active .slabel2{color:var(--blue);font-weight:600}
+.step.done .slabel2{color:var(--green)}
+
+.sconn{width:1px;height:8px;background:var(--border);margin:2px 0 2px 21px}
+
+/* Warranty badge in sidebar */
+.wbox{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-top:6px;box-shadow:var(--shadow-sm)}
+.wbadge{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:var(--rs);font-size:11px;font-weight:700;margin-bottom:6px}
+.wbadge.garantia{background:var(--green-bg);border:1px solid var(--green-bdr);color:var(--green)}
+.wbadge.extendida{background:var(--green-bg);border:1px solid var(--green-bdr);color:var(--green-lt)}
+.wbadge.fuera,.wbadge.siniestro{background:var(--red-bg);border:1px solid var(--red-bdr);color:var(--red)}
 .wdesc{font-size:11px;color:var(--muted);line-height:1.5}
 
-/* MAIN */
-.main{padding:24px 28px;overflow-y:auto}
-.sec-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.sec-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.sec-title{font-size:17px;font-weight:700}
+.logic-item{font-size:10px;color:var(--muted);line-height:2;display:flex;align-items:center;gap:6px}
+.logic-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ═══════════════════════════════════════════════════
+   MAIN
+   ═══════════════════════════════════════════════════ */
+.main{padding:24px 28px;overflow-y:auto;background:var(--bg)}
+
+.sec-hdr{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.sec-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+  border:1px solid transparent
+}
+.sec-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.3px}
 .sec-sub{font-size:12px;color:var(--muted);margin-top:2px}
 
-.fblock{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;transition:border-color .2s}
-.fblock:hover{border-color:var(--border2)}
-.btitle{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:6px}
-.btitle::before{content:'';width:3px;height:11px;border-radius:2px;background:var(--blue);flex-shrink:0}
+/* Form blocks */
+.fblock{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px;margin-bottom:14px;
+  box-shadow:var(--shadow-sm);
+  transition:border-color .15s,box-shadow .15s
+}
+.fblock:focus-within{border-color:var(--blue-bdr);box-shadow:var(--shadow)}
+
+.btitle{
+  font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px
+}
+.btitle::before{content:'';width:3px;height:13px;border-radius:2px;background:var(--blue);flex-shrink:0}
 .btitle.green::before{background:var(--green)}
 .btitle.amber::before{background:var(--amber)}
 .btitle.red::before{background:var(--red)}
-.btitle.purple::before{background:var(--purple)}
+.btitle.purple::before{background:#6D28D9}
 .btitle.teal::before{background:var(--teal)}
 
+/* Grid rows */
 .row{display:grid;gap:12px;margin-bottom:12px}
 .row:last-child{margin-bottom:0}
 .row.c2{grid-template-columns:1fr 1fr}
 .row.c3{grid-template-columns:1fr 1fr 1fr}
 .row.c1{grid-template-columns:1fr}
 .fg{display:flex;flex-direction:column;gap:4px}
-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px}
-.req::after{content:' *';color:var(--redl)}
 
-input,select,textarea{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 11px;width:100%;transition:border-color .15s,box-shadow .15s;outline:none;-webkit-appearance:none}
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,111,219,.12)}
-input[readonly]{background:var(--s3);color:var(--muted);cursor:default;border-color:var(--border)}
+label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px}
+.req::after{content:' *';color:var(--red)}
+
+/* Inputs */
+input,select,textarea{
+  background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);
+  color:var(--text);font-family:'Inter',sans-serif;font-size:13px;
+  padding:9px 12px;width:100%;
+  transition:border-color .15s,box-shadow .15s,background .15s;
+  outline:none;-webkit-appearance:none;appearance:none
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--blue);background:var(--surface);
+  box-shadow:0 0 0 3px rgba(29,111,209,.12)
+}
+input[readonly]{background:var(--bg3);color:var(--muted);cursor:default;border-color:var(--border)}
 input[readonly]:focus{border-color:var(--border);box-shadow:none}
 input::placeholder,textarea::placeholder{color:var(--faint)}
-select option{background:var(--s2)}
-select:disabled{opacity:.45;cursor:not-allowed}
-textarea{resize:vertical;min-height:76px;line-height:1.5}
+select option{background:var(--surface)}
+select:disabled{opacity:.4;cursor:not-allowed}
+textarea{resize:vertical;min-height:76px;line-height:1.6}
 
 /* Autofill highlight */
-.autofill{border-color:var(--teal)!important;background:var(--tealbg)!important;color:var(--teall)!important}
+.autofill{border-color:var(--teal-bdr)!important;background:var(--teal-bg)!important;color:var(--teal-lt)!important;font-weight:500}
 .autofill-wrap{position:relative}
-.autofill-tag{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:9px;font-weight:700;color:var(--teal);background:var(--tealbg);border:1px solid var(--teal);border-radius:3px;padding:1px 5px;pointer-events:none;font-family:'DM Mono',monospace}
+.autofill-tag{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-size:9px;font-weight:700;color:var(--teal);
+  background:var(--teal-bg);border:1px solid var(--teal-bdr);
+  border-radius:3px;padding:1px 5px;pointer-events:none
+}
 
 /* Ticket display */
-.ticket-display-big{background:var(--greenbg);border:1px solid var(--greenb);border-radius:var(--rs);padding:10px 14px;font-family:'DM Mono',monospace;font-size:14px;color:var(--greenl);font-weight:500;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
-.ticket-display-big.empty{background:var(--s3);border-color:var(--border);color:var(--faint);font-size:12px;font-family:'DM Sans',monospace}
+.ticket-display-big{
+  background:var(--blue-bg);border:1.5px solid var(--blue-bdr);border-radius:var(--rs);
+  padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:14px;
+  color:var(--blue);font-weight:600;letter-spacing:.5px;
+  display:flex;align-items:center;gap:8px
+}
+.ticket-display-big.empty{background:var(--bg3);border-color:var(--border);color:var(--faint);font-size:12px;font-family:'Inter',sans-serif;font-weight:400}
 
 /* Toggles */
 .tgroup{display:flex;gap:7px}
-.tcard{flex:1;padding:9px 12px;border-radius:var(--rs);border:1px solid var(--border);background:var(--s2);cursor:pointer;text-align:center;font-size:13px;font-weight:600;transition:all .15s;color:var(--muted);user-select:none}
-.tcard:hover{border-color:var(--border2);color:var(--text)}
-.tcard.yes{background:var(--greenbg);border-color:var(--green);color:var(--greenl)}
-.tcard.no{background:var(--redbg);border-color:var(--red);color:var(--redl)}
-.tcard.neutral{background:var(--s3);border-color:var(--border2);color:var(--text)}
+.tcard{
+  flex:1;padding:9px 12px;border-radius:var(--rs);border:1.5px solid var(--border);
+  background:var(--bg2);cursor:pointer;text-align:center;
+  font-size:13px;font-weight:600;transition:all .15s;color:var(--muted);user-select:none
+}
+.tcard:hover{border-color:var(--border2);color:var(--text);background:var(--bg3)}
+.tcard.yes{background:var(--green-bg);border-color:var(--green-bdr);color:var(--green)}
+.tcard.no{background:var(--red-bg);border-color:var(--red-bdr);color:var(--red)}
+.tcard.neutral{background:var(--blue-bg);border-color:var(--blue-bdr);color:var(--blue)}
 .tcard.sm{font-size:11px;padding:7px 8px}
 
-.alert-box{display:none;margin-top:10px;background:var(--redbg);border:1px solid var(--red);border-radius:var(--rs);padding:11px 13px;font-size:12px;color:var(--redl);line-height:1.5;gap:7px;align-items:flex-start}
+/* Alert box */
+.alert-box{display:none;margin-top:10px;background:var(--red-bg);border:1px solid var(--red-bdr);border-radius:var(--rs);padding:11px 14px;font-size:12px;color:var(--red);line-height:1.5;gap:8px;align-items:flex-start}
 .alert-box.show{display:flex}
 
-/* warranty result inline */
+/* Warranty result */
 .wresult{display:none;border-radius:var(--rs);padding:12px 14px;margin-top:10px}
 .wresult.show{display:block}
-.wresult.garantia{background:var(--greenbg);border:1px solid var(--green)}
-.wresult.extendida{background:var(--greenbg);border:1px solid var(--lime)}
-.wresult.fuera,.wresult.siniestro{background:var(--redbg);border:1px solid var(--red)}
-.wresult-title{font-size:12px;font-weight:700;margin-bottom:3px}
-.wresult.garantia .wresult-title,.wresult.extendida .wresult-title{color:var(--greenl)}
-.wresult.fuera .wresult-title,.wresult.siniestro .wresult-title{color:var(--redl)}
+.wresult.garantia{background:var(--green-bg);border:1px solid var(--green-bdr)}
+.wresult.extendida{background:var(--green-bg);border:1px solid var(--green-bdr)}
+.wresult.fuera,.wresult.siniestro{background:var(--red-bg);border:1px solid var(--red-bdr)}
+.wresult-title{font-size:12px;font-weight:700;margin-bottom:4px}
+.wresult.garantia .wresult-title,.wresult.extendida .wresult-title{color:var(--green)}
+.wresult.fuera .wresult-title,.wresult.siniestro .wresult-title{color:var(--red)}
 .wresult-desc{font-size:11px;color:var(--muted);line-height:1.5}
 
 /* Info note */
-.info-note{background:var(--bluebg);border:1px solid var(--border2);border-radius:var(--rs);padding:10px 13px;font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:12px;display:flex;gap:7px}
-.info-note strong{color:var(--bluel)}
+.info-note{
+  background:var(--blue-bg);border:1px solid var(--blue-bdr);border-radius:var(--rs);
+  padding:10px 13px;font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:12px;
+  display:flex;gap:8px;align-items:flex-start
+}
+.info-note strong{color:var(--blue)}
 
-/* NAV */
+/* Tag badge */
+.tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.5px;vertical-align:middle}
+.tag.green{background:var(--green-bg);border:1px solid var(--green-bdr);color:var(--green)}
+.tag.teal{background:var(--teal-bg);border:1px solid var(--teal-bdr);color:var(--teal)}
+
+/* NAV bar */
 .navbar{display:flex;justify-content:space-between;align-items:center;padding:18px 0 2px;border-top:1px solid var(--border);margin-top:20px}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
-.btn-primary{background:var(--green);color:#fff;box-shadow:0 2px 12px rgba(0,113,64,.3)}
-.btn-primary:hover{background:var(--greenl);transform:translateY(-1px)}
-.btn-secondary{background:var(--s2);color:var(--text);border:1px solid var(--border)}
-.btn-secondary:hover{background:var(--s3);border-color:var(--border2)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(0,113,64,.2)}
+.btn-primary:hover{background:var(--green-dk);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,113,64,.3)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(29,111,209,.2)}
+.btn-blue:hover{background:var(--blue-dk);transform:translateY(-1px)}
+.btn-secondary{background:var(--bg2);color:var(--text);border:1.5px solid var(--border)}
+.btn-secondary:hover{background:var(--bg3);border-color:var(--border2)}
 .btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
 .step-label-nav{font-size:11px;color:var(--faint)}
 
-/* RIGHT PANEL */
-.rpanel{background:var(--s1);border-left:1px solid var(--border);padding:18px 14px;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto}
-.ptitle{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--faint);text-transform:uppercase;margin-bottom:8px}
-.psec{margin-bottom:20px}
+/* ═══════════════════════════════════════════════════
+   RIGHT PANEL
+   ═══════════════════════════════════════════════════ */
+.rpanel{
+  background:var(--bg2);border-left:1px solid var(--border);
+  padding:18px 14px;position:sticky;top:55px;height:calc(100vh - 55px);overflow-y:auto
+}
+.ptitle{font-size:9px;font-weight:700;letter-spacing:1.4px;color:var(--faint);text-transform:uppercase;margin-bottom:10px}
+.psec{margin-bottom:22px}
+
 .irow{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);gap:8px}
 .irow:last-child{border-bottom:none}
 .ikey{font-size:11px;color:var(--muted);flex-shrink:0}
-.ival{font-size:11px;color:var(--text);font-weight:500;text-align:right;font-family:'DM Mono',monospace;font-size:10px}
-.ival.mt{color:var(--teall)}
-.ival.empty{color:var(--faint);font-family:'DM Sans',sans-serif;font-weight:400;font-size:11px}
+.ival{font-size:11px;color:var(--text);font-weight:600;text-align:right;font-family:'JetBrains Mono',monospace;font-size:10px}
+.ival.mt{color:var(--teal)}
+.ival.empty{color:var(--faint);font-family:'Inter',sans-serif;font-weight:400;font-size:11px}
 
+/* Checklist */
 .chk-item{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:11px;color:var(--faint);transition:color .2s}
 .chk-item.done{color:var(--text)}
-.chk-box{width:14px;height:14px;border-radius:3px;border:1px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .2s}
-.chk-item.done .chk-box{background:var(--greenbg);border-color:var(--green);color:var(--greenl)}
+.chk-box{
+  width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;
+  transition:all .2s
+}
+.chk-item.done .chk-box{background:var(--green-bg);border-color:var(--green-bdr);color:var(--green)}
 
-.hint{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);padding:11px;font-size:11px;color:var(--muted);line-height:1.6}
-.hint strong{color:var(--text);display:block;margin-bottom:3px}
+/* Hint box */
+.hint{background:var(--blue-bg);border:1px solid var(--blue-bdr);border-radius:var(--rs);padding:12px;font-size:11px;color:var(--muted);line-height:1.6}
+.hint strong{color:var(--blue);display:block;margin-bottom:3px;font-size:12px}
 
-/* PAGE / ANIMATION */
+/* ═══════════════════════════════════════════════════
+   PAGES
+   ═══════════════════════════════════════════════════ */
 .page{display:none}
 .page.active{display:block;animation:fadeUp .2s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-/* SUCCESS */
+/* ═══════════════════════════════════════════════════
+   SUCCESS
+   ═══════════════════════════════════════════════════ */
 .success-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 30px;text-align:center}
-.sicon{width:60px;height:60px;border-radius:50%;background:var(--greenbg);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)}
+.sicon{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--green-bg);border:2px solid var(--green-bdr);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  margin-bottom:16px;animation:pop .4s cubic-bezier(.175,.885,.32,1.275)
+}
 @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
-.s-ticket{font-family:'DM Mono',monospace;font-size:26px;font-weight:700;color:var(--greenl);margin:8px 0;letter-spacing:1px}
-.scard{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin:16px 0;text-align:left;width:100%;max-width:500px}
-.srow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.s-ticket{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--blue);margin:8px 0;letter-spacing:1px}
+.scard{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px;margin:16px 0;text-align:left;width:100%;max-width:500px;
+  box-shadow:var(--shadow-sm)
+}
+.srow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
 .srow:last-child{border-bottom:none}
-.sk{color:var(--muted)}.sv{color:var(--text);font-weight:500;font-family:'DM Mono',monospace;font-size:11px}
+.sk{color:var(--muted)}.sv{color:var(--text);font-weight:600;font-family:'JetBrains Mono',monospace;font-size:11px}
 
-/* CHAR COUNT */
-.cc{font-size:10px;color:var(--faint);text-align:right;margin-top:2px}
+/* Char count */
+.cc{font-size:10px;color:var(--faint);text-align:right;margin-top:3px}
 
-/* MOBILE */
-@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar,.rpanel{display:none}.main{padding:14px}.row.c2,.row.c3{grid-template-columns:1fr}}
-@media(max-width:600px){.topbar-title{display:none}.live span{display:none}}
+/* Disp indicator */
+.disp-box{
+  background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);
+  padding:10px 12px;min-height:42px
+}
+.disp-num{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;line-height:1.2}
+.disp-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE
+   ═══════════════════════════════════════════════════ */
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar,.rpanel{display:none}
+  .main{padding:14px}
+  .row.c2,.row.c3{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .topbar-title{display:none}
+  .live span{display:none}
+}
 </style>
 </head>
 <body>
-<!-- ═══════════════════════════════════════════════════════════
-  DATOS DE REFERENCIA (en producción: reemplazar por API)
-  ═══════════════════════════════════════════════════════════ -->
+<!-- DATOS DE REFERENCIA -->
 <script>
 const DB = {
   clientes: [
@@ -226,26 +421,21 @@ const DB = {
   },
 };
 
-// ── STATE ──────────────────────────────────────────────────────────────────
 const S = {
   page:1, clienteId:null, terminalId:null, terminal:null,
   siniestro:null, extendida:null, resuelto:null, notificar:null,
   warranty:null, ticket:null, seqCounter:{}
 };
 
-// ── TICKET GENERATOR ───────────────────────────────────────────────────────
 function genTicket() {
   if (!S.clienteId) return null;
   const d = new Date();
-  const fecha = d.getFullYear().toString() +
-    String(d.getMonth()+1).padStart(2,'0') +
-    String(d.getDate()).padStart(2,'0');
+  const fecha = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
   const key = fecha + S.clienteId;
   S.seqCounter[key] = (S.seqCounter[key] || 0) + 1;
   return `TKT-${fecha}-${S.clienteId}-${String(S.seqCounter[key]).padStart(3,'0')}`;
 }
 
-// ── WARRANTY CALC ──────────────────────────────────────────────────────────
 function calcWarranty() {
   const pm = S.terminal?.pm;
   let result=null, title='', desc='';
@@ -268,28 +458,22 @@ function calcWarranty() {
   }
   S.warranty=result;
 
-  // Update inline
   const el=document.getElementById('wr-inline');
   if(el){ el.className='wresult'+(result?' show '+result:''); el.querySelector('.wresult-title').textContent=title; el.querySelector('.wresult-desc').textContent=desc; }
 
-  // Right panel
   const rp=document.getElementById('wr-right'); const rpp=document.getElementById('wr-right-pending');
   if(rp){ if(result){ rp.className='wresult show '+result; rp.querySelector('.wresult-title').textContent=title; rp.querySelector('.wresult-desc').textContent=desc; if(rpp) rpp.style.display='none'; } else { rp.className='wresult'; if(rpp) rpp.style.display='block'; } }
 
-  // Sidebar badge
   const sb=document.getElementById('ws-badge'), sp=document.getElementById('ws-pending');
   if(result){ sb?.parentElement.classList.remove('hidden'); if(sp) sp.style.display='none'; if(sb){ sb.className='wbadge '+result; sb.textContent=title; } const wd=document.getElementById('ws-desc'); if(wd) wd.textContent=desc; }
   updateComplete();
 }
 
-// ── CLIENT CHANGE ──────────────────────────────────────────────────────────
 function onClienteChange() {
   const sel = document.getElementById('sel-cliente');
   S.clienteId = sel.value || null;
-  S.terminalId = null; S.terminal = null;
-  S.warranty = null;
+  S.terminalId = null; S.terminal = null; S.warranty = null;
 
-  // Populate terminal dropdown
   const tsel = document.getElementById('sel-terminal');
   tsel.innerHTML = '<option value="">Seleccionar terminal…</option>';
   tsel.disabled = !S.clienteId;
@@ -297,7 +481,6 @@ function onClienteChange() {
   if (S.clienteId) {
     const terms = DB.terminales[S.clienteId] || [];
     terms.forEach(t => { const o=document.createElement('option'); o.value=t.id; o.textContent=`${t.id} — ${t.nombre}`; tsel.appendChild(o); });
-    // generate ticket
     S.ticket = genTicket();
     document.getElementById('ticket-chip').textContent = S.ticket;
     document.getElementById('ticket-chip').className = 'ticket-chip ready';
@@ -316,7 +499,6 @@ function onClienteChange() {
   updateComplete();
 }
 
-// ── TERMINAL CHANGE ────────────────────────────────────────────────────────
 function onTerminalChange() {
   const tsel = document.getElementById('sel-terminal');
   S.terminalId = tsel.value || null;
@@ -326,25 +508,22 @@ function onTerminalChange() {
   S.terminal = terms.find(t => t.id === S.terminalId) || null;
 
   if (S.terminal) {
-    setAF('af-ubicacion',  S.terminal.ubic);
-    setAF('af-region',     S.terminal.region);
-    setAF('af-tipo',       S.terminal.tipo);
-    setAF('af-cargadores', S.terminal.cargadores);
-    setAF('af-pm',         formatDate(S.terminal.pm));
+    setAF('af-ubicacion', S.terminal.ubic);
+    setAF('af-region',    S.terminal.region);
+    setAF('af-tipo',      S.terminal.tipo);
+    setAF('af-cargadores',S.terminal.cargadores);
+    setAF('af-pm',        formatDate(S.terminal.pm));
 
-    // PM months
     const meses = Math.floor((new Date()-new Date(S.terminal.pm))/(1000*60*60*24*30.44));
     const mEl = document.getElementById('af-meses');
     mEl.value = meses + ' meses';
     mEl.className = 'autofill';
-    mEl.style.color = meses<=24 ? 'var(--greenl)' : 'var(--redl)';
+    mEl.style.color = meses<=24 ? 'var(--green)' : 'var(--red)';
 
-    // Jefe de patio pre-fill (editable)
     document.getElementById('in-jefe').value  = S.terminal.jefe;
     document.getElementById('in-tel').value   = S.terminal.tel;
     document.getElementById('in-email').value = S.terminal.email;
 
-    // Garantía extendida — desde registro del terminal
     S.extendida = S.terminal.garantiaExtendida ? 'si' : 'no';
     const extDisplay = document.getElementById('wr-ext-display');
     const extStatus  = document.getElementById('ext-status');
@@ -375,26 +554,20 @@ function calcDisponibilidad() {
   if (!pctEl) return;
 
   if (instalados === 0) {
-    pctEl.textContent = '—';
-    pctEl.style.color = 'var(--muted)';
-    detEl.textContent = 'Selecciona un terminal para calcular';
-    return;
+    pctEl.textContent = '—'; pctEl.style.color = 'var(--muted)';
+    detEl.textContent = 'Selecciona un terminal para calcular'; return;
   }
   if (afectados === 0) {
-    pctEl.textContent = '0% inoperativo';
-    pctEl.style.color = 'var(--greenl)';
-    detEl.textContent = 'Sin cargadores afectados reportados';
-    return;
+    pctEl.textContent = '0% inoperativo'; pctEl.style.color = 'var(--green)';
+    detEl.textContent = 'Sin cargadores afectados reportados'; return;
   }
 
   const pctInop = Math.round((afectados / instalados) * 100);
   const pctOp   = 100 - pctInop;
 
   pctEl.textContent = `${pctInop}% inoperativo`;
-  pctEl.style.color = pctInop >= 50 ? 'var(--redl)' : pctInop > 0 ? 'var(--amberl)' : 'var(--greenl)';
+  pctEl.style.color = pctInop >= 50 ? 'var(--red)' : pctInop > 0 ? 'var(--amber)' : 'var(--green)';
   detEl.textContent = `${afectados} de ${instalados} cargadores con falla · ${pctOp}% operativo`;
-
-  // Guardar en state para enviar a Airtable
   S.disponibilidad = `${pctInop}% inoperativo (${afectados}/${instalados} cargadores)`;
 }
 
@@ -411,13 +584,12 @@ function formatDate(d) {
 
 function clearTerminalFields() {
   ['af-ubicacion','af-region','af-tipo','af-cargadores','af-pm','af-meses'].forEach(id=>{
-    const el=document.getElementById(id); if(el){ el.value=''; el.className=''; }
+    const el=document.getElementById(id); if(el){ el.value=''; el.className=''; el.style.color=''; }
   });
   S.terminal=null; S.warranty=null;
   calcWarranty(); updatePreview();
 }
 
-// ── TOGGLE ─────────────────────────────────────────────────────────────────
 function tog(key, val) {
   S[key]=val;
   if(key==='siniestro'){
@@ -455,7 +627,6 @@ function setChk(id,val){
   });
 }
 
-// ── PREVIEW UPDATE ─────────────────────────────────────────────────────────
 function updatePreview() {
   const cname = S.clienteId ? DB.clientes.find(c=>c.id===S.clienteId)?.nombre : null;
   pv('pv-ticket',  S.ticket);
@@ -467,11 +638,8 @@ function updatePreview() {
   const meses = S.terminal ? Math.floor((new Date()-new Date(S.terminal.pm))/(1000*60*60*24*30.44)) : null;
   const mEl = document.getElementById('pv-pm');
   if(mEl){
-    if(meses!==null){
-      mEl.textContent = meses+' meses'; mEl.className='ival mt';
-    } else {
-      mEl.textContent='—'; mEl.className='ival empty';
-    }
+    if(meses!==null){ mEl.textContent = meses+' meses'; mEl.className='ival mt'; }
+    else { mEl.textContent='—'; mEl.className='ival empty'; }
   }
 }
 
@@ -480,7 +648,6 @@ function pv(id, val){
   if(el){ el.textContent=val||'—'; el.className=val?'ival':'ival empty'; }
 }
 
-// ── COMPLETENESS ───────────────────────────────────────────────────────────
 function updateComplete(){
   const checks={
     'ck-cliente':  !!S.clienteId,
@@ -496,7 +663,6 @@ function updateComplete(){
   });
 }
 
-// ── NAVIGATION ─────────────────────────────────────────────────────────────
 const hints={
   1:{t:'Terminal afectado', d:'Selecciona primero el cliente para cargar la lista de terminales asociados. Al elegir el terminal, los campos se completan automáticamente.'},
   2:{t:'Validación de garantía', d:'Responde en orden. Si hay siniestro, el resultado es inmediato. Si no, el sistema calcula automáticamente según la fecha de puesta en marcha.'},
@@ -519,19 +685,12 @@ function goTo(n){
   window.scrollTo(0,0); updateComplete();
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-// CONFIGURACIÓN — el token ya NO está aquí, vive en Netlify de forma segura
-// El formulario llama a nuestra propia función serverless
-// ════════════════════════════════════════════════════════════════════════════
 const FUNCION_URL = '/.netlify/functions/guardar-caso';
 
-// ── GENERAR TOKEN ÚNICO POR CASO (seguridad contratistas) ──────────────────
 function genTokenCaso() {
-  return Math.random().toString(36).substring(2,10).toUpperCase() +
-         Date.now().toString(36).toUpperCase();
+  return Math.random().toString(36).substring(2,10).toUpperCase() + Date.now().toString(36).toUpperCase();
 }
 
-// ── SUBMIT CON NETLIFY FUNCTION ─────────────────────────────────────────────
 async function submitForm(){
   const btnSubmit = document.getElementById('btn-submit');
   btnSubmit.disabled = true;
@@ -544,9 +703,8 @@ async function submitForm(){
   const tokenCaso  = genTokenCaso();
 
   const wl = {garantia:'GARANTÍA VIGENTE',extendida:'GARANTÍA EXTENDIDA',fuera:'FUERA DE GARANTÍA',siniestro:'SINIESTRO — CARGO CLIENTE'};
-  const wc = {garantia:'var(--greenl)',extendida:'var(--lime)',fuera:'var(--redl)',siniestro:'var(--redl)'};
+  const wc = {garantia:'var(--green)',extendida:'var(--green-lt)',fuera:'var(--red)',siniestro:'var(--red)'};
 
-  // ── Armar el registro ──
   const registro = {
     "Ticket":                   S.ticket || '—',
     "Fecha evento":             document.getElementById('in-fecha')?.value || '',
@@ -584,46 +742,26 @@ async function submitForm(){
     "Fecha creacion":           new Date().toLocaleString('es-CL', {timeZone:'America/Santiago', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit'}),
   };
 
-  // ── Llamar a la función serverless de Netlify ──
   let guardadoOk = false;
   try {
-    const resp = await fetch(FUNCION_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(registro),
-    });
+    const resp = await fetch(FUNCION_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(registro) });
+    if (resp.ok) { guardadoOk = true; S.tokenCaso = tokenCaso; }
+    else { const err = await resp.json(); console.error('Error función:', err); }
+  } catch(e) { console.error('Error de conexión:', e); }
 
-    if (resp.ok) {
-      guardadoOk = true;
-      S.tokenCaso = tokenCaso;
-    } else {
-      const err = await resp.json();
-      console.error('Error función:', err);
-    }
-  } catch(e) {
-    console.error('Error de conexión:', e);
-  }
-
-  // ── Armar link de terreno ──
   const BASE_URL    = 'https://snazzy-starship-8e4240.netlify.app';
   const linkTerreno = `${BASE_URL}/terreno.html?ticket=${encodeURIComponent(S.ticket)}&token=${encodeURIComponent(tokenCaso)}`;
 
-  // Recurso y teléfono asignado
   const recursoNombre = recursoSel?.value || '—';
   const telRecurso = (() => {
     const recursos = {
-      'Rodrigo Jerez (Inspector)':       '+56912345678',
-      'Eddic Monzart (Inspector)':       '+56912345679',
-      'DCC — Emergencia grupos electrógenos': '+56912345680',
-      'RAICA — Emergencia cargadores':   '+56912345681',
-      'LARI':    '+56912345682',
-      'SOLGEC':  '+56912345683',
-      'AINEL':   '+56912345684',
+      'Rodrigo Jerez (Inspector)':'+56912345678','Eddic Monzart (Inspector)':'+56912345679',
+      'DCC — Emergencia grupos electrógenos':'+56912345680','RAICA — Emergencia cargadores':'+56912345681',
+      'LARI':'+56912345682','SOLGEC':'+56912345683','AINEL':'+56912345684',
     };
     return recursos[recursoNombre] || null;
   })();
 
-  // Mensaje WhatsApp
   const msgWA = encodeURIComponent(
 `*ACEX · Asistencia Electroterminales 24/7*
 ─────────────────────────
@@ -638,41 +776,15 @@ async function submitForm(){
 📋 *Completa el formulario de terreno aquí:*
 ${linkTerreno}`);
 
-  const urlWA = telRecurso
-    ? `https://wa.me/${telRecurso.replace(/\D/g,'')}?text=${msgWA}`
-    : `https://wa.me/?text=${msgWA}`;
-
-  // Mensaje correo
+  const urlWA = telRecurso ? `https://wa.me/${telRecurso.replace(/\D/g,'')}?text=${msgWA}` : `https://wa.me/?text=${msgWA}`;
   const asunto = encodeURIComponent(`[ACEX] Asistencia asignada — ${S.ticket}`);
-  const cuerpo = encodeURIComponent(
-`Estimado/a ${recursoNombre},
-
-Se te ha asignado la siguiente asistencia:
-
-Ticket: ${S.ticket}
-Cliente: ${cname}
-Terminal: ${S.terminal?.nombre||'—'}
-Ubicación: ${S.terminal?.ubic||'—'}
-Falla reportada: ${fallaSel?.value||'—'}
-Urgencia: ${urgSel?.options[urgSel.selectedIndex]?.text||'—'}
-Garantía: ${wl[S.warranty]||'—'}
-
-Por favor completa el formulario de terreno al llegar al sitio:
-${linkTerreno}
-
-ACEX · Sistema de Asistencias 24/7`);
-
+  const cuerpo = encodeURIComponent(`Estimado/a ${recursoNombre},\n\nSe te ha asignado la siguiente asistencia:\n\nTicket: ${S.ticket}\nCliente: ${cname}\nTerminal: ${S.terminal?.nombre||'—'}\nUbicación: ${S.terminal?.ubic||'—'}\nFalla reportada: ${fallaSel?.value||'—'}\n\nFormulario de terreno:\n${linkTerreno}\n\nACEX · Sistema de Asistencias 24/7`);
   const urlCorreo = `mailto:?subject=${asunto}&body=${cuerpo}`;
 
-  // ── Mostrar pantalla de éxito ──
   document.getElementById('s-ticket').textContent = S.ticket || '—';
   document.getElementById('s-guardado').innerHTML = guardadoOk
-    ? `<div style="background:var(--greenbg);border:1px solid var(--green);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--greenl);margin-bottom:14px">
-        ✅ Caso guardado correctamente en Airtable
-       </div>`
-    : `<div style="background:var(--amberbg);border:1px solid var(--amber);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--amberl);margin-bottom:14px">
-        ⚠️ No se pudo conectar. Verifica la configuración de Netlify.
-       </div>`;
+    ? `<div style="background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:14px">✅ Caso guardado correctamente en Airtable</div>`
+    : `<div style="background:var(--amber-bg);border:1px solid var(--amber-bdr);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:14px">⚠️ No se pudo conectar. Verifica la configuración de Netlify.</div>`;
 
   document.getElementById('s-card').innerHTML = `
     <div class="srow"><span class="sk">Ticket</span><span class="sv">${S.ticket||'—'}</span></div>
@@ -681,29 +793,23 @@ ACEX · Sistema de Asistencias 24/7`);
     <div class="srow"><span class="sk">Ubicación</span><span class="sv">${S.terminal?.ubic||'—'}</span></div>
     <div class="srow"><span class="sk">Tipo falla</span><span class="sv">${fallaSel?.value||'—'}</span></div>
     <div class="srow"><span class="sk">Urgencia</span><span class="sv">${urgSel?.options[urgSel.selectedIndex]?.text||'—'}</span></div>
-    <div class="srow"><span class="sk">Garantía</span><span class="sv" style="color:${wc[S.warranty]||'var(--muted)'};font-weight:700">${wl[S.warranty]||'—'}</span></div>
+    <div class="srow"><span class="sk">Garantía</span><span class="sv" style="color:${wc[S.warranty]||'var(--muted)'}">${wl[S.warranty]||'—'}</span></div>
     <div class="srow"><span class="sk">Recurso</span><span class="sv">${recursoNombre}</span></div>
-    <div class="srow"><span class="sk">Estado</span><span class="sv" style="color:var(--greenl)">Abierto</span></div>
-    <div class="srow"><span class="sk">Apertura</span><span class="sv">${new Date().toLocaleString('es-CL')}</span></div>
-  `;
+    <div class="srow"><span class="sk">Estado</span><span class="sv" style="color:var(--green)">Abierto</span></div>
+    <div class="srow"><span class="sk">Apertura</span><span class="sv">${new Date().toLocaleString('es-CL')}</span></div>`;
 
-  // ── Botones de notificación ──
   document.getElementById('s-notif').innerHTML = `
-    <div style="width:100%;max-width:500px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r);padding:16px;margin-top:4px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">
-        Notificar al técnico asignado
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">
-        Envía el link del formulario de terreno a <strong style="color:var(--text)">${recursoNombre}</strong>
-      </div>
+    <div style="width:100%;max-width:500px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-top:4px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Notificar al técnico asignado</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Envía el link del formulario de terreno a <strong style="color:var(--text)">${recursoNombre}</strong></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a href="${urlWA}" target="_blank" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:#075e54;border:1px solid #25d366;border-radius:var(--rs);color:#25d366;font-size:13px;font-weight:700;text-decoration:none;transition:all .15s">
+        <a href="${urlWA}" target="_blank" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:#075e54;border:1px solid #25d366;border-radius:var(--rs);color:#25d366;font-size:13px;font-weight:700;text-decoration:none">
           <span style="font-size:18px">💬</span> WhatsApp
         </a>
-        <a href="${urlCorreo}" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:var(--bluebg);border:1px solid var(--blue);border-radius:var(--rs);color:var(--bluel);font-size:13px;font-weight:700;text-decoration:none;transition:all .15s">
+        <a href="${urlCorreo}" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:var(--blue-bg);border:1px solid var(--blue-bdr);border-radius:var(--rs);color:var(--blue);font-size:13px;font-weight:700;text-decoration:none">
           <span style="font-size:18px">📧</span> Correo
         </a>
-        <button onclick="copiarLink('${linkTerreno}')" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:var(--s3);border:1px solid var(--border2);border-radius:var(--rs);color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif" id="btn-copiar">
+        <button onclick="copiarLink('${linkTerreno}')" id="btn-copiar" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--rs);color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
           <span style="font-size:18px">🔗</span> Copiar link
         </button>
       </div>
@@ -713,7 +819,6 @@ ACEX · Sistema de Asistencias 24/7`);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-5').classList.add('active');
   document.getElementById('prog').style.width='100%';
-
   btnSubmit.disabled = false;
   btnSubmit.textContent = '✅ Confirmar apertura del caso';
 }
@@ -722,13 +827,8 @@ function copiarLink(link) {
   navigator.clipboard.writeText(link).then(() => {
     const btn = document.getElementById('btn-copiar');
     btn.innerHTML = '<span style="font-size:18px">✅</span> ¡Copiado!';
-    btn.style.borderColor = 'var(--green)';
-    btn.style.color = 'var(--greenl)';
-    setTimeout(() => {
-      btn.innerHTML = '<span style="font-size:18px">🔗</span> Copiar link';
-      btn.style.borderColor = 'var(--border2)';
-      btn.style.color = 'var(--muted)';
-    }, 2000);
+    btn.style.borderColor = 'var(--green-bdr)'; btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.innerHTML = '<span style="font-size:18px">🔗</span> Copiar link'; btn.style.borderColor='var(--border2)'; btn.style.color='var(--muted)'; }, 2000);
   });
 }
 
@@ -743,10 +843,17 @@ window.onload=()=>{
 };
 </script>
 
-<!-- ══════════════════════════════════════════════════════════ TOPBAR -->
+<!-- ══════════════════════════════════════════════ TOPBAR -->
 <div class="topbar">
-  <div style="display:flex;align-items:center;gap:14px">
-    <div class="logo-block"><div class="logo-sq"></div><div class="logo-txt">enel <span>x</span></div></div>
+  <div style="display:flex;align-items:center;gap:0">
+    <div class="logo-block">
+      <!-- Enel X wordmark — simplified inline SVG -->
+      <svg class="logo-svg" viewBox="0 0 55 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Enel">
+        <text x="0" y="15" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="0.5">enel</text>
+      </svg>
+      <div class="logo-divider"></div>
+      <span class="logo-sub">ACEX</span>
+    </div>
     <div class="topbar-title">Apertura de Caso · Electroterminales 24/7</div>
   </div>
   <div class="topbar-right">
@@ -757,7 +864,7 @@ window.onload=()=>{
 <div class="progress-bar"><div class="progress-fill" id="prog" style="width:25%"></div></div>
 
 <div class="layout">
-<!-- ══════════════════════════════════════════════════════════ SIDEBAR -->
+<!-- ══════════════════════════════════════════════ SIDEBAR -->
 <aside class="sidebar">
   <div style="margin-bottom:20px">
     <div class="slabel">Pasos</div>
@@ -781,26 +888,25 @@ window.onload=()=>{
 
   <div>
     <div class="slabel">Lógica garantía</div>
-    <div style="font-size:10px;color:var(--faint);line-height:1.8;padding:2px 0">
-      <div>① <strong style="color:var(--redl)">SINIESTRO</strong> → cargo cliente</div>
-      <div>② <strong style="color:var(--lime)">GARANTÍA EXTENDIDA</strong> → cobertura total</div>
-      <div>③ <strong style="color:var(--greenl)">DENTRO 24 MESES</strong> → cobertura total</div>
-      <div>④ <strong style="color:var(--redl)">FUERA GARANTÍA</strong> → cargo cliente</div>
+    <div style="padding:4px 0">
+      <div class="logic-item"><div class="logic-dot" style="background:var(--red)"></div><span>① Siniestro → cargo cliente</span></div>
+      <div class="logic-item"><div class="logic-dot" style="background:var(--green)"></div><span>② Garantía extendida → cobertura</span></div>
+      <div class="logic-item"><div class="logic-dot" style="background:var(--green)"></div><span>③ Dentro 24 meses → cobertura</span></div>
+      <div class="logic-item"><div class="logic-dot" style="background:var(--amber)"></div><span>④ Fuera garantía → cargo cliente</span></div>
     </div>
   </div>
 </aside>
 
-<!-- ══════════════════════════════════════════════════════════ MAIN -->
+<!-- ══════════════════════════════════════════════ MAIN -->
 <main class="main">
 
-<!-- ─── PAGE 1: TERMINAL AFECTADO ─────────────────────────────────────── -->
+<!-- PAGE 1 -->
 <div class="page active" id="page-1">
   <div class="sec-hdr">
-    <div class="sec-icon" style="background:var(--bluebg);border:1px solid var(--blue)">⚡</div>
+    <div class="sec-icon" style="background:var(--blue-bg);border-color:var(--blue-bdr)">⚡</div>
     <div><div class="sec-title">Terminal afectado</div><div class="sec-sub">Selecciona cliente y terminal — los datos se cargan automáticamente</div></div>
   </div>
 
-  <!-- Ticket autogenerado -->
   <div class="fblock">
     <div class="btitle">Ticket generado automáticamente</div>
     <div class="info-note">
@@ -819,7 +925,6 @@ window.onload=()=>{
     </div>
   </div>
 
-  <!-- Cliente + Terminal -->
   <div class="fblock">
     <div class="btitle">Identificación</div>
     <div class="row c2">
@@ -827,7 +932,6 @@ window.onload=()=>{
         <label class="req">Cliente / Empresa</label>
         <select id="sel-cliente" onchange="onClienteChange()">
           <option value="">Seleccionar cliente…</option>
-          <!-- filled by JS -->
         </select>
       </div>
       <div class="fg">
@@ -839,12 +943,11 @@ window.onload=()=>{
     </div>
   </div>
 
-  <!-- Datos del terminal (autofill) -->
   <div class="fblock">
-    <div class="btitle teal">Datos del terminal <span style="color:var(--teal);font-size:9px;font-weight:700;margin-left:6px;background:var(--tealbg);border:1px solid var(--teal);border-radius:3px;padding:1px 5px">AUTO-COMPLETADO</span></div>
-    <div class="info-note" style="margin-bottom:14px">
+    <div class="btitle teal">Datos del terminal <span class="tag teal" style="margin-left:4px">AUTO-COMPLETADO</span></div>
+    <div class="info-note">
       <span>🔄</span>
-      <div>Los campos marcados en <strong>verde azulado</strong> se completan automáticamente desde el registro del terminal. No requieren edición en condiciones normales.</div>
+      <div>Los campos marcados en <strong>verde azulado</strong> se completan automáticamente desde el registro del terminal.</div>
     </div>
     <div class="row c2">
       <div class="fg"><label>Ubicación</label><input type="text" id="af-ubicacion" readonly placeholder="Se cargará al seleccionar terminal"/></div>
@@ -867,10 +970,9 @@ window.onload=()=>{
     </div>
   </div>
 
-  <!-- Contacto en patio -->
   <div class="fblock">
-    <div class="btitle green">Contacto en patio <span style="color:var(--green);font-size:9px;font-weight:700;margin-left:6px;background:var(--greenbg);border:1px solid var(--green);border-radius:3px;padding:1px 5px">PRE-CARGADO · EDITABLE</span></div>
-    <div class="info-note" style="margin-bottom:14px">
+    <div class="btitle green">Contacto en patio <span class="tag green" style="margin-left:4px">PRE-CARGADO · EDITABLE</span></div>
+    <div class="info-note">
       <span>✏️</span>
       <div>Los datos del jefe de patio se pre-cargan desde el registro del terminal. <strong>Edítalos si quien llama es otra persona.</strong></div>
     </div>
@@ -883,14 +985,14 @@ window.onload=()=>{
 
   <div class="navbar">
     <div class="step-label-nav">Paso 1 de 4</div>
-    <button class="btn btn-primary" onclick="goTo(2)">Siguiente → Garantía</button>
+    <button class="btn btn-blue" onclick="goTo(2)">Siguiente → Garantía</button>
   </div>
 </div>
 
-<!-- ─── PAGE 2: GARANTÍA ────────────────────────────────────────────────── -->
+<!-- PAGE 2 -->
 <div class="page" id="page-2">
   <div class="sec-hdr">
-    <div class="sec-icon" style="background:var(--purplebg);border:1px solid var(--purple)">🛡️</div>
+    <div class="sec-icon" style="background:#F3F0FD;border-color:#C4B5FD">🛡️</div>
     <div><div class="sec-title">Validación de garantía</div><div class="sec-sub">El resultado se calcula automáticamente — responde en el orden indicado</div></div>
   </div>
 
@@ -915,7 +1017,7 @@ window.onload=()=>{
     <div class="btitle purple">② Garantía extendida</div>
     <div class="info-note">
       <span>🔄</span>
-      <div>La garantía extendida se determina automáticamente desde el registro del terminal seleccionado. <strong id="ext-status">Selecciona un terminal en el paso 1 para ver el estado.</strong></div>
+      <div>La garantía extendida se determina automáticamente desde el registro del terminal. <strong id="ext-status">Selecciona un terminal en el paso 1 para ver el estado.</strong></div>
     </div>
     <div class="wresult" id="wr-ext-display" style="display:none">
       <div class="wresult-title" id="wr-ext-title"></div>
@@ -935,14 +1037,14 @@ window.onload=()=>{
 
   <div class="navbar">
     <button class="btn btn-secondary" onclick="goTo(1)">← Volver</button>
-    <button class="btn btn-primary" onclick="goTo(3)">Siguiente → Falla</button>
+    <button class="btn btn-blue" onclick="goTo(3)">Siguiente → Falla</button>
   </div>
 </div>
 
-<!-- ─── PAGE 3: FALLA ───────────────────────────────────────────────────── -->
+<!-- PAGE 3 -->
 <div class="page" id="page-3">
   <div class="sec-hdr">
-    <div class="sec-icon" style="background:var(--amberbg);border:1px solid var(--amber)">🔧</div>
+    <div class="sec-icon" style="background:var(--amber-bg);border-color:var(--amber-bdr)">🔧</div>
     <div><div class="sec-title">Descripción de la falla</div><div class="sec-sub">Síntomas reportados por el jefe de patio y check list telefónico</div></div>
   </div>
 
@@ -983,9 +1085,9 @@ window.onload=()=>{
       </div>
       <div class="fg">
         <label>Indisponibilidad del terminal</label>
-        <div style="background:var(--s3);border:1px solid var(--border2);border-radius:var(--rs);padding:9px 11px">
-          <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600" id="disp-pct">—</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:3px" id="disp-detalle">Ingresa cargadores instalados y afectados para calcular</div>
+        <div class="disp-box">
+          <div class="disp-num" id="disp-pct" style="color:var(--muted)">—</div>
+          <div class="disp-sub" id="disp-detalle">Ingresa cargadores afectados para calcular</div>
         </div>
       </div>
     </div>
@@ -1052,14 +1154,14 @@ window.onload=()=>{
 
   <div class="navbar">
     <button class="btn btn-secondary" onclick="goTo(2)">← Volver</button>
-    <button class="btn btn-primary" onclick="goTo(4)">Siguiente → Asignación</button>
+    <button class="btn btn-blue" onclick="goTo(4)">Siguiente → Asignación</button>
   </div>
 </div>
 
-<!-- ─── PAGE 4: ASIGNACIÓN ─────────────────────────────────────────────── -->
+<!-- PAGE 4 -->
 <div class="page" id="page-4">
   <div class="sec-hdr">
-    <div class="sec-icon" style="background:var(--greenbg);border:1px solid var(--green)">👷</div>
+    <div class="sec-icon" style="background:var(--green-bg);border-color:var(--green-bdr)">👷</div>
     <div><div class="sec-title">Asignación y cierre de apertura</div><div class="sec-sub">Asigna el recurso y confirma la apertura formal del caso</div></div>
   </div>
 
@@ -1121,12 +1223,12 @@ window.onload=()=>{
   </div>
 </div>
 
-<!-- ─── PAGE 5: SUCCESS ─────────────────────────────────────────────────── -->
+<!-- PAGE 5: SUCCESS -->
 <div class="page" id="page-5">
   <div class="success-wrap">
     <div class="sicon">✅</div>
     <div style="font-size:13px;color:var(--muted);font-weight:500">Caso abierto exitosamente</div>
-    <div class="s-ticket" id="s-ticket" style="font-family:'DM Mono',monospace;font-size:26px;font-weight:700;color:var(--greenl);margin:8px 0;letter-spacing:1px"></div>
+    <div class="s-ticket" id="s-ticket"></div>
     <div style="font-size:12px;color:var(--muted);max-width:400px;line-height:1.7">El técnico asignado fue notificado. ACEX realizará seguimiento cada 30 minutos hasta la reposición total de energía.</div>
     <div id="s-guardado" style="width:100%;max-width:500px;margin-top:14px"></div>
     <div class="scard" id="s-card"></div>
@@ -1135,13 +1237,13 @@ window.onload=()=>{
       <button class="btn btn-secondary" onclick="window.print()">🖨 Imprimir resumen</button>
       <button class="btn btn-primary" onclick="location.reload()">+ Nuevo caso</button>
     </div>
-    <div style="font-size:11px;color:var(--faint);margin-top:20px">ACEX v2.0 · Electroterminales · Sistema activo 24/7</div>
+    <div style="font-size:11px;color:var(--faint);margin-top:24px">ACEX v2.0 · Enel Chile · Sistema activo 24/7</div>
   </div>
 </div>
 
 </main>
 
-<!-- ══════════════════════════════════════════════════════════ RIGHT PANEL -->
+<!-- ══════════════════════════════════════════════ RIGHT PANEL -->
 <aside class="rpanel">
   <div class="psec">
     <div class="ptitle">Resumen del caso</div>
@@ -1176,32 +1278,16 @@ window.onload=()=>{
     <div class="hint" id="hint-box"><strong>Terminal afectado</strong>Selecciona primero el cliente para cargar la lista de terminales. Al elegir el terminal, los campos se completan automáticamente desde el registro.</div>
   </div>
 </aside>
-
 </div>
 
 <script>
-// Populate client dropdown on load
 const csel = document.getElementById('sel-cliente');
 DB.clientes.forEach(cl => {
   const o = document.createElement('option');
-  o.value = cl.id;
-  o.textContent = cl.nombre;
+  o.value = cl.id; o.textContent = cl.nombre;
   csel.appendChild(o);
 });
 
-// Sync PM fields to page 2 mirror
-const observer = new MutationObserver(() => {
-  const pm = document.getElementById('af-pm')?.value;
-  const m  = document.getElementById('af-meses')?.value;
-  const p2pm = document.getElementById('af-pm2');
-  const p2m  = document.getElementById('af-meses2');
-  if(p2pm) { p2pm.value = pm || ''; p2pm.className = pm ? 'autofill' : ''; }
-  if(p2m)  { p2m.value  = m  || ''; p2m.className  = m  ? 'autofill' : ''; p2m.style.color = document.getElementById('af-meses')?.style.color || ''; }
-});
-const pmEl = document.getElementById('af-pm');
-if(pmEl) observer.observe(pmEl, { attributes:true, attributeFilter:['value'] });
-
-// Simpler sync via interval (more reliable cross-browser)
 setInterval(()=>{
   const pm  = document.getElementById('af-pm')?.value;
   const m   = document.getElementById('af-meses')?.value;

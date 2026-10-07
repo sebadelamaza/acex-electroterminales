@@ -621,6 +621,26 @@ async function submitTerreno() {
     const data = await resp.json();
 
     if (resp.ok) {
+      // Notificar al supervisor Enel para que apruebe el informe
+      const BASE_URL_NOTIF = 'https://snazzy-starship-8e4240.netlify.app';
+      const linkAprob = `${BASE_URL_NOTIF}/aprobacion.html?ticket=${encodeURIComponent(T.ticket)}&token=${encodeURIComponent(T.token)}`;
+      try {
+        await fetch('/.netlify/functions/enviar-notificacion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tipo:               'informe',
+            ticket:             T.ticket,
+            destinatarioNombre: 'Supervisor ACEX',
+            destinatarioEmail:  T.caso?.['Email supervisor'] || '',
+            terminalNombre:     T.caso?.['Terminal nombre'] || '—',
+            clienteNombre:      T.caso?.['Cliente nombre']  || '—',
+            tecnicoNombre:      T.caso?.['Tecnico nombre']  || T.caso?.['Contratista nombre'] || '—',
+            linkFormulario:     linkAprob,
+          }),
+        });
+      } catch(e) { console.warn('Notificación supervisor falló:', e); }
+
       mostrarExito(hhTotal, totalMat, opMap[T.operativo]);
     } else {
       alert('Error al guardar: ' + JSON.stringify(data.error));

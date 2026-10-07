@@ -734,14 +734,45 @@ async function submitForm(){
     : `${BASE_URL}/terreno.html`; // sin token → modo demo en terreno.html
 
   const recursoNombre = recursoSel?.value || '—';
-  const telRecurso = (() => {
-    const recursos = {
-      'Rodrigo Jerez (Inspector)':'+56912345678','Eddic Monzart (Inspector)':'+56912345679',
-      'DCC — Emergencia grupos electrógenos':'+56912345680','RAICA — Emergencia cargadores':'+56912345681',
-      'LARI':'+56912345682','SOLGEC':'+56912345683','AINEL':'+56912345684',
-    };
-    return recursos[recursoNombre] || null;
-  })();
+
+  // ── Datos de contacto de recursos (teléfono + email) ──────────────────
+  // Actualizar con datos reales de cada técnico/contratista
+  const RECURSOS_DATA = {
+    'Rodrigo Jerez (Inspector)':     { tel:'+56912345678', email:'r.jerez@enel.com' },
+    'Eddic Monzart (Inspector)':     { tel:'+56912345679', email:'e.monzart@enel.com' },
+    'DCC — Emergencia grupos electrógenos': { tel:'+56912345680', email:'operaciones@dcc.cl' },
+    'RAICA — Emergencia cargadores': { tel:'+56912345681', email:'emergencias@raica.cl' },
+    'LARI':                          { tel:'+56912345682', email:'servicio@lari.cl' },
+    'SOLGEC':                        { tel:'+56912345683', email:'tecnico@solgec.cl' },
+    'AINEL':                         { tel:'+56912345684', email:'asistencia@ainel.cl' },
+  };
+  const recursoData   = RECURSOS_DATA[recursoNombre] || {};
+  const telRecurso    = recursoData.tel  || null;
+  const emailRecurso  = recursoData.email || null;
+
+  // ── Enviar notificación automática al técnico ─────────────────────────
+  let emailEnviado = false;
+  if (guardadoOk && emailRecurso) {
+    try {
+      const notifResp = await fetch('/.netlify/functions/enviar-notificacion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo:               'apertura',
+          ticket:             S.ticket,
+          destinatarioNombre: recursoNombre,
+          destinatarioEmail:  emailRecurso,
+          terminalNombre:     S.terminal?.nombre || '—',
+          clienteNombre:      cname,
+          tipoFalla:          fallaSel?.value || '—',
+          urgencia:           urgSel?.options[urgSel.selectedIndex]?.text || '—',
+          garantia:           wl[S.warranty] || '—',
+          linkFormulario:     linkTerreno,
+        }),
+      });
+      if (notifResp.ok) emailEnviado = true;
+    } catch(e) { console.warn('Notificación email falló:', e); }
+  }
 
   const msgWA = encodeURIComponent(
 `*ACEX · Asistencia Electroterminales 24/7*
@@ -763,8 +794,16 @@ ${linkTerreno}`);
   const urlCorreo = `mailto:?subject=${asunto}&body=${cuerpo}`;
 
   document.getElementById('s-ticket').textContent = S.ticket || '—';
+  const emailStatusHtml = guardadoOk
+    ? (emailEnviado
+        ? `<div style="margin-top:6px;font-size:11px;color:var(--green)">📧 Email enviado a ${recursoNombre} (${emailRecurso})</div>`
+        : emailRecurso
+          ? `<div style="margin-top:6px;font-size:11px;color:var(--amber)">⚠️ Email no enviado — verifica configuración de Resend</div>`
+          : `<div style="margin-top:6px;font-size:11px;color:var(--muted)">📧 Email no enviado — sin email configurado para este recurso</div>`)
+    : '';
+
   document.getElementById('s-guardado').innerHTML = guardadoOk
-    ? `<div style="background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:14px">✅ Caso guardado correctamente en Airtable</div>`
+    ? `<div style="background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:14px">✅ Caso guardado correctamente en Airtable${emailStatusHtml}</div>`
     : `<div style="background:var(--amber-bg);border:1px solid var(--amber-bdr);border-radius:var(--rs);padding:10px 14px;font-size:12px;color:var(--amber);margin-bottom:14px">⚠️ No se pudo conectar. Verifica la configuración de Netlify.</div>`;
 
   document.getElementById('s-card').innerHTML = `

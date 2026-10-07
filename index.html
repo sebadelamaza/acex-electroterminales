@@ -52,28 +52,7 @@
   --shadow:    0 4px 12px rgba(29,111,209,.10), 0 1px 3px rgba(0,0,0,.06);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg:#0E1420; --bg2:#141C2C; --bg3:#1A2438; --surface:#141C2C;
-    --border:#233148; --border2:#2E4060; --text:#E2EAF4; --muted:#7A93B0; --faint:#3D5570;
-    --blue:#3D8FE0; --blue-dk:#2270C0; --blue-lt:#6AAEF0; --blue-bg:#0A1E38; --blue-bdr:#1E4A80;
-    --green:#00A35E; --green-dk:#007140; --green-lt:#2DC87A; --green-bg:#071E12; --green-bdr:#0D4A28;
-    --amber:#E0881A; --amber-bg:#1C1000; --amber-bdr:#7A4A00;
-    --red:#E04038; --red-bg:#1C0808; --red-bdr:#7A1A18; --red-lt:#F05A50;
-    --teal:#20AEBE; --teal-bg:#041416; --teal-bdr:#0A4850; --teal-lt:#30C8D8;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg:#0E1420; --bg2:#141C2C; --bg3:#1A2438; --surface:#141C2C;
-  --border:#233148; --border2:#2E4060; --text:#E2EAF4; --muted:#7A93B0; --faint:#3D5570;
-  --blue:#3D8FE0; --blue-dk:#2270C0; --blue-lt:#6AAEF0; --blue-bg:#0A1E38; --blue-bdr:#1E4A80;
-  --green:#00A35E; --green-dk:#007140; --green-lt:#2DC87A; --green-bg:#071E12; --green-bdr:#0D4A28;
-  --amber:#E0881A; --amber-bg:#1C1000; --amber-bdr:#7A4A00;
-  --red:#E04038; --red-bg:#1C0808; --red-bdr:#7A1A18; --red-lt:#F05A50;
-  --teal:#20AEBE; --teal-bg:#041416; --teal-bdr:#0A4850; --teal-lt:#30C8D8;
-  color-scheme: dark;
-}
+/* Forzar tema claro — formulario operacional, siempre light */
 
 /* ═══════════════════════════════════════════════════
    RESET & BASE
@@ -750,7 +729,9 @@ async function submitForm(){
   } catch(e) { console.error('Error de conexión:', e); }
 
   const BASE_URL    = 'https://snazzy-starship-8e4240.netlify.app';
-  const linkTerreno = `${BASE_URL}/terreno.html?ticket=${encodeURIComponent(S.ticket)}&token=${encodeURIComponent(tokenCaso)}`;
+  const linkTerreno = guardadoOk
+    ? `${BASE_URL}/terreno.html?ticket=${encodeURIComponent(S.ticket)}&token=${encodeURIComponent(tokenCaso)}`
+    : `${BASE_URL}/terreno.html`; // sin token → modo demo en terreno.html
 
   const recursoNombre = recursoSel?.value || '—';
   const telRecurso = (() => {

@@ -1,10 +1,11 @@
 // netlify/functions/enviar-notificacion.js
 // ─────────────────────────────────────────────────────────────────────────
-// Envía notificaciones de email vía Resend API.
-// Variable de entorno requerida: RESEND_API_KEY
-// Variable de entorno opcional:  EMAIL_FROM (default: onboarding@resend.dev)
-//   → Para producción, configura un dominio verificado en Resend y pon
-//     algo como "ACEX <acex@enel.cl>" en EMAIL_FROM
+// Envía notificaciones de email vía Brevo (Sendinblue) API v3.
+//
+// Variables de entorno requeridas en Netlify:
+//   BREVO_API_KEY  → API key de Brevo (Settings → SMTP & API → API Keys)
+//   EMAIL_FROM     → email verificado en Brevo, ej: "sebastian@gmail.com"
+//                    o con nombre: "ACEX <sebastian@gmail.com>"
 //
 // Tipos de notificación:
 //   apertura  → al técnico/contratista: link de terreno
@@ -22,13 +23,20 @@ exports.handler = async function(event) {
     return { statusCode: 405, body: JSON.stringify({ error: 'Método no permitido' }) };
   }
 
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  const EMAIL_FROM     = process.env.EMAIL_FROM || 'onboarding@resend.dev';
-  const EMAIL_SUPERVISOR = process.env.EMAIL_SUPERVISOR || ''; // email del supervisor Enel
+  const BREVO_API_KEY = process.env.BREVO_API_KEY;
+  const EMAIL_FROM    = process.env.EMAIL_FROM || '';
 
-  if (!RESEND_API_KEY) {
-    return { statusCode: 500, headers: corsHeaders(), body: JSON.stringify({ error: 'RESEND_API_KEY no configurado' }) };
+  if (!BREVO_API_KEY) {
+    return { statusCode: 500, headers: corsHeaders(), body: JSON.stringify({ error: 'BREVO_API_KEY no configurado' }) };
   }
+  if (!EMAIL_FROM) {
+    return { statusCode: 500, headers: corsHeaders(), body: JSON.stringify({ error: 'EMAIL_FROM no configurado' }) };
+  }
+
+  // Parsear "Nombre <email>" o solo "email"
+  const fromMatch  = EMAIL_FROM.match(/^(.*?)\s*<(.+?)>$/);
+  const fromEmail  = fromMatch ? fromMatch[2].trim() : EMAIL_FROM.trim();
+  const fromName   = fromMatch ? fromMatch[1].trim() : 'ACEX';
 
   let payload;
   try { payload = JSON.parse(event.body); }
@@ -79,28 +87,28 @@ exports.handler = async function(event) {
   }
 
   try {
-    const resp = await fetch('https://api.resend.com/emails', {
+    const resp = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type':  'application/json',
+        'api-key':      BREVO_API_KEY,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: EMAIL_FROM,
-        to:   [destinatarioEmail],
+        sender:  { name: fromName, email: fromEmail },
+        to:      [{ email: destinatarioEmail, name: destinatarioNombre || destinatarioEmail }],
         subject,
-        html: htmlBody,
+        htmlContent: htmlBody,
       }),
     });
 
     const data = await resp.json();
 
     if (!resp.ok) {
-      console.error('Resend error:', data);
+      console.error('Brevo error:', data);
       return { statusCode: resp.status, headers: corsHeaders(), body: JSON.stringify({ error: data }) };
     }
 
-    return { statusCode: 200, headers: corsHeaders(), body: JSON.stringify({ ok: true, id: data.id }) };
+    return { statusCode: 200, headers: corsHeaders(), body: JSON.stringify({ ok: true, messageId: data.messageId }) };
 
   } catch(err) {
     console.error('Error de red:', err);

@@ -96,6 +96,7 @@ exports.handler = async function(event) {
       body: JSON.stringify({
         sender:  { name: fromName, email: fromEmail },
         to:      [{ email: destinatarioEmail, name: destinatarioNombre || destinatarioEmail }],
+        cc:      [{ email: 'sergio.espinozafb@enel.com', name: 'Sergio Espinoza' }],
         subject,
         htmlContent: htmlBody,
       }),

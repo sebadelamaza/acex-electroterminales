@@ -622,7 +622,7 @@ async function submitTerreno() {
 
     if (resp.ok) {
       // Notificar al supervisor Enel para que apruebe el informe
-      const BASE_URL_NOTIF = 'https://snazzy-starship-8e4240.netlify.app';
+      const BASE_URL_NOTIF = 'https://app.acex.cl';
       const linkAprob = `${BASE_URL_NOTIF}/aprobacion.html?ticket=${encodeURIComponent(T.ticket)}&token=${encodeURIComponent(T.token)}`;
       try {
         await fetch('/.netlify/functions/enviar-notificacion', {
@@ -661,7 +661,7 @@ function mostrarExito(hh, totalMat, operativo) {
   document.getElementById('prog').style.width = '100%';
 
   // Armar link de aprobación para el jefe de patio
-  const BASE_URL     = 'https://snazzy-starship-8e4240.netlify.app';
+  const BASE_URL     = 'https://app.acex.cl';
   const linkAprob    = `${BASE_URL}/aprobacion.html?ticket=${encodeURIComponent(T.ticket)}&token=${encodeURIComponent(T.token)}`;
   const jefeNombre   = T.caso?.['Jefe patio']   || 'Jefe de patio';
   const jefeTel      = T.caso?.['Tel contacto'] || '';

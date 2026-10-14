@@ -728,7 +728,7 @@ async function submitForm(){
     else { const err = await resp.json(); console.error('Error función:', err); }
   } catch(e) { console.error('Error de conexión:', e); }
 
-  const BASE_URL    = 'https://snazzy-starship-8e4240.netlify.app';
+  const BASE_URL    = 'https://app.acex.cl';
   const linkTerreno = guardadoOk
     ? `${BASE_URL}/terreno.html?ticket=${encodeURIComponent(S.ticket)}&token=${encodeURIComponent(tokenCaso)}`
     : `${BASE_URL}/terreno.html`; // sin token → modo demo en terreno.html

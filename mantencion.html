@@ -97,6 +97,18 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 .correctivo-indicator{display:none;font-size:11px;font-weight:700;color:var(--amber);background:var(--amberbg);border:1px solid var(--amberl);border-radius:20px;padding:3px 8px}
 .correctivo-indicator.show{display:inline-flex;align-items:center;gap:4px}
 
+/* FOTOS POR CARGADOR */
+.foto-section{margin-top:8px}
+.foto-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.foto-hdr-lbl{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px;display:flex;align-items:center;gap:5px}
+.foto-cnt-badge{font-size:10px;font-weight:700;color:#fff;background:var(--blue);border-radius:10px;padding:1px 6px}
+.btn-add-foto{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--blue);background:var(--bluebg);border:1px solid var(--blue);border-radius:6px;padding:5px 10px;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+.btn-add-foto:active{opacity:.7}
+.foto-strip{display:flex;flex-wrap:wrap;gap:6px;min-height:0}
+.foto-thumb{position:relative;width:72px;height:72px;border-radius:6px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
+.foto-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.foto-thumb-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
+
 /* DISABLED state */
 .cargador-card.no-aplica-card .cargador-body{pointer-events:none}
 .cargador-card.no-aplica-card .checks-grid{opacity:.4}
@@ -137,6 +149,12 @@ textarea{resize:none;min-height:80px;line-height:1.5}
   .cargador-card.no-aplica-card .checks-grid{opacity:1}
   .check-item input:checked ~ .check-box{border-color:#007140;background:#007140;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .cargador-num-badge{background:#1D6FD1;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .foto-strip{display:flex!important;flex-wrap:wrap;gap:4px}
+  .foto-thumb{width:80px;height:80px;break-inside:avoid}
+  .foto-thumb img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .foto-thumb-del,.btn-add-foto,.foto-hdr-lbl{display:none!important}
+  .foto-cnt-badge{display:none!important}
+  .foto-section:has(.foto-thumb) .foto-hdr-lbl{display:flex!important}
 }
 .print-header{display:none;text-align:center;padding:16px 0 8px;border-bottom:2px solid #1D6FD1;margin-bottom:16px}
 .print-header h1{font-size:18px;font-weight:700;color:#1D6FD1}
@@ -372,7 +390,7 @@ function generarCargadores(n) {
   list.innerHTML = '';
   S.cargadores = [];
   for (let i = 1; i <= n; i++) {
-    S.cargadores.push({ num:i, sn:'', noAplica:false, checks:{}, observaciones:'' });
+    S.cargadores.push({ num:i, sn:'', noAplica:false, checks:{}, observaciones:'', fotos:[] });
     list.appendChild(crearCargadorCard(i));
   }
 }
@@ -442,6 +460,24 @@ function crearCargadorCard(num) {
     </div>
   `;
 
+  // Fotos
+  const fotoSection = document.createElement('div');
+  fotoSection.className = 'foto-section';
+  fotoSection.id = `foto-sec-${num}`;
+  fotoSection.innerHTML = `
+    <div class="foto-hdr">
+      <span class="foto-hdr-lbl">
+        📷 Fotos
+        <span class="foto-cnt-badge" id="foto-cnt-${num}" style="display:none">0</span>
+      </span>
+      <label class="btn-add-foto" for="foto-inp-${num}">📷 Agregar foto</label>
+      <input type="file" id="foto-inp-${num}" accept="image/*" capture="environment"
+        style="display:none" onchange="addFoto(${num},this)"/>
+    </div>
+    <div class="foto-strip" id="foto-strip-${num}"></div>
+  `;
+  body.appendChild(fotoSection);
+
   card.appendChild(body);
   return card;
 }
@@ -472,6 +508,48 @@ function toggleObs(num) {
   const tog = document.getElementById(`obstog-${num}`);
   box.classList.toggle('show');
   tog.classList.toggle('open');
+}
+
+// ─── FOTOS ───
+const MAX_FOTOS = 4;
+
+function addFoto(num, input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  const cargador = S.cargadores[num - 1];
+  const remaining = MAX_FOTOS - cargador.fotos.length;
+  files.slice(0, remaining).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      cargador.fotos.push(e.target.result);
+      renderFotos(num);
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = ''; // reset so same photo can be re-captured if needed
+}
+
+function removeFoto(num, idx) {
+  S.cargadores[num - 1].fotos.splice(idx, 1);
+  renderFotos(num);
+}
+
+function renderFotos(num) {
+  const fotos  = S.cargadores[num - 1].fotos;
+  const strip  = document.getElementById(`foto-strip-${num}`);
+  const cntEl  = document.getElementById(`foto-cnt-${num}`);
+  const addLbl = document.querySelector(`label[for="foto-inp-${num}"]`);
+
+  strip.innerHTML = fotos.map((src, i) => `
+    <div class="foto-thumb">
+      <img src="${src}" alt="Foto ${i + 1}"/>
+      <button class="foto-thumb-del" type="button" onclick="removeFoto(${num},${i})">×</button>
+    </div>
+  `).join('');
+
+  cntEl.textContent = fotos.length;
+  cntEl.style.display = fotos.length ? 'inline' : 'none';
+  if (addLbl) addLbl.style.display = fotos.length >= MAX_FOTOS ? 'none' : 'inline-flex';
 }
 
 // ─── GENERAR TICKET ───
@@ -514,6 +592,7 @@ async function enviarMantencion() {
     sello:         document.getElementById(`chk-${c.num}-sello`)?.checked || false,
     carga:         document.getElementById(`chk-${c.num}-carga`)?.checked || false,
     observaciones: document.getElementById(`obs-${c.num}`)?.value || '',
+    fotos_count:   c.fotos.length,
   }));
 
   const payload = {

@@ -172,6 +172,13 @@ textarea{resize:none;min-height:80px;line-height:1.5}
   <span class="topbar-title">Mantención Preventiva</span>
 </div>
 
+<!-- MODULE NAV -->
+<nav style="display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid #D8E2EE;overflow-x:auto">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;border:1px solid transparent;color:#637181;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">🔧 Asistencia</a>
+  <a href="mantencion.html" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#EBF3FD;border:1px solid #B3D4F5;color:#1D6FD1;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">🔩 Mantención</a>
+  <a href="comisionamiento.html" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;border:1px solid transparent;color:#637181;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">⚡ Comisionamiento</a>
+</nav>
+
 <!-- PRINT HEADER (solo visible al imprimir) -->
 <div class="print-header">
   <h1>ACEX · Registro de Mantención Preventiva</h1>
@@ -280,8 +287,8 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 </div>
 
 <script>
-// ─── DB (igual que index.html — se reemplazará con datos reales de tablas maestras) ───
-const DB = {
+// ─── DB FALLBACK (mientras Airtable Terminales esté vacío) ───
+const DB_FALLBACK = {
   clientes: [
     { id:'CL001', nombre:'RBU' },
     { id:'CL002', nombre:'METBUS' },
@@ -321,6 +328,9 @@ const DB = {
   }
 };
 
+// DB activo — se reemplaza con datos de Airtable si hay terminales comisionados
+let DB = { clientes: DB_FALLBACK.clientes, terminales: DB_FALLBACK.terminales };
+
 const CHECKLIST_ITEMS = [
   { id:'limpieza',   label:'Limpieza de equipo' },
   { id:'reapriete',  label:'Reapriete de conexiones' },
@@ -337,16 +347,67 @@ let S = { clienteId:'', terminal:null, tecnico:'', fecha:'', cargadores:[] };
 
 // ─── INIT ───
 document.addEventListener('DOMContentLoaded', () => {
-  // Fecha hoy por defecto
   document.getElementById('inp-fecha').value = new Date().toISOString().split('T')[0];
-  // Poblar clientes
+  poblarClientes();
+  cargarTerminalesDeAirtable(); // intenta enriquecer con terminales comisionados
+});
+
+function poblarClientes() {
   const sel = document.getElementById('sel-cliente');
+  sel.innerHTML = '<option value="">— Selecciona cliente —</option>';
   DB.clientes.forEach(c => {
     const o = document.createElement('option');
     o.value = c.id; o.textContent = c.nombre;
     sel.appendChild(o);
   });
-});
+}
+
+async function cargarTerminalesDeAirtable() {
+  try {
+    const resp = await fetch(`${BASE_URL}/.netlify/functions/get-terminales`);
+    if (!resp.ok) return; // silencioso: usamos fallback
+    const data = await resp.json();
+    if (!data.ok || !data.total) return; // tabla vacía — usamos fallback
+
+    // Convertir lista plana a la estructura DB esperada
+    const terminalesAirtable = {};
+    const clientesSet = {};
+
+    data.terminales.forEach(t => {
+      const cid = t.clienteId || t.cliente;
+      if (!clientesSet[cid]) {
+        clientesSet[cid] = { id: cid, nombre: t.cliente };
+        terminalesAirtable[cid] = [];
+      }
+      terminalesAirtable[cid].push({
+        id:         t.terminalId || t.id,
+        nombre:     t.nombre,
+        ubic:       t.direccion || '',
+        cargadores: t.numCargadores || 0,
+      });
+    });
+
+    // Fusionar: Airtable tiene precedencia, pero conservamos los del fallback que no estén
+    const clientesAirtable = Object.values(clientesSet);
+    const clienteIdsAirtable = new Set(clientesAirtable.map(c => c.id));
+
+    DB.clientes = [
+      ...clientesAirtable,
+      ...DB_FALLBACK.clientes.filter(c => !clienteIdsAirtable.has(c.id)),
+    ];
+    DB.terminales = terminalesAirtable;
+    // Agregar terminales fallback para clientes que no estén en Airtable
+    DB_FALLBACK.clientes.forEach(c => {
+      if (!terminalesAirtable[c.id] && DB_FALLBACK.terminales[c.id]) {
+        DB.terminales[c.id] = DB_FALLBACK.terminales[c.id];
+      }
+    });
+
+    poblarClientes(); // repoblar con datos actualizados
+  } catch {
+    // Silencioso — usamos DB fallback tal cual
+  }
+}
 
 function onClienteChange() {
   const cid = document.getElementById('sel-cliente').value;

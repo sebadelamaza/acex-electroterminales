@@ -36,7 +36,7 @@ exports.handler = async (event) => {
 
     const { data: rows, error } = await supabase
       .from('mantenimientos')
-      .select('fecha, ticket, tecnico')
+      .select('fecha, ticket, tecnico, cargadores_json')
       .eq('terminal_id', terminalId)
       .order('fecha', { ascending: false })
       .limit(1);
@@ -48,6 +48,24 @@ exports.handler = async (event) => {
 
     const ultimo = rows && rows.length > 0 ? rows[0] : null;
 
+    // Parsear cargadores_json para devolver datos de equipos (marca, modelo, potencia, sn)
+    let cargadoresData = null;
+    if (ultimo?.cargadores_json) {
+      try {
+        const parsed = typeof ultimo.cargadores_json === 'string'
+          ? JSON.parse(ultimo.cargadores_json)
+          : ultimo.cargadores_json;
+        // Extraer solo los campos de identidad del equipo
+        cargadoresData = (Array.isArray(parsed) ? parsed : []).map(c => ({
+          num:    c.num,
+          sn:     c.sn     || '',
+          marca:  c.marca  || '',
+          modelo: c.modelo || '',
+          potencia: c.potencia || '',
+        }));
+      } catch (_) { /* ignore parse error */ }
+    }
+
     return {
       statusCode: 200,
       headers: HEADERS,
@@ -58,6 +76,7 @@ exports.handler = async (event) => {
           ticket:  ultimo.ticket,
           tecnico: ultimo.tecnico,
         } : null,
+        cargadoresData,
       }),
     };
 

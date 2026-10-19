@@ -69,7 +69,16 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 .toggle-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px}
 .cargador-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
 
-/* SN INPUT inline */
+/* EQUIPO FIELDS por cargador */
+.equipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:2px}
+.equipo-field{display:flex;flex-direction:column;gap:3px}
+.equipo-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
+.equipo-input{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:13px;color:var(--text);outline:none;width:100%;transition:border-color .15s}
+.equipo-input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,111,209,.1)}
+.equipo-input.prefilled{background:var(--greenbg);border-color:var(--green);color:var(--green)}
+/* S/N usa mono */
+.equipo-input.mono{font-family:'JetBrains Mono',monospace}
+/* SN INPUT inline (legacy) */
 .sn-row{display:flex;align-items:center;gap:8px}
 .sn-label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;letter-spacing:.2px;min-width:24px}
 .sn-input{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);outline:none;flex:1;transition:border-color .15s}
@@ -122,6 +131,7 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 .cargador-card.no-aplica-card .cargador-body{pointer-events:none}
 .cargador-card.no-aplica-card .checks-grid{opacity:.4}
 .cargador-card.no-aplica-card .sn-input{opacity:.4}
+.cargador-card.no-aplica-card .equipo-input{opacity:.4}
 
 /* SUBMIT */
 .submit-section{position:fixed;bottom:0;left:0;right:0;padding:16px;background:rgba(245,247,250,.96);backdrop-filter:blur(8px);border-top:1px solid var(--border);z-index:50}
@@ -165,6 +175,10 @@ textarea{resize:none;min-height:80px;line-height:1.5}
   .cargador-card.no-aplica-card .checks-grid{opacity:1}
   .check-item input:checked ~ .check-box{border-color:#007140;background:#007140;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .cargador-num-badge{background:#1D6FD1;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .equipo-grid{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:4px!important;margin-bottom:4px}
+  .equipo-label{font-size:8px!important;letter-spacing:.3px}
+  .equipo-input{font-size:11px!important;padding:4px 6px!important;background:#F5F7FA!important;border:1px solid #D8E2EE!important}
+  .equipo-input.prefilled{background:#E6F4EC!important;border-color:#007140!important;color:#007140!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .foto-bloques{display:flex!important;gap:6px}
   .foto-bloque{flex:1;padding:5px 7px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .foto-bloque.antes{background:rgba(180,83,9,.06)!important;border:1px solid rgba(180,83,9,.25)!important}
@@ -532,11 +546,34 @@ function onTerminalChange() {
   const terms = DB.terminales[cid] || [];
   S.terminal = terms.find(t => t.id === tid) || null;
   S.ultimoMantenimiento = null;
-  // Cargar último mantenimiento de este terminal (silencioso)
+  // Cargar último mantenimiento (incluye datos de equipos para pre-rellenar)
   if (S.terminal) {
     fetch(`${BASE_URL}/.netlify/functions/get-ultimo-mantenimiento?terminalId=${encodeURIComponent(S.terminal.id)}`)
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d && d.ok) S.ultimoMantenimiento = d.ultimoMantenimiento; })
+      .then(d => {
+        if (!d || !d.ok) return;
+        S.ultimoMantenimiento = d.ultimoMantenimiento;
+        // Pre-rellenar datos del equipo si existen en el último mantenimiento
+        if (d.cargadoresData && Array.isArray(d.cargadoresData)) {
+          d.cargadoresData.forEach(cd => {
+            const idx = cd.num - 1;
+            if (idx < 0 || idx >= S.cargadores.length) return;
+            const prefill = (fieldId, val, stateKey) => {
+              const el = document.getElementById(`${fieldId}-${cd.num}`);
+              if (!el || el.value) return; // no sobreescribir si ya hay algo
+              if (val) {
+                el.value = val;
+                el.classList.add('prefilled');
+                S.cargadores[idx][stateKey] = val;
+              }
+            };
+            prefill('sn',      cd.sn,       'sn');
+            prefill('marca',   cd.marca,    'marca');
+            prefill('modelo',  cd.modelo,   'modelo');
+            prefill('potencia',cd.potencia, 'potencia');
+          });
+        }
+      })
       .catch(() => {});
   }
   if (!S.terminal) return;
@@ -553,7 +590,7 @@ function generarCargadores(n) {
   list.innerHTML = '';
   S.cargadores = [];
   for (let i = 1; i <= n; i++) {
-    S.cargadores.push({ num:i, sn:'', noAplica:false, checks:{}, observaciones:'', fotosAntes:[], fotosDespues:[] });
+    S.cargadores.push({ num:i, sn:'', marca:'', modelo:'', potencia:'', noAplica:false, checks:{}, observaciones:'', fotosAntes:[], fotosDespues:[] });
     list.appendChild(crearCargadorCard(i));
   }
 }
@@ -585,12 +622,29 @@ function crearCargadorCard(num) {
   body.className = 'cargador-body';
   body.id = `body-${num}`;
 
-  // S/N
+  // Datos del equipo (Marca / Modelo / Potencia / S/N)
   body.innerHTML += `
-    <div class="sn-row">
-      <span class="sn-label">S/N</span>
-      <input class="sn-input" type="text" id="sn-${num}" placeholder="Número de serie (opcional)"
-        oninput="S.cargadores[${num-1}].sn=this.value"/>
+    <div class="equipo-grid">
+      <div class="equipo-field">
+        <span class="equipo-label">Marca</span>
+        <input class="equipo-input" type="text" id="marca-${num}" placeholder="ej. ABB"
+          oninput="S.cargadores[${num-1}].marca=this.value"/>
+      </div>
+      <div class="equipo-field">
+        <span class="equipo-label">Modelo</span>
+        <input class="equipo-input" type="text" id="modelo-${num}" placeholder="ej. Terra 54"
+          oninput="S.cargadores[${num-1}].modelo=this.value"/>
+      </div>
+      <div class="equipo-field">
+        <span class="equipo-label">Potencia (kW)</span>
+        <input class="equipo-input" type="text" id="potencia-${num}" placeholder="ej. 50"
+          oninput="S.cargadores[${num-1}].potencia=this.value"/>
+      </div>
+      <div class="equipo-field">
+        <span class="equipo-label">N° de Serie</span>
+        <input class="equipo-input mono" type="text" id="sn-${num}" placeholder="S/N (opcional)"
+          oninput="S.cargadores[${num-1}].sn=this.value"/>
+      </div>
     </div>
   `;
 
@@ -755,7 +809,10 @@ async function enviarMantencion() {
   // Snapshot de datos de cargadores
   const cargadoresData = S.cargadores.map(c => ({
     num:           c.num,
-    sn:            document.getElementById(`sn-${c.num}`)?.value || '',
+    sn:            document.getElementById(`sn-${c.num}`)?.value     || '',
+    marca:         document.getElementById(`marca-${c.num}`)?.value  || '',
+    modelo:        document.getElementById(`modelo-${c.num}`)?.value || '',
+    potencia:      document.getElementById(`potencia-${c.num}`)?.value || '',
     noAplica:      document.getElementById(`na-${c.num}`)?.checked || false,
     limpieza:      document.getElementById(`chk-${c.num}-limpieza`)?.checked || false,
     reapriete:     document.getElementById(`chk-${c.num}-reapriete`)?.checked || false,

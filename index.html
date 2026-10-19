@@ -664,7 +664,7 @@ function goTo(n){
   window.scrollTo(0,0); updateComplete();
 }
 
-const FUNCION_URL = '/.netlify/functions/guardar-caso';
+const FUNCION_URL = '/api/guardar-caso';
 
 function genTokenCaso() {
   return Math.random().toString(36).substring(2,10).toUpperCase() + Date.now().toString(36).toUpperCase();
@@ -754,7 +754,7 @@ async function submitForm(){
   let emailEnviado = false;
   if (guardadoOk && emailRecurso) {
     try {
-      const notifResp = await fetch('/.netlify/functions/enviar-notificacion', {
+      const notifResp = await fetch('/api/enviar-notificacion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

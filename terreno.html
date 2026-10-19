@@ -382,7 +382,7 @@ window.onload = async () => {
 
 async function cargarCaso() {
   try {
-    const resp = await fetch(`/.netlify/functions/obtener-caso?ticket=${encodeURIComponent(T.ticket)}&token=${encodeURIComponent(T.token)}`);
+    const resp = await fetch(`/api/obtener-caso?ticket=${encodeURIComponent(T.ticket)}&token=${encodeURIComponent(T.token)}`);
     const data = await resp.json();
 
     if (!resp.ok) {
@@ -612,7 +612,7 @@ async function submitTerreno() {
   };
 
   try {
-    const resp = await fetch('/.netlify/functions/actualizar-caso', {
+    const resp = await fetch('/api/actualizar-caso', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ recordId: T.recordId, token: T.token, campos }),
@@ -625,7 +625,7 @@ async function submitTerreno() {
       const BASE_URL_NOTIF = 'https://app.acex.cl';
       const linkAprob = `${BASE_URL_NOTIF}/aprobacion.html?ticket=${encodeURIComponent(T.ticket)}&token=${encodeURIComponent(T.token)}`;
       try {
-        await fetch('/.netlify/functions/enviar-notificacion', {
+        await fetch('/api/enviar-notificacion', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

@@ -832,7 +832,7 @@ async function enviarComisionamiento() {
   document.getElementById('btn-submit').disabled = true;
 
   try {
-    const resp = await fetch(`${BASE_URL}/.netlify/functions/guardar-comisionamiento`, {
+    const resp = await fetch(`${BASE_URL}/api/guardar-comisionamiento`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

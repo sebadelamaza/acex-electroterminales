@@ -349,7 +349,7 @@ window.onload = async () => {
 async function cargarCaso(ticket, token) {
   try {
     const resp = await fetch(
-      `/.netlify/functions/obtener-caso?ticket=${encodeURIComponent(ticket)}&token=${encodeURIComponent(token)}`
+      `/api/obtener-caso?ticket=${encodeURIComponent(ticket)}&token=${encodeURIComponent(token)}`
     );
     const data = await resp.json();
     if (!resp.ok) {

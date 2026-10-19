@@ -334,7 +334,7 @@ window.onload = async () => {
 async function cargarCaso() {
   try {
     const resp = await fetch(
-      `/.netlify/functions/obtener-caso?ticket=${encodeURIComponent(A.ticket)}&token=${encodeURIComponent(A.token)}`
+      `/api/obtener-caso?ticket=${encodeURIComponent(A.ticket)}&token=${encodeURIComponent(A.token)}`
     );
     const data = await resp.json();
     if (!resp.ok) {
@@ -596,7 +596,7 @@ async function firmarDocumento() {
   };
 
   try {
-    const resp = await fetch('/.netlify/functions/actualizar-caso', {
+    const resp = await fetch('/api/actualizar-caso', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ recordId: A.recordId, token: A.token, campos }),

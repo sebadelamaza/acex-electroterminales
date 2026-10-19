@@ -292,7 +292,7 @@ async function login() {
 
   // Verificar PIN llamando a la función
   try {
-    const resp = await fetch(`/.netlify/functions/listar-casos?pin=${encodeURIComponent(pin)}`);
+    const resp = await fetch(`/api/listar-casos?pin=${encodeURIComponent(pin)}`);
     if (resp.status === 401) {
       document.getElementById('login-error').textContent = 'PIN incorrecto. Inténtalo de nuevo.';
       document.getElementById('pin-input').value = '';
@@ -330,7 +330,7 @@ async function cargarDatos() {
     const desde   = document.getElementById('f-desde').value;
     const hasta   = document.getElementById('f-hasta').value;
 
-    let url = `/.netlify/functions/listar-casos?pin=${encodeURIComponent(PIN)}`;
+    let url = `/api/listar-casos?pin=${encodeURIComponent(PIN)}`;
     if (estado && estado !== 'todos') url += `&estado=${encodeURIComponent(estado)}`;
     if (cliente) url += `&cliente=${encodeURIComponent(cliente)}`;
     if (desde)   url += `&desde=${encodeURIComponent(desde)}`;

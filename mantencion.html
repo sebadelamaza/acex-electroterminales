@@ -467,7 +467,7 @@ function poblarClientes() {
 
 async function cargarTerminalesDeAirtable() {
   try {
-    const resp = await fetch(`${BASE_URL}/.netlify/functions/get-terminales`);
+    const resp = await fetch(`${BASE_URL}/api/get-terminales`);
     if (!resp.ok) return; // silencioso: usamos fallback
     const data = await resp.json();
     if (!data.ok || !data.total) return; // tabla vacía — usamos fallback
@@ -548,7 +548,7 @@ function onTerminalChange() {
   S.ultimoMantenimiento = null;
   // Cargar último mantenimiento (incluye datos de equipos para pre-rellenar)
   if (S.terminal) {
-    fetch(`${BASE_URL}/.netlify/functions/get-ultimo-mantenimiento?terminalId=${encodeURIComponent(S.terminal.id)}`)
+    fetch(`${BASE_URL}/api/get-ultimo-mantenimiento?terminalId=${encodeURIComponent(S.terminal.id)}`)
       .then(r => r.ok ? r.json() : null)
       .then(d => {
         if (!d || !d.ok) return;
@@ -846,7 +846,7 @@ async function enviarMantencion() {
   document.getElementById('btn-submit').disabled = true;
 
   try {
-    const resp = await fetch(`${BASE_URL}/.netlify/functions/guardar-mantencion`, {
+    const resp = await fetch(`${BASE_URL}/api/guardar-mantencion`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

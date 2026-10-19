@@ -690,7 +690,7 @@ async function enviarMantencion() {
     document.getElementById('sec-checklist').style.display = 'none';
     document.getElementById('submit-bar').style.display = 'none';
     document.getElementById('success-msg').textContent =
-      `Ticket ${ticket} guardado correctamente en Airtable.${tieneCorrectivos ? ' ⚠️ Hay correctivos pendientes.' : ''}`;
+      `Ticket ${ticket} guardado correctamente.${tieneCorrectivos ? ' ⚠️ Hay correctivos pendientes.' : ''}`;
     document.getElementById('success-state').classList.add('show');
     window.scrollTo({top:0,behavior:'smooth'});
 
@@ -702,9 +702,27 @@ async function enviarMantencion() {
 }
 
 function generarPDF() {
-  // Mostrar todas las obs antes de imprimir
+  // Título dinámico para el nombre del archivo PDF
+  const clienteNombre = DB.clientes.find(c => c.id === S.clienteId)?.nombre || S.terminal?.cliente || '';
+  const termNombre    = S.terminal?.nombre || '';
+  const fechaStr      = document.getElementById('inp-fecha')?.value || new Date().toISOString().split('T')[0];
+  const tituloOriginal = document.title;
+  document.title = `ACEX · Mantención · ${clienteNombre} · ${termNombre} · ${fechaStr}`;
+
+  // Mostrar todas las obs y el checklist (fotos incluidas) antes de imprimir
   document.querySelectorAll('.obs-textarea').forEach(el => el.classList.add('show'));
+  const secChecklist = document.getElementById('sec-checklist');
+  const wasHidden    = secChecklist && secChecklist.style.display === 'none';
+  if (wasHidden) secChecklist.style.display = '';
+
   window.print();
+
+  // Restaurar estado tras imprimir
+  window.addEventListener('afterprint', function restoreAfterPrint() {
+    document.title = tituloOriginal;
+    if (wasHidden && secChecklist) secChecklist.style.display = 'none';
+    window.removeEventListener('afterprint', restoreAfterPrint);
+  }, { once: true });
 }
 </script>
 </body>

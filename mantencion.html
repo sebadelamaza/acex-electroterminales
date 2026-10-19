@@ -97,17 +97,26 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 .correctivo-indicator{display:none;font-size:11px;font-weight:700;color:var(--amber);background:var(--amberbg);border:1px solid var(--amberl);border-radius:20px;padding:3px 8px}
 .correctivo-indicator.show{display:inline-flex;align-items:center;gap:4px}
 
-/* FOTOS POR CARGADOR */
-.foto-section{margin-top:8px}
-.foto-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.foto-hdr-lbl{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px;display:flex;align-items:center;gap:5px}
-.foto-cnt-badge{font-size:10px;font-weight:700;color:#fff;background:var(--blue);border-radius:10px;padding:1px 6px}
-.btn-add-foto{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--blue);background:var(--bluebg);border:1px solid var(--blue);border-radius:6px;padding:5px 10px;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+/* FOTOS POR CARGADOR — Antes / Después */
+.foto-bloques{display:flex;gap:8px;margin-top:10px}
+.foto-bloque{flex:1;min-width:0;border-radius:8px;padding:8px 10px}
+.foto-bloque.antes{background:rgba(180,83,9,.06);border:1px solid rgba(180,83,9,.2)}
+.foto-bloque.despues{background:rgba(0,113,64,.06);border:1px solid rgba(0,113,64,.2)}
+.foto-bloque-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.foto-bloque-lbl{font-size:11px;font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:4px}
+.foto-bloque.antes .foto-bloque-lbl{color:#b45309}
+.foto-bloque.despues .foto-bloque-lbl{color:#007140}
+.foto-cnt-badge{font-size:10px;font-weight:700;color:#fff;border-radius:10px;padding:1px 6px}
+.foto-bloque.antes .foto-cnt-badge{background:#b45309}
+.foto-bloque.despues .foto-cnt-badge{background:#007140}
+.btn-add-foto{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;border-radius:6px;padding:4px 8px;cursor:pointer;transition:opacity .15s;white-space:nowrap;border:1px solid}
+.foto-bloque.antes .btn-add-foto{color:#b45309;background:rgba(180,83,9,.08);border-color:#b45309}
+.foto-bloque.despues .btn-add-foto{color:#007140;background:rgba(0,113,64,.08);border-color:#007140}
 .btn-add-foto:active{opacity:.7}
-.foto-strip{display:flex;flex-wrap:wrap;gap:6px;min-height:0}
-.foto-thumb{position:relative;width:72px;height:72px;border-radius:6px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
+.foto-strip{display:flex;flex-wrap:wrap;gap:5px;min-height:0}
+.foto-thumb{position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
 .foto-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.foto-thumb-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
+.foto-thumb-del{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
 
 /* DISABLED state */
 .cargador-card.no-aplica-card .cargador-body{pointer-events:none}
@@ -156,12 +165,17 @@ textarea{resize:none;min-height:80px;line-height:1.5}
   .cargador-card.no-aplica-card .checks-grid{opacity:1}
   .check-item input:checked ~ .check-box{border-color:#007140;background:#007140;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .cargador-num-badge{background:#1D6FD1;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .foto-bloques{display:flex!important;gap:6px}
+  .foto-bloque{flex:1;padding:5px 7px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .foto-bloque.antes{background:rgba(180,83,9,.06)!important;border:1px solid rgba(180,83,9,.25)!important}
+  .foto-bloque.despues{background:rgba(0,113,64,.06)!important;border:1px solid rgba(0,113,64,.25)!important}
+  .foto-bloque-lbl{font-size:9px!important;font-weight:700!important}
+  .foto-bloque.antes .foto-bloque-lbl{color:#b45309!important}
+  .foto-bloque.despues .foto-bloque-lbl{color:#007140!important}
   .foto-strip{display:flex!important;flex-wrap:wrap;gap:4px}
-  .foto-thumb{width:80px;height:80px;break-inside:avoid}
+  .foto-thumb{width:72px;height:72px;break-inside:avoid}
   .foto-thumb img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .foto-thumb-del,.btn-add-foto,.foto-hdr-lbl{display:none!important}
-  .foto-cnt-badge{display:none!important}
-  .foto-section:has(.foto-thumb) .foto-hdr-lbl{display:flex!important}
+  .foto-thumb-del,.btn-add-foto,.foto-cnt-badge{display:none!important}
 }
 .print-header{display:none;text-align:center;padding:16px 0 8px;border-bottom:2px solid #1D6FD1;margin-bottom:12px}
 .print-header h1{font-size:18px;font-weight:700;color:#1D6FD1}
@@ -539,7 +553,7 @@ function generarCargadores(n) {
   list.innerHTML = '';
   S.cargadores = [];
   for (let i = 1; i <= n; i++) {
-    S.cargadores.push({ num:i, sn:'', noAplica:false, checks:{}, observaciones:'', fotos:[] });
+    S.cargadores.push({ num:i, sn:'', noAplica:false, checks:{}, observaciones:'', fotosAntes:[], fotosDespues:[] });
     list.appendChild(crearCargadorCard(i));
   }
 }
@@ -609,22 +623,29 @@ function crearCargadorCard(num) {
     </div>
   `;
 
-  // Fotos
+  // Fotos Antes / Después
   const fotoSection = document.createElement('div');
-  fotoSection.className = 'foto-section';
+  fotoSection.className = 'foto-bloques';
   fotoSection.id = `foto-sec-${num}`;
-  fotoSection.innerHTML = `
-    <div class="foto-hdr">
-      <span class="foto-hdr-lbl">
-        📷 Fotos
-        <span class="foto-cnt-badge" id="foto-cnt-${num}" style="display:none">0</span>
-      </span>
-      <label class="btn-add-foto" for="foto-inp-${num}">📷 Agregar foto</label>
-      <input type="file" id="foto-inp-${num}" accept="image/*" capture="environment"
-        style="display:none" onchange="addFoto(${num},this)"/>
-    </div>
-    <div class="foto-strip" id="foto-strip-${num}"></div>
-  `;
+  ['antes','despues'].forEach(tipo => {
+    const emoji = tipo === 'antes' ? '📷' : '✅';
+    const label = tipo === 'antes' ? 'Estado ANTES del mantenimiento' : 'Estado DESPUÉS del mantenimiento';
+    const bloque = document.createElement('div');
+    bloque.className = `foto-bloque ${tipo}`;
+    bloque.innerHTML = `
+      <div class="foto-bloque-hdr">
+        <span class="foto-bloque-lbl">
+          ${emoji} ${label}
+          <span class="foto-cnt-badge" id="foto-cnt-${num}-${tipo}" style="display:none">0</span>
+        </span>
+        <label class="btn-add-foto" for="foto-inp-${num}-${tipo}">${emoji} Foto</label>
+        <input type="file" id="foto-inp-${num}-${tipo}" accept="image/*" capture="environment"
+          style="display:none" onchange="addFoto(${num},'${tipo}',this)"/>
+      </div>
+      <div class="foto-strip" id="foto-strip-${num}-${tipo}"></div>
+    `;
+    fotoSection.appendChild(bloque);
+  });
   body.appendChild(fotoSection);
 
   card.appendChild(body);
@@ -660,45 +681,47 @@ function toggleObs(num) {
 }
 
 // ─── FOTOS ───
-const MAX_FOTOS = 4;
+const MAX_FOTOS = 3; // por tipo (antes / después)
 
-function addFoto(num, input) {
+function addFoto(num, tipo, input) {
   const files = Array.from(input.files);
   if (!files.length) return;
-  const cargador = S.cargadores[num - 1];
-  const remaining = MAX_FOTOS - cargador.fotos.length;
+  const cargador  = S.cargadores[num - 1];
+  const arr       = tipo === 'antes' ? cargador.fotosAntes : cargador.fotosDespues;
+  const remaining = MAX_FOTOS - arr.length;
   files.slice(0, remaining).forEach(file => {
     const reader = new FileReader();
     reader.onload = e => {
-      cargador.fotos.push(e.target.result);
-      renderFotos(num);
+      arr.push(e.target.result);
+      renderFotos(num, tipo);
     };
     reader.readAsDataURL(file);
   });
-  input.value = ''; // reset so same photo can be re-captured if needed
+  input.value = '';
 }
 
-function removeFoto(num, idx) {
-  S.cargadores[num - 1].fotos.splice(idx, 1);
-  renderFotos(num);
+function removeFoto(num, tipo, idx) {
+  const arr = tipo === 'antes' ? S.cargadores[num-1].fotosAntes : S.cargadores[num-1].fotosDespues;
+  arr.splice(idx, 1);
+  renderFotos(num, tipo);
 }
 
-function renderFotos(num) {
-  const fotos  = S.cargadores[num - 1].fotos;
-  const strip  = document.getElementById(`foto-strip-${num}`);
-  const cntEl  = document.getElementById(`foto-cnt-${num}`);
-  const addLbl = document.querySelector(`label[for="foto-inp-${num}"]`);
+function renderFotos(num, tipo) {
+  const arr    = tipo === 'antes' ? S.cargadores[num-1].fotosAntes : S.cargadores[num-1].fotosDespues;
+  const strip  = document.getElementById(`foto-strip-${num}-${tipo}`);
+  const cntEl  = document.getElementById(`foto-cnt-${num}-${tipo}`);
+  const addLbl = document.querySelector(`label[for="foto-inp-${num}-${tipo}"]`);
 
-  strip.innerHTML = fotos.map((src, i) => `
+  strip.innerHTML = arr.map((src, i) => `
     <div class="foto-thumb">
       <img src="${src}" alt="Foto ${i + 1}"/>
-      <button class="foto-thumb-del" type="button" onclick="removeFoto(${num},${i})">×</button>
+      <button class="foto-thumb-del" type="button" onclick="removeFoto(${num},'${tipo}',${i})">×</button>
     </div>
   `).join('');
 
-  cntEl.textContent = fotos.length;
-  cntEl.style.display = fotos.length ? 'inline' : 'none';
-  if (addLbl) addLbl.style.display = fotos.length >= MAX_FOTOS ? 'none' : 'inline-flex';
+  cntEl.textContent = arr.length;
+  cntEl.style.display = arr.length ? 'inline' : 'none';
+  if (addLbl) addLbl.style.display = arr.length >= MAX_FOTOS ? 'none' : 'inline-flex';
 }
 
 // ─── GENERAR TICKET ───
@@ -741,7 +764,8 @@ async function enviarMantencion() {
     sello:         document.getElementById(`chk-${c.num}-sello`)?.checked || false,
     carga:         document.getElementById(`chk-${c.num}-carga`)?.checked || false,
     observaciones: document.getElementById(`obs-${c.num}`)?.value || '',
-    fotos_count:   c.fotos.length,
+    fotos_antes_count:   c.fotosAntes.length,
+    fotos_despues_count: c.fotosDespues.length,
   }));
 
   const payload = {
@@ -831,7 +855,8 @@ function generarPDF() {
   document.querySelectorAll('.obs-textarea').forEach(el => el.classList.add('show'));
   const obsEmptyEls = [];
   S.cargadores.forEach((c, i) => {
-    if (!c.observaciones || !c.observaciones.trim()) {
+    const obs = document.getElementById(`obs-${i + 1}`)?.value || '';
+    if (!obs.trim()) {
       const box = document.getElementById(`obsbox-${i + 1}`);
       if (box) { box.classList.add('obs-empty-print'); obsEmptyEls.push(box); }
     }

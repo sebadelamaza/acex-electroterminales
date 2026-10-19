@@ -266,30 +266,65 @@ textarea{resize:none;min-height:80px;line-height:1.5}
           oninput="onCargadoresChange(this.value)"/>
       </div>
       <div class="fg">
-        <label class="req">Potencia por cargador</label>
-        <select id="sel-potencia">
-          <option value="">— Selecciona —</option>
-          <option value="50 kW">50 kW</option>
-          <option value="60 kW">60 kW</option>
-          <option value="120 kW">120 kW</option>
-          <option value="150 kW">150 kW</option>
-          <option value="180 kW">180 kW</option>
-          <option value="240 kW">240 kW</option>
-          <option value="Otro">Otro</option>
-        </select>
+        <label class="req">Potencia por cargador (kW)</label>
+        <input type="text" id="inp-potencia" list="potencia-options" placeholder="Ej: 120"
+          inputmode="decimal"/>
+        <datalist id="potencia-options">
+          <option value="22">22 kW</option>
+          <option value="50">50 kW</option>
+          <option value="60">60 kW</option>
+          <option value="120">120 kW</option>
+          <option value="150">150 kW</option>
+          <option value="180">180 kW</option>
+          <option value="240">240 kW</option>
+          <option value="360">360 kW</option>
+        </datalist>
       </div>
     </div>
 
     <div class="row2">
       <div class="fg">
+        <label class="req">Marca / Fabricante</label>
+        <input type="text" id="inp-marca" list="marca-options" placeholder="Ej: ABB"/>
+        <datalist id="marca-options">
+          <option value="ABB"/>
+          <option value="EFACEC"/>
+          <option value="Tritium"/>
+          <option value="Wallbox"/>
+          <option value="BTC Power"/>
+          <option value="Schneider Electric"/>
+          <option value="Siemens"/>
+          <option value="Delta"/>
+          <option value="Ingeteam"/>
+          <option value="Alpitronic"/>
+          <option value="Phoenix Contact"/>
+        </datalist>
+      </div>
+      <div class="fg">
         <label class="req">Modelo del cargador</label>
-        <input type="text" id="inp-modelo" placeholder="Ej: EFACEC QC45"/>
+        <input type="text" id="inp-modelo" placeholder="Ej: Terra 184"/>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="fg">
+        <label>Tipo de conector</label>
+        <select id="sel-conector">
+          <option value="">— Selecciona —</option>
+          <option value="CCS2">CCS2 (CSS Tipo 2)</option>
+          <option value="CHAdeMO">CHAdeMO</option>
+          <option value="CCS2 + CHAdeMO">CCS2 + CHAdeMO (doble pistola)</option>
+          <option value="AC Tipo 2">AC Tipo 2 (Mennekes)</option>
+          <option value="GB/T DC">GB/T DC</option>
+          <option value="Otro">Otro</option>
+        </select>
       </div>
       <div class="fg">
         <label>Protocolo OCPP</label>
         <select id="sel-protocolo">
           <option value="OCPP 1.6">OCPP 1.6</option>
           <option value="OCPP 2.0.1">OCPP 2.0.1</option>
+          <option value="Sin OCPP">Sin OCPP</option>
           <option value="Otro">Otro</option>
         </select>
       </div>
@@ -720,7 +755,9 @@ function validar() {
   if (!document.getElementById('inp-direccion').value.trim()) return 'Ingresa la dirección del terminal';
   const nc = parseInt(document.getElementById('inp-cargadores').value);
   if (!nc || nc < 1) return 'Ingresa el número de cargadores';
+  if (!document.getElementById('inp-marca').value.trim()) return 'Ingresa la marca / fabricante del cargador';
   if (!document.getElementById('inp-modelo').value.trim()) return 'Ingresa el modelo del cargador';
+  if (!document.getElementById('inp-potencia').value.trim()) return 'Ingresa la potencia del cargador';
   if (!document.getElementById('sel-tecnico').value)  return 'Selecciona un técnico';
   if (!document.getElementById('inp-fecha').value)    return 'Ingresa la fecha de entrega';
   if (!document.getElementById('firma-nombre').value.trim()) return 'Ingresa el nombre del representante';
@@ -744,8 +781,10 @@ async function enviarComisionamiento() {
   const terminal  = document.getElementById('inp-terminal').value.trim();
   const direccion = document.getElementById('inp-direccion').value.trim();
   const nCarg     = parseInt(document.getElementById('inp-cargadores').value);
+  const marca     = document.getElementById('inp-marca').value.trim();
   const modelo    = document.getElementById('inp-modelo').value.trim();
-  const potencia  = document.getElementById('sel-potencia').value;
+  const potencia  = document.getElementById('inp-potencia').value.trim();
+  const conector  = document.getElementById('sel-conector').value;
   const protocolo = document.getElementById('sel-protocolo').value;
   const cert      = document.getElementById('inp-cert').value.trim();
   const tecnico   = document.getElementById('sel-tecnico').value;
@@ -781,8 +820,8 @@ async function enviarComisionamiento() {
   const payload = {
     ticket, clienteId: cid, clienteNombre: clienteNom,
     terminalNombre: terminal, terminalDireccion: direccion,
-    numCargadores: nCarg, modeloCargador: modelo,
-    potenciaKw: potencia, protocolo, certElectrico: cert,
+    numCargadores: nCarg, marcaCargador: marca, modeloCargador: modelo,
+    potenciaKw: potencia, tipoConector: conector, protocolo, certElectrico: cert,
     tecnico, fecha, obsGenerales: obsGen,
     cargadoresJson: JSON.stringify(cargadoresData),
     firmaNombre: firmaNom, firmaRut, firmaCargo,

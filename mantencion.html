@@ -895,8 +895,8 @@ function generarPDF() {
   set('ps-cliente',    clienteNombre);
   set('ps-terminal',   termNombre);
   set('ps-direccion',  t.ubic || '—');
-  set('ps-modelo',     t.modeloCargador || '—');
-  set('ps-potencia',   [t.potenciaKw ? `${t.potenciaKw} kW` : null, t.protocolo].filter(Boolean).join(' · ') || '—');
+  set('ps-modelo',     [t.marcaCargador, t.modeloCargador].filter(Boolean).join(' · ') || '—');
+  set('ps-potencia',   [t.potenciaKw ? `${t.potenciaKw} kW` : null, t.tipoConector, t.protocolo].filter(Boolean).join(' · ') || '—');
   set('ps-ncargadores', t.cargadores ? `${t.cargadores} cargadores` : '—');
   set('ps-fechacom',   t.fechaComisionamiento || '—');
   set('ps-mesescom',   mesesCom !== null ? `${mesesCom} meses` : '—');

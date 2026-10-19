@@ -1,32 +1,34 @@
 // netlify/functions/guardar-comisionamiento.js
-// Guarda un comisionamiento: crea registro en Terminales + Comisionamientos
+// ─────────────────────────────────────────────────────────────────────────
+// Guarda un comisionamiento: crea registro en terminales + comisionamientos.
+// Variables de entorno: SUPABASE_URL, SUPABASE_SERVICE_KEY
+// ─────────────────────────────────────────────────────────────────────────
+
+const { createClient } = require('@supabase/supabase-js');
+
+const HEADERS = {
+  'Access-Control-Allow-Origin':  '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Content-Type':                 'application/json',
+};
 
 exports.handler = async (event) => {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json',
-  };
-
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
+    return { statusCode: 200, headers: HEADERS, body: '' };
   }
-
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+    return { statusCode: 405, headers: HEADERS, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  const token = process.env.AIRTABLE_TOKEN;
-  if (!token) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Token de Airtable no configurado' }) };
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return { statusCode: 500, headers: HEADERS, body: JSON.stringify({ error: 'Variables de entorno Supabase no configuradas' }) };
   }
 
   let body;
-  try {
-    body = JSON.parse(event.body);
-  } catch {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: 'JSON inválido' }) };
-  }
+  try { body = JSON.parse(event.body); }
+  catch { return { statusCode: 400, headers: HEADERS, body: JSON.stringify({ error: 'JSON inválido' }) }; }
 
   const {
     ticket, clienteId, clienteNombre,
@@ -38,123 +40,96 @@ exports.handler = async (event) => {
     firmaNombre, firmaRut, firmaCargo, firmaImg,
   } = body;
 
-  // Validaciones mínimas
   if (!ticket || !clienteNombre || !terminalNombre || !tecnico || !fecha) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: 'Faltan campos obligatorios' }) };
+    return { statusCode: 400, headers: HEADERS, body: JSON.stringify({ error: 'Faltan campos obligatorios' }) };
   }
 
-  const BASE_ID = 'appmEbDwIFMLp0W3I';
-  const AT_BASE = `https://api.airtable.com/v0/${BASE_ID}`;
-  const AT_HEADERS = {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json',
+  let cargadoresObj;
+  try {
+    cargadoresObj = typeof cargadoresJson === 'string' ? JSON.parse(cargadoresJson) : cargadoresJson;
+  } catch { cargadoresObj = []; }
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ── 1. Crear registro en terminales ──────────────────────────────────────
+  const terminalRow = {
+    terminal_id:            ticket,       // ticket CMN-YYYYMMDD-XXX como ID del terminal
+    nombre:                 terminalNombre,
+    cliente_id:             clienteId   || null,
+    cliente_nombre:         clienteNombre,
+    direccion:              terminalDireccion || null,
+    num_cargadores:         numCargadores ? Number(numCargadores) : null,
+    modelo_cargador:        modeloCargador  || null,
+    potencia_kw:            potenciaKw      || null,
+    protocolo:              protocolo       || 'OCPP 1.6',
+    cert_electrico:         certElectrico   || null,
+    fecha_comisionamiento:  fecha,
+    estado:                 'Activo',
   };
 
-  // ── 1. Crear registro en tabla Terminales ──
-  let terminalRecordId;
-  try {
-    const terminalPayload = {
-      fields: {
-        Terminal_ID:            ticket,           // usamos el ticket como ID único del terminal
-        Nombre:                 terminalNombre,
-        Cliente:                clienteNombre,
-        Cliente_ID:             clienteId || '',
-        Direccion:              terminalDireccion || '',
-        Num_Cargadores:         numCargadores ? Number(numCargadores) : null,
-        Modelo_Cargador:        modeloCargador || '',
-        Potencia_kW:            potenciaKw || '',
-        Protocolo:              protocolo || 'OCPP 1.6',
-        Cert_Electrico:         certElectrico || '',
-        Fecha_Comisionamiento:  fecha,
-        Estado:                 'Activo',
-      },
+  const { data: termData, error: termError } = await supabase
+    .from('terminales')
+    .insert(terminalRow)
+    .select('id, terminal_id')
+    .single();
+
+  if (termError) {
+    console.error('Supabase error terminales:', termError);
+    return {
+      statusCode: 502,
+      headers: HEADERS,
+      body: JSON.stringify({ error: 'Error al crear terminal', detail: termError.message }),
     };
-
-    const terminalResp = await fetch(`${AT_BASE}/Terminales`, {
-      method: 'POST',
-      headers: AT_HEADERS,
-      body: JSON.stringify(terminalPayload),
-    });
-
-    if (!terminalResp.ok) {
-      const errBody = await terminalResp.text();
-      console.error('Error Airtable Terminales:', errBody);
-      return {
-        statusCode: 502,
-        headers,
-        body: JSON.stringify({ error: 'Error al crear terminal en Airtable', detail: errBody }),
-      };
-    }
-
-    const terminalData = await terminalResp.json();
-    terminalRecordId = terminalData.id;
-
-  } catch (err) {
-    console.error('Error creando terminal:', err);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
   }
 
-  // ── 2. Crear registro en tabla Comisionamientos ──
-  let comisionRecordId;
-  try {
-    const comisionPayload = {
-      fields: {
-        Ticket:           ticket,
-        Terminal_ID:      ticket,
-        Terminal_Nombre:  terminalNombre,
-        Cliente:          clienteNombre,
-        Cliente_ID:       clienteId || '',
-        Tecnico:          tecnico,
-        Fecha:            fecha,
-        Cargadores_JSON:  cargadoresJson || '[]',
-        Firma_Nombre:     firmaNombre || '',
-        Firma_RUT:        firmaRut || '',
-        Firma_Cargo:      firmaCargo || '',
-        Firma_IMG:        firmaImg || '',     // base64 data URL de la firma canvas
-        Observaciones:    obsGenerales || '',
-        Estado:           'Entregado',
-      },
+  // ── 2. Crear registro en comisionamientos ────────────────────────────────
+  const comisionRow = {
+    ticket,
+    terminal_id:     ticket,
+    terminal_nombre: terminalNombre,
+    cliente_id:      clienteId    || null,
+    cliente_nombre:  clienteNombre,
+    tecnico,
+    fecha,
+    cargadores_json: cargadoresObj || [],
+    firma_nombre:    firmaNombre   || null,
+    firma_rut:       firmaRut      || null,
+    firma_cargo:     firmaCargo    || null,
+    firma_img:       firmaImg      || null,
+    observaciones:   obsGenerales  || null,
+    estado:          'Entregado',
+  };
+
+  const { data: comData, error: comError } = await supabase
+    .from('comisionamientos')
+    .insert(comisionRow)
+    .select('id, ticket')
+    .single();
+
+  if (comError) {
+    console.error('Supabase error comisionamientos:', comError);
+    // Terminal creado; retornamos éxito parcial con advertencia
+    return {
+      statusCode: 207,
+      headers: HEADERS,
+      body: JSON.stringify({
+        ok: true,
+        partial: true,
+        terminalId: termData.id,
+        ticket,
+        warning: 'Terminal creado pero error al guardar comisionamiento: ' + comError.message,
+      }),
     };
-
-    const comisionResp = await fetch(`${AT_BASE}/Comisionamientos`, {
-      method: 'POST',
-      headers: AT_HEADERS,
-      body: JSON.stringify(comisionPayload),
-    });
-
-    if (!comisionResp.ok) {
-      const errBody = await comisionResp.text();
-      console.error('Error Airtable Comisionamientos:', errBody);
-      // El terminal ya fue creado; retornamos éxito parcial con advertencia
-      return {
-        statusCode: 207,
-        headers,
-        body: JSON.stringify({
-          ok: true,
-          partial: true,
-          terminalRecordId,
-          ticket,
-          warning: 'Terminal creado pero error al guardar comisionamiento: ' + errBody,
-        }),
-      };
-    }
-
-    const comisionData = await comisionResp.json();
-    comisionRecordId = comisionData.id;
-
-  } catch (err) {
-    console.error('Error creando comisionamiento:', err);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
   }
 
   return {
     statusCode: 200,
-    headers,
+    headers: HEADERS,
     body: JSON.stringify({
       ok: true,
       ticket,
-      terminalRecordId,
-      comisionRecordId,
+      terminalId:   termData.id,
+      comisionId:   comData.id,
     }),
   };
 };

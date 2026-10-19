@@ -1,0 +1,12 @@
+{
+  "name": "acex-electroterminales",
+  "version": "1.0.0",
+  "description": "ACEX eTransport — Sistema de asistencia y gestión de terminales de carga",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

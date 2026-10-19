@@ -1,85 +1,84 @@
 // netlify/functions/listar-casos.js
 // ─────────────────────────────────────────────────────────────────────────
-// Devuelve todos los casos de Airtable para el dashboard supervisor.
-// Protegido por PIN de supervisor (variable de entorno DASHBOARD_PIN).
-// Si DASHBOARD_PIN no está configurado, acepta el PIN "acex2024" por defecto.
+// Devuelve casos desde Supabase para el dashboard supervisor.
+// Protegido por PIN (DASHBOARD_PIN, default "acex2024").
+// Variables de entorno: SUPABASE_URL, SUPABASE_SERVICE_KEY
 // ─────────────────────────────────────────────────────────────────────────
 
+const { createClient } = require('@supabase/supabase-js');
+
+const CORS = {
+  'Access-Control-Allow-Origin':  '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Content-Type':                 'application/json',
+};
+
 exports.handler = async function(event) {
-
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers: CORS };
   if (event.httpMethod !== 'GET') {
-    return { statusCode: 405, body: JSON.stringify({ error: 'Método no permitido' }) };
+    return { statusCode: 405, headers: CORS, body: JSON.stringify({ error: 'Método no permitido' }) };
   }
 
-  const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
-  const DASHBOARD_PIN  = process.env.DASHBOARD_PIN || 'acex2024';
-  const AIRTABLE_BASE  = 'appmEbDwIFMLp0W3I';
-  const AIRTABLE_TABLE = 'Casos';
+  const SUPABASE_URL  = process.env.SUPABASE_URL;
+  const SUPABASE_KEY  = process.env.SUPABASE_SERVICE_KEY;
+  const DASHBOARD_PIN = process.env.DASHBOARD_PIN || 'acex2024';
 
-  if (!AIRTABLE_TOKEN) {
-    return { statusCode: 500, body: JSON.stringify({ error: 'Token no configurado' }) };
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: 'Variables de entorno Supabase no configuradas' }) };
   }
 
-  // Verificar PIN
   const { pin, estado, cliente, desde, hasta } = event.queryStringParameters || {};
 
   if (!pin || pin !== DASHBOARD_PIN) {
-    return { statusCode: 401, body: JSON.stringify({ error: 'PIN incorrecto' }) };
+    return { statusCode: 401, headers: CORS, body: JSON.stringify({ error: 'PIN incorrecto' }) };
   }
 
   try {
-    // Construir filtro opcional por estado
-    let formula = '';
-    const filtros = [];
-    if (estado && estado !== 'todos') filtros.push(`{Estado} = "${estado}"`);
-    if (cliente) filtros.push(`FIND("${cliente}", {Cliente nombre})`);
-    if (desde)   filtros.push(`IS_AFTER({Fecha apertura}, "${desde}")`);
-    if (hasta)   filtros.push(`IS_BEFORE({Fecha apertura}, "${hasta}")`);
-    if (filtros.length === 1) formula = filtros[0];
-    if (filtros.length > 1)  formula = `AND(${filtros.join(',')})`;
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${encodeURIComponent(AIRTABLE_TABLE)}`;
-    url += `?sort[0][field]=Fecha apertura&sort[0][direction]=desc`;
-    url += `&pageSize=100`;
-    if (formula) url += `&filterByFormula=${encodeURIComponent(formula)}`;
+    let query = supabase
+      .from('casos')
+      .select('id, ticket, estado, cliente_nombre, terminal_nombre, tipo_falla, urgencia, garantia, resultado_garantia, tecnico_nombre, contratista_nombre, fecha_apertura, fecha_cierre, hh_total, token_caso')
+      .order('fecha_apertura', { ascending: false })
+      .limit(200);
 
-    const resp = await fetch(url, {
-      headers: { 'Authorization': `Bearer ${AIRTABLE_TOKEN}` }
-    });
+    if (estado && estado !== 'todos') query = query.eq('estado', estado);
+    if (cliente) query = query.ilike('cliente_nombre', `%${cliente}%`);
+    if (desde)   query = query.gte('fecha_apertura', desde);
+    if (hasta)   query = query.lte('fecha_apertura', hasta);
 
-    const data = await resp.json();
+    const { data: rows, error } = await query;
 
-    if (!resp.ok) {
-      return { statusCode: resp.status, body: JSON.stringify({ error: data }) };
+    if (error) {
+      console.error('Supabase error listar-casos:', error);
+      return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: error.message }) };
     }
 
-    // Devolver solo los campos necesarios para el dashboard (sin token de seguridad)
-    const casos = (data.records || []).map(r => ({
-      id:      r.id,
-      ticket:  r.fields['Ticket'],
-      estado:  r.fields['Estado'],
-      cliente: r.fields['Cliente nombre'],
-      terminal:r.fields['Terminal nombre'],
-      falla:   r.fields['Tipo falla'],
-      urgencia:r.fields['Urgencia'],
-      garantia:r.fields['Resultado garantia'],
-      tecnico: r.fields['Tecnico nombre'] || r.fields['Contratista nombre'],
-      apertura:r.fields['Fecha apertura'],
-      cierre:  r.fields['Fecha cierre'],
-      hhTotal: r.fields['HH total'],
-      tokenCaso: r.fields['Token caso'], // necesario para generar links
+    // Formato compatible con el frontend existente (mismos nombres de campo)
+    const casos = (rows || []).map(r => ({
+      id:        r.id,
+      ticket:    r.ticket,
+      estado:    r.estado,
+      cliente:   r.cliente_nombre,
+      terminal:  r.terminal_nombre,
+      falla:     r.tipo_falla,
+      urgencia:  r.urgencia,
+      garantia:  r.resultado_garantia,
+      tecnico:   r.tecnico_nombre || r.contratista_nombre,
+      apertura:  r.fecha_apertura,
+      cierre:    r.fecha_cierre,
+      hhTotal:   r.hh_total,
+      tokenCaso: r.token_caso,
     }));
 
     return {
       statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      },
+      headers: CORS,
       body: JSON.stringify({ ok: true, total: casos.length, casos }),
     };
 
-  } catch(err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+  } catch (err) {
+    console.error('Error listar-casos:', err);
+    return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: err.message }) };
   }
 };

@@ -141,6 +141,13 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 @media print {
   body{background:#fff;padding:0}
   .topbar,.submit-section,#success-state,.obs-toggle{display:none!important}
+  .print-summary{display:block!important}
+  .ps-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important}
+  .ps-cell{border:1px solid #ccc;border-radius:4px;padding:6px 8px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ps-lbl{font-size:8px;font-weight:700;color:#637181;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+  .ps-val{font-size:11px;font-weight:600;color:#1a2533}
+  .ps-val.highlight{color:#1D6FD1}
+  .ps-val.warn{color:#b45309}
   .section{margin:0 0 16px;box-shadow:none;border:1px solid #ccc;break-inside:avoid}
   .cargador-card{break-inside:avoid}
   .print-header{display:block!important}
@@ -156,9 +163,22 @@ textarea{resize:none;min-height:80px;line-height:1.5}
   .foto-cnt-badge{display:none!important}
   .foto-section:has(.foto-thumb) .foto-hdr-lbl{display:flex!important}
 }
-.print-header{display:none;text-align:center;padding:16px 0 8px;border-bottom:2px solid #1D6FD1;margin-bottom:16px}
+.print-header{display:none;text-align:center;padding:16px 0 8px;border-bottom:2px solid #1D6FD1;margin-bottom:12px}
 .print-header h1{font-size:18px;font-weight:700;color:#1D6FD1}
 .print-header p{font-size:12px;color:#637181;margin-top:4px}
+/* Ficha resumen de portada — solo print */
+.print-summary{display:none}
+.ps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.ps-cell{border:1px solid #D8E2EE;border-radius:6px;padding:7px 10px}
+.ps-lbl{font-size:9px;font-weight:700;color:#637181;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.ps-val{font-size:12px;font-weight:600;color:#1a2533}
+.ps-val.highlight{color:#1D6FD1}
+.ps-val.warn{color:#b45309}
+.ps-divider{border:none;border-top:1px solid #D8E2EE;margin:10px 0}
+/* Sin comentarios en print */
+@media print{
+  .obs-empty-print::after{content:'Sin comentarios';color:#9aadbd;font-style:italic;font-size:11px;display:block;padding:4px 0}
+}
 </style>
 </head>
 <body>
@@ -183,6 +203,61 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 <div class="print-header">
   <h1>ACEX · Registro de Mantención Preventiva</h1>
   <p id="print-meta"></p>
+</div>
+
+<!-- PORTADA DE RESUMEN (solo visible al imprimir) -->
+<div class="print-summary" id="print-summary">
+  <div class="ps-grid">
+    <div class="ps-cell">
+      <div class="ps-lbl">Cliente</div>
+      <div class="ps-val" id="ps-cliente">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Terminal</div>
+      <div class="ps-val" id="ps-terminal">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Dirección</div>
+      <div class="ps-val" id="ps-direccion">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Modelo cargador</div>
+      <div class="ps-val" id="ps-modelo">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Potencia / Protocolo</div>
+      <div class="ps-val" id="ps-potencia">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">N° cargadores</div>
+      <div class="ps-val" id="ps-ncargadores">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Fecha puesta en marcha</div>
+      <div class="ps-val highlight" id="ps-fechacom">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Meses en servicio</div>
+      <div class="ps-val highlight" id="ps-mesescom">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Último mantenimiento</div>
+      <div class="ps-val warn" id="ps-ultimomant">Sin registro</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Meses desde último mant.</div>
+      <div class="ps-val warn" id="ps-mesesmant">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Fecha visita</div>
+      <div class="ps-val" id="ps-fechavisita">—</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-lbl">Técnico</div>
+      <div class="ps-val" id="ps-tecnico">—</div>
+    </div>
+  </div>
+  <hr class="ps-divider"/>
 </div>
 
 <!-- SECCIÓN 1: DATOS DE LA VISITA -->
@@ -380,10 +455,15 @@ async function cargarTerminalesDeAirtable() {
         terminalesAirtable[cid] = [];
       }
       terminalesAirtable[cid].push({
-        id:         t.terminalId || t.id,
-        nombre:     t.nombre,
-        ubic:       t.direccion || '',
-        cargadores: t.numCargadores || 0,
+        id:                   t.terminalId || t.id,
+        nombre:               t.nombre,
+        ubic:                 t.direccion || '',
+        cargadores:           t.numCargadores || 0,
+        modeloCargador:       t.modeloCargador || null,
+        potenciaKw:           t.potenciaKw || null,
+        protocolo:            t.protocolo || null,
+        fechaComisionamiento: t.fechaComisionamiento || null,
+        cliente:              t.cliente || '',
       });
     });
 
@@ -437,6 +517,14 @@ function onTerminalChange() {
   if (!tid) { document.getElementById('sec-checklist').style.display='none'; return; }
   const terms = DB.terminales[cid] || [];
   S.terminal = terms.find(t => t.id === tid) || null;
+  S.ultimoMantenimiento = null;
+  // Cargar último mantenimiento de este terminal (silencioso)
+  if (S.terminal) {
+    fetch(`${BASE_URL}/.netlify/functions/get-ultimo-mantenimiento?terminalId=${encodeURIComponent(S.terminal.id)}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && d.ok) S.ultimoMantenimiento = d.ultimoMantenimiento; })
+      .catch(() => {});
+  }
   if (!S.terminal) return;
   document.getElementById('info-cargadores').value = S.terminal.cargadores;
   document.getElementById('checklist-sub').textContent =
@@ -701,26 +789,67 @@ async function enviarMantencion() {
   }
 }
 
+function mesesEntre(fechaIso, ref) {
+  if (!fechaIso) return null;
+  const d1 = new Date(fechaIso);
+  const d2 = ref || new Date();
+  return Math.max(0, (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth()));
+}
+
 function generarPDF() {
-  // Título dinámico para el nombre del archivo PDF
   const clienteNombre = DB.clientes.find(c => c.id === S.clienteId)?.nombre || S.terminal?.cliente || '';
   const termNombre    = S.terminal?.nombre || '';
   const fechaStr      = document.getElementById('inp-fecha')?.value || new Date().toISOString().split('T')[0];
+  const tecnicoStr    = document.getElementById('inp-tecnico')?.value || '';
   const tituloOriginal = document.title;
   document.title = `ACEX · Mantención · ${clienteNombre} · ${termNombre} · ${fechaStr}`;
 
-  // Mostrar todas las obs y el checklist (fotos incluidas) antes de imprimir
+  // ── Poblar ficha de portada ──
+  const t   = S.terminal || {};
+  const ref = new Date(fechaStr);
+  const mesesCom  = mesesEntre(t.fechaComisionamiento, ref);
+  const mesesMant = S.ultimoMantenimiento ? mesesEntre(S.ultimoMantenimiento.fecha, ref) : null;
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+  set('ps-cliente',    clienteNombre);
+  set('ps-terminal',   termNombre);
+  set('ps-direccion',  t.ubic || '—');
+  set('ps-modelo',     t.modeloCargador || '—');
+  set('ps-potencia',   [t.potenciaKw ? `${t.potenciaKw} kW` : null, t.protocolo].filter(Boolean).join(' · ') || '—');
+  set('ps-ncargadores', t.cargadores ? `${t.cargadores} cargadores` : '—');
+  set('ps-fechacom',   t.fechaComisionamiento || '—');
+  set('ps-mesescom',   mesesCom !== null ? `${mesesCom} meses` : '—');
+  set('ps-ultimomant', S.ultimoMantenimiento ? `${S.ultimoMantenimiento.fecha} (${S.ultimoMantenimiento.ticket})` : 'Sin registro');
+  set('ps-mesesmant',  mesesMant !== null ? `${mesesMant} meses` : '—');
+  set('ps-fechavisita', fechaStr);
+  set('ps-tecnico',    tecnicoStr);
+
+  const printSummary = document.getElementById('print-summary');
+  if (printSummary) printSummary.style.display = 'block';
+
+  // ── Mostrar obs vacías como "Sin comentarios" ──
   document.querySelectorAll('.obs-textarea').forEach(el => el.classList.add('show'));
+  const obsEmptyEls = [];
+  S.cargadores.forEach((c, i) => {
+    if (!c.observaciones || !c.observaciones.trim()) {
+      const box = document.getElementById(`obsbox-${i + 1}`);
+      if (box) { box.classList.add('obs-empty-print'); obsEmptyEls.push(box); }
+    }
+  });
+
+  // ── Mostrar checklist (fotos) ──
   const secChecklist = document.getElementById('sec-checklist');
   const wasHidden    = secChecklist && secChecklist.style.display === 'none';
   if (wasHidden) secChecklist.style.display = '';
 
   window.print();
 
-  // Restaurar estado tras imprimir
+  // ── Restaurar estado tras imprimir ──
   window.addEventListener('afterprint', function restoreAfterPrint() {
     document.title = tituloOriginal;
     if (wasHidden && secChecklist) secChecklist.style.display = 'none';
+    if (printSummary) printSummary.style.display = 'none';
+    obsEmptyEls.forEach(el => el.classList.remove('obs-empty-print'));
     window.removeEventListener('afterprint', restoreAfterPrint);
   }, { once: true });
 }

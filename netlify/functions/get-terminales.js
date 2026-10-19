@@ -33,7 +33,7 @@ exports.handler = async (event) => {
 
     const { data: rows, error } = await supabase
       .from('terminales')
-      .select('id, terminal_id, nombre, cliente_id, cliente_nombre, direccion, num_cargadores, estado')
+      .select('id, terminal_id, nombre, cliente_id, cliente_nombre, direccion, num_cargadores, estado, modelo_cargador, potencia_kw, protocolo, fecha_comisionamiento')
       .eq('estado', 'Activo')
       .order('cliente_nombre', { ascending: true })
       .order('nombre', { ascending: true });
@@ -45,14 +45,18 @@ exports.handler = async (event) => {
 
     // Transformar a formato compatible con el frontend existente
     const terminales = (rows || []).map(r => ({
-      id:            r.id,
-      terminalId:    r.terminal_id,
-      nombre:        r.nombre,
-      cliente:       r.cliente_nombre || '',
-      clienteId:     r.cliente_id     || '',
-      direccion:     r.direccion      || '',
-      numCargadores: r.num_cargadores || 0,
-      estado:        r.estado         || 'Activo',
+      id:                   r.id,
+      terminalId:           r.terminal_id,
+      nombre:               r.nombre,
+      cliente:              r.cliente_nombre        || '',
+      clienteId:            r.cliente_id            || '',
+      direccion:            r.direccion             || '',
+      numCargadores:        r.num_cargadores        || 0,
+      estado:               r.estado                || 'Activo',
+      modeloCargador:       r.modelo_cargador       || null,
+      potenciaKw:           r.potencia_kw           || null,
+      protocolo:            r.protocolo             || null,
+      fechaComisionamiento: r.fecha_comisionamiento || null,
     }));
 
     // Agrupar por cliente para los <optgroup>

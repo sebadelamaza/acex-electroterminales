@@ -770,8 +770,13 @@ async function submitForm(){
           linkFormulario:     linkTerreno,
         }),
       });
-      if (notifResp.ok) emailEnviado = true;
-    } catch(e) { console.warn('Notificación email falló:', e); }
+      if (notifResp.ok) {
+        emailEnviado = true;
+      } else {
+        const errData = await notifResp.json().catch(() => ({}));
+        console.warn('Notificación email falló. Status:', notifResp.status, '| Error Brevo:', JSON.stringify(errData));
+      }
+    } catch(e) { console.warn('Notificación email falló (red):', e); }
   }
 
   const msgWA = encodeURIComponent(
@@ -798,7 +803,7 @@ ${linkTerreno}`);
     ? (emailEnviado
         ? `<div style="margin-top:6px;font-size:11px;color:var(--green)">📧 Email enviado a ${recursoNombre} (${emailRecurso})</div>`
         : emailRecurso
-          ? `<div style="margin-top:6px;font-size:11px;color:var(--amber)">⚠️ Email no enviado — verifica configuración de Resend</div>`
+          ? `<div style="margin-top:6px;font-size:11px;color:var(--amber)">⚠️ Email no enviado — revisa BREVO_API_KEY en Cloudflare (ver consola)</div>`
           : `<div style="margin-top:6px;font-size:11px;color:var(--muted)">📧 Email no enviado — sin email configurado para este recurso</div>`)
     : '';
 

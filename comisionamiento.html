@@ -10,148 +10,105 @@
   --bg:#F5F7FA; --s1:#FFFFFF; --s2:#EBF0F7; --s3:#D8E2EE;
   --border:#D8E2EE; --border2:#B8CAE0;
   --text:#1A1F2B; --muted:#637181; --faint:#9BAAB8;
-  --green:#007140; --greenl:#00A35E; --greenbg:#E6F4EC; --greenbdr:#99D4B4;
-  --blue:#1D6FD1; --bluel:#4A96E8; --bluebg:#EBF3FD; --bluebdr:#B3D4F5;
+  --green:#007140; --greenl:#00A35E; --greenbg:#E6F4EC;
+  --blue:#1D6FD1; --bluel:#4A96E8; --bluebg:#EBF3FD;
   --amber:#C96D00; --amberl:#E08300; --amberbg:#FEF3E2;
-  --red:#C0392B; --redl:#D94432; --redbg:#FEECEB;
-  --teal:#0D7377; --teall:#129B9F; --tealbg:#E5F4F5; --tealbdr:#80C8CB;
-  --purple:#6D28D9; --purplebg:#EDE9FE;
+  --red:#C0392B; --redbg:#FEECEB;
+  --purple:#6C3EC7; --purplebg:#F0EAFB; --purpleborder:#C4A8F0;
   --r:12px; --rs:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{font-size:16px}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:120px}
 
-/* TOPBAR */
-.topbar{background:#1D6FD1;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar{background:var(--purple);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo-block{display:flex;align-items:center;gap:10px}
 .logo-txt{font-size:13px;font-weight:700;color:#fff;letter-spacing:.3px}
 .logo-divider{width:1px;height:16px;background:rgba(255,255,255,.4)}
 .logo-sub{font-size:11px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.5px}
 .topbar-title{font-size:12px;color:rgba(255,255,255,.8);font-weight:600}
 
-/* MODULE NAV */
-.mod-nav{display:flex;gap:6px;padding:10px 16px;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
-.mod-nav::-webkit-scrollbar{display:none}
-.mod-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);background:transparent;border:1px solid transparent;text-decoration:none;white-space:nowrap;transition:all .15s;font-family:'Inter',sans-serif}
-.mod-btn:hover{background:var(--s2);color:var(--text)}
-.mod-btn.active{background:var(--bluebg);border-color:var(--bluebdr);color:var(--blue)}
+nav{display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid #D8E2EE;overflow-x:auto}
+.nav-link{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;border:1px solid transparent;color:#637181;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif}
+.nav-link.active{background:var(--purplebg);border-color:var(--purpleborder);color:var(--purple)}
 
-/* SECTIONS */
-.section{margin:16px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 4px rgba(29,111,209,.06)}
+.section{margin:16px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 4px rgba(108,62,199,.06)}
 .section-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .section-title{font-size:14px;font-weight:700}
 .section-sub{font-size:11px;color:var(--muted);margin-top:1px}
 .section-body{padding:16px}
 
-/* FORM */
 .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
 .fg:last-child{margin-bottom:0}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.2px}
 .req::after{content:' *';color:var(--red)}
 input,select,textarea{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;padding:12px 13px;width:100%;outline:none;-webkit-appearance:none;transition:border-color .15s}
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,111,209,.12)}
-input[readonly]{background:var(--s3);color:var(--muted)}
+input:focus,select:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(108,62,199,.12)}
+input[readonly],input:disabled{background:var(--s3);color:var(--muted)}
 input::placeholder,textarea::placeholder{color:var(--faint)}
-select option{background:var(--s1)}
-textarea{resize:none;min-height:80px;line-height:1.5}
+textarea{resize:none;min-height:70px;line-height:1.5}
 
-/* NUEVO CLIENTE */
-.nuevo-cliente-fields{display:none;margin-top:12px;padding:12px;background:var(--amberbg);border:1px solid var(--amberbg);border-radius:var(--rs)}
-.nuevo-cliente-fields.show{display:block}
-.nuevo-lbl{font-size:11px;font-weight:700;color:var(--amber);margin-bottom:8px}
+/* INFO BOX */
+.info-box{background:var(--purplebg);border:1px solid var(--purpleborder);border-radius:var(--rs);padding:14px 16px;margin-bottom:16px}
+.info-row{display:flex;gap:6px;margin-bottom:4px;font-size:13px}
+.info-lbl{color:var(--muted);min-width:90px;font-weight:500}
+.info-val{color:var(--text);font-weight:600}
 
 /* TICKET BADGE */
-.ticket-badge{display:inline-flex;align-items:center;gap:6px;background:var(--purplebg);border:1px solid var(--purple);border-radius:20px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple);margin-bottom:16px}
+.ticket-badge{display:inline-flex;align-items:center;gap:6px;background:var(--purplebg);border:1px solid var(--purple);border-radius:20px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple)}
+.borrador-badge{display:inline-flex;align-items:center;gap:6px;background:var(--amberbg);border:1px solid var(--amber);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--amber);margin-left:8px}
 
-/* CARGADOR CARD */
-.cargadores-list{display:flex;flex-direction:column;gap:12px}
-.cargador-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);overflow:hidden;transition:border-color .2s}
-.cargador-card.no-aplica-card{opacity:.5}
+/* CARGADOR CARDS */
+.cargadores-list{display:flex;flex-direction:column;gap:14px}
+.cargador-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);overflow:hidden}
 .cargador-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--s3);border-bottom:1px solid var(--border)}
 .cargador-num{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
 .cargador-num-badge{width:26px;height:26px;border-radius:6px;background:var(--purple);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace}
-.no-aplica-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
-.no-aplica-toggle input[type=checkbox]{display:none}
-.toggle-pill{width:38px;height:20px;background:var(--border2);border-radius:10px;position:relative;transition:background .2s;flex-shrink:0}
-.toggle-pill::after{content:'';width:16px;height:16px;border-radius:8px;background:#fff;position:absolute;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
-.no-aplica-toggle input:checked ~ .toggle-pill{background:var(--amber)}
-.no-aplica-toggle input:checked ~ .toggle-pill::after{left:20px}
-.toggle-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px}
 .cargador-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
 
-/* SN */
-.sn-row{display:flex;align-items:center;gap:8px}
-.sn-label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;letter-spacing:.2px;min-width:24px}
-.sn-input{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);outline:none;flex:1;transition:border-color .15s}
-.sn-input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,111,209,.1)}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.field-item{display:flex;flex-direction:column;gap:3px}
+.field-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
+.field-input{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:14px;color:var(--text);outline:none;width:100%;transition:border-color .15s}
+.field-input:focus{border-color:var(--purple);box-shadow:0 0 0 2px rgba(108,62,199,.1)}
+.field-input.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
 
-/* CHECKS GRID */
-.checks-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.check-item{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:8px 10px;cursor:pointer;user-select:none;transition:border-color .15s,background .15s}
-.check-item:active{background:var(--greenbg)}
-.check-item input[type=checkbox]{display:none}
-.check-box{width:18px;height:18px;border-radius:4px;border:2px solid var(--border2);background:var(--s2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
-.check-item input:checked ~ .check-box{border-color:var(--green);background:var(--green)}
-.check-item input:checked ~ .check-box::after{content:'✓';color:#fff;font-size:11px;font-weight:700}
-.check-item input:checked ~ .check-lbl{color:var(--green);font-weight:600}
-.check-lbl{font-size:12px;color:var(--muted);line-height:1.2}
-
-/* OBS */
-.obs-toggle{font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;display:flex;align-items:center;gap:4px;padding:2px 0}
-.obs-toggle::before{content:'+ '}
-.obs-toggle.open::before{content:'− '}
-.obs-textarea{display:none;margin-top:6px}
-.obs-textarea.show{display:block}
-
-/* FOTOS */
-.foto-section{margin-top:8px}
-.foto-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.foto-hdr-lbl{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px;display:flex;align-items:center;gap:5px}
-.foto-cnt-badge{font-size:10px;font-weight:700;color:#fff;background:var(--purple);border-radius:10px;padding:1px 6px}
-.btn-add-foto{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--purple);background:var(--purplebg);border:1px solid var(--purple);border-radius:6px;padding:5px 10px;cursor:pointer;transition:opacity .15s;white-space:nowrap}
-.btn-add-foto:active{opacity:.7}
-.foto-strip{display:flex;flex-wrap:wrap;gap:6px;min-height:0}
-.foto-thumb{position:relative;width:72px;height:72px;border-radius:6px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
+/* Foto conectores */
+.conectores-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px}
+.conectores-grid{display:flex;flex-direction:column;gap:8px}
+.conector-row{background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.conector-row-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.conector-num{font-size:12px;font-weight:700;color:var(--purple)}
+.foto-strip{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.foto-thumb{position:relative;width:60px;height:60px;border-radius:6px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
 .foto-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.foto-thumb-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
+.foto-thumb-del{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
+.btn-add-foto{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;border-radius:6px;padding:5px 10px;cursor:pointer;transition:opacity .15s;white-space:nowrap;border:1px solid var(--purple);color:var(--purple);background:var(--purplebg)}
+.btn-add-foto:active{opacity:.7}
+.foto-cnt{font-size:11px;color:var(--muted);font-weight:500}
 
-/* DISABLED */
-.cargador-card.no-aplica-card .cargador-body{pointer-events:none}
-.cargador-card.no-aplica-card .checks-grid{opacity:.4}
-.cargador-card.no-aplica-card .sn-input{opacity:.4}
-
-/* FIRMA CANVAS */
-.firma-wrap{position:relative;background:var(--s1);border:1.5px dashed var(--border2);border-radius:var(--rs);overflow:hidden;touch-action:none}
-.firma-wrap.signed{border-color:var(--green);border-style:solid}
-#firma-canvas{display:block;width:100%;height:160px;cursor:crosshair;touch-action:none}
-.firma-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;pointer-events:none;transition:opacity .2s}
-.firma-placeholder.hide{opacity:0}
-.firma-placeholder-icon{font-size:28px;opacity:.3}
-.firma-placeholder-txt{font-size:12px;color:var(--faint)}
-.btn-limpiar-firma{margin-top:8px;font-size:11px;font-weight:600;color:var(--red);background:transparent;border:1px solid var(--red);border-radius:6px;padding:5px 12px;cursor:pointer;transition:opacity .15s}
-.btn-limpiar-firma:active{opacity:.7}
-.firma-line{height:1px;background:var(--border2);margin:8px 14px 4px;position:absolute;bottom:36px;left:0;right:0}
-.firma-label-bottom{position:absolute;bottom:8px;left:14px;font-size:10px;color:var(--faint);font-weight:500;letter-spacing:.3px;pointer-events:none}
-
-/* SUBMIT */
-.submit-section{position:fixed;bottom:0;left:0;right:0;padding:16px;background:rgba(245,247,250,.96);backdrop-filter:blur(8px);border-top:1px solid var(--border);z-index:50}
-.btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--purple),var(--blue));border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s}
-.btn-submit:active{opacity:.85}
-.btn-submit:disabled{background:var(--border2);cursor:not-allowed;opacity:.6}
-
-/* SUCCESS */
-#success-state{display:none;margin:16px}
-#success-state.show{display:block}
+/* RESULT */
+.result-section{margin:16px;display:none}
+.result-section.show{display:block}
 .success-card{background:var(--greenbg);border:1.5px solid var(--green);border-radius:var(--r);padding:24px;text-align:center}
 .success-icon{font-size:40px;margin-bottom:12px}
 .success-title{font-size:18px;font-weight:700;color:var(--green);margin-bottom:6px}
 .success-sub{font-size:13px;color:var(--text);margin-bottom:20px;line-height:1.5}
-.btn-pdf{width:100%;padding:14px;background:var(--blue);border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
-.btn-nuevo{width:100%;padding:13px;background:transparent;border:1.5px solid var(--green);border-radius:var(--rs);color:var(--green);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.link-card{background:var(--purplebg);border:1.5px solid var(--purple);border-radius:var(--r);padding:20px}
+.link-card-title{font-size:15px;font-weight:700;color:var(--purple);margin-bottom:8px}
+.link-card-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.link-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);word-break:break-all;margin-bottom:12px}
+.btn-copy{width:100%;padding:13px;background:var(--purple);border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.btn-nuevo{width:100%;padding:12px;background:transparent;border:1.5px solid var(--green);border-radius:var(--rs);color:var(--green);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+
+/* BOTTOM BAR */
+.submit-section{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:rgba(245,247,250,.96);backdrop-filter:blur(8px);border-top:1px solid var(--border);z-index:50;display:flex;gap:10px}
+.btn-submit{flex:1;padding:15px;background:linear-gradient(135deg,var(--purple),#4A90D9);border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s}
+.btn-submit:active{opacity:.85}
+.btn-submit:disabled{background:var(--border2);cursor:not-allowed;opacity:.6}
+.btn-borrador{padding:15px 18px;background:var(--s1);border:1.5px solid var(--amber);border-radius:var(--rs);color:var(--amber);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.btn-borrador:active{opacity:.7}
 
 /* LOADING */
 .loading-overlay{display:none;position:fixed;inset:0;background:rgba(245,247,250,.9);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
@@ -160,32 +117,22 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-txt{font-size:13px;color:var(--muted);font-weight:500}
 
-/* PRINT */
-@media print {
-  body{background:#fff;padding:0;font-size:13px}
-  .topbar,.mod-nav,.submit-section,#success-state,.obs-toggle,.btn-limpiar-firma,.btn-add-foto,.foto-thumb-del,.firma-placeholder{display:none!important}
-  .section{margin:0 0 14px;box-shadow:none;border:1px solid #ccc;break-inside:avoid}
-  .cargador-card{break-inside:avoid;margin-bottom:8px}
-  .print-header{display:block!important}
-  .obs-textarea{display:block!important}
-  .foto-strip{display:flex!important;flex-wrap:wrap;gap:4px}
-  .foto-thumb{width:80px;height:80px}
-  .foto-thumb img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .check-item input:checked ~ .check-box{border-color:#007140;background:#007140;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .cargador-num-badge{background:#6D28D9;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  #firma-canvas{display:none!important}
-  #firma-print{display:block!important;width:100%;max-height:140px;object-fit:contain}
-  .firma-wrap{border:1px solid #ccc;border-style:solid}
-  .acta-texto{font-size:12px;color:#333;line-height:1.6}
-  .acta-signer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:12px}
-  .acta-field{border-top:1px solid #999;padding-top:4px}
-  .acta-field-lbl{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.5px}
-  .acta-field-val{font-size:13px;font-weight:600;color:#1A1F2B;margin-top:2px}
+/* ERROR */
+.error-page{margin:32px 16px;text-align:center}
+.error-page .e-icon{font-size:48px;margin-bottom:16px}
+.error-page h2{font-size:20px;font-weight:700;margin-bottom:8px;color:var(--red)}
+.error-page p{color:var(--muted);font-size:14px;line-height:1.6}
+
+/* TOAST */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:#1A1F2B;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .2s,transform .2s;z-index:300;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media print{
+  .topbar,nav,.submit-section,.result-section,.toast{display:none!important}
+  .section{margin:0 0 16px;box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  .cargador-card{break-inside:avoid}
+  .cargador-num-badge{background:#6C3EC7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
-.print-header{display:none;padding:16px 0 12px;border-bottom:2px solid #6D28D9;margin-bottom:16px}
-.print-header h1{font-size:17px;font-weight:700;color:#6D28D9}
-.print-header p{font-size:11px;color:#637181;margin-top:3px}
-#firma-print{display:none}
 </style>
 </head>
 <body>
@@ -199,349 +146,296 @@ textarea{resize:none;min-height:80px;line-height:1.5}
   <span class="topbar-title">Comisionamiento</span>
 </div>
 
-<!-- MODULE NAV -->
-<nav class="mod-nav">
-  <a href="index.html" class="mod-btn">🔧 Asist. Correctivo</a>
-  <a href="mantencion.html" class="mod-btn">🔩 Mant. Preventivo</a>
-  <a href="comisionamiento.html" class="mod-btn active">⚡ Comisionamiento</a>
-  <a href="dashboard.html" class="mod-btn">📋 Dashboard</a>
+<nav>
+  <a href="index.html" class="nav-link">🔧 Asist. Correctivo</a>
+  <a href="mantencion.html" class="nav-link">🔩 Mant. Preventivo</a>
+  <a href="comisionamiento.html" class="nav-link active">⚡ Comisionamiento</a>
+  <a href="dashboard.html" class="nav-link">📋 Dashboard</a>
 </nav>
 
-<!-- PRINT HEADER -->
-<div class="print-header">
-  <h1>ACEX · Acta de Recepción de Terminal Eléctrico</h1>
-  <p id="print-meta"></p>
-</div>
+<!-- ══════════════════════════════════════════════
+     MODO OPERADOR (sin token)
+     ══════════════════════════════════════════════ -->
+<div id="modo-operador" style="display:none">
 
-<!-- SECCIÓN 1: DATOS DEL TERMINAL -->
-<div class="section" id="sec-terminal">
-  <div class="section-hdr">
-    <div class="section-icon" style="background:var(--purplebg)">🏗️</div>
-    <div>
-      <div class="section-title">Datos del terminal</div>
-      <div class="section-sub">Información del nuevo punto de carga</div>
-    </div>
-  </div>
-  <div class="section-body">
-    <div class="fg">
-      <label class="req">Cliente</label>
-      <select id="sel-cliente" onchange="onClienteChange()">
-        <option value="">— Selecciona cliente —</option>
-        <optgroup label="Clientes activos">
-          <option value="CL001">RBU</option>
-          <option value="CL002">METBUS</option>
-          <option value="CL003">VOY SANTIAGO SPA</option>
-          <option value="CL004">VOY SANTIAGO 14</option>
-          <option value="CL005">VOY SANTIAGO 15</option>
-          <option value="CL006">TRANSPORTES ALEJANDRO IBAÑEZ</option>
-          <option value="CL007">CORP. MUNICIPAL COLINA</option>
-          <option value="CL008">ESERCO</option>
-          <option value="CL009">EXPRESO RANCAGUA</option>
-          <option value="CL010">YANGUAS</option>
-          <option value="CL011">EFRABUS</option>
-          <option value="CL012">GALAXIAS SUSTENTABLE</option>
-          <option value="CL013">OK BUSES</option>
-        </optgroup>
-        <option value="NUEVO">+ Nuevo cliente…</option>
-      </select>
-      <div class="nuevo-cliente-fields" id="nuevo-cliente-fields">
-        <div class="nuevo-lbl">⚠️ Cliente nuevo — ingresa nombre oficial</div>
-        <input type="text" id="nuevo-cliente-nombre" placeholder="Nombre del cliente (razón social)"/>
+  <div class="section">
+    <div class="section-hdr">
+      <div class="section-icon" style="background:var(--purplebg)">⚡</div>
+      <div>
+        <div class="section-title">Crear orden de comisionamiento</div>
+        <div class="section-sub">La persona asignada recibirá un link para completar el formulario técnico</div>
       </div>
     </div>
-
-    <div class="fg">
-      <label class="req">Nombre del terminal</label>
-      <input type="text" id="inp-terminal" placeholder="Ej: ET La Estrella II"/>
-    </div>
-
-    <div class="fg">
-      <label class="req">Dirección / Ubicación</label>
-      <input type="text" id="inp-direccion" placeholder="Ej: Av. Pedro Aguirre Cerda 180, Cerro Navia"/>
-    </div>
-
-    <div class="row2">
+    <div class="section-body">
       <div class="fg">
-        <label class="req">N° de cargadores</label>
-        <input type="number" id="inp-cargadores" min="1" max="50" placeholder="Ej: 13"
-          oninput="onCargadoresChange(this.value)"/>
+        <label class="req">Nombre del cliente</label>
+        <input type="text" id="op-cliente" placeholder="Ej: METBUS S.A."/>
       </div>
       <div class="fg">
-        <label class="req">Potencia por cargador (kW)</label>
-        <input type="text" id="inp-potencia" list="potencia-options" placeholder="Ej: 120"
-          inputmode="decimal"/>
-        <datalist id="potencia-options">
-          <option value="22">22 kW</option>
-          <option value="50">50 kW</option>
-          <option value="60">60 kW</option>
-          <option value="120">120 kW</option>
-          <option value="150">150 kW</option>
-          <option value="180">180 kW</option>
-          <option value="240">240 kW</option>
-          <option value="360">360 kW</option>
-        </datalist>
-      </div>
-    </div>
-
-    <div class="row2">
-      <div class="fg">
-        <label class="req">Marca / Fabricante</label>
-        <input type="text" id="inp-marca" list="marca-options" placeholder="Ej: ABB"/>
-        <datalist id="marca-options">
-          <option value="ABB"/>
-          <option value="EFACEC"/>
-          <option value="Tritium"/>
-          <option value="Wallbox"/>
-          <option value="BTC Power"/>
-          <option value="Schneider Electric"/>
-          <option value="Siemens"/>
-          <option value="Delta"/>
-          <option value="Ingeteam"/>
-          <option value="Alpitronic"/>
-          <option value="Phoenix Contact"/>
-        </datalist>
+        <label class="req">Nombre del terminal</label>
+        <input type="text" id="op-terminal" placeholder="Ej: Terminal Maipú"/>
       </div>
       <div class="fg">
-        <label class="req">Modelo del cargador</label>
-        <input type="text" id="inp-modelo" placeholder="Ej: Terra 184"/>
+        <label>Dirección del terminal</label>
+        <input type="text" id="op-dir" placeholder="Ej: Av. Rinconada 1500, Maipú"/>
       </div>
-    </div>
-
-    <div class="row2">
-      <div class="fg">
-        <label>Tipo de conector</label>
-        <select id="sel-conector">
-          <option value="">— Selecciona —</option>
-          <option value="CCS2">CCS2 (CSS Tipo 2)</option>
-          <option value="CHAdeMO">CHAdeMO</option>
-          <option value="CCS2 + CHAdeMO">CCS2 + CHAdeMO (doble pistola)</option>
-          <option value="AC Tipo 2">AC Tipo 2 (Mennekes)</option>
-          <option value="GB/T DC">GB/T DC</option>
-          <option value="Otro">Otro</option>
-        </select>
-      </div>
-      <div class="fg">
-        <label>Protocolo OCPP</label>
-        <select id="sel-protocolo">
-          <option value="OCPP 1.6">OCPP 1.6</option>
-          <option value="OCPP 2.0.1">OCPP 2.0.1</option>
-          <option value="Sin OCPP">Sin OCPP</option>
-          <option value="Otro">Otro</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="fg">
-      <label>N° Certificado Eléctrico</label>
-      <input type="text" id="inp-cert" placeholder="N° del certificado SEC (opcional)"/>
-    </div>
-  </div>
-</div>
-
-<!-- SECCIÓN 2: DATOS DE LA VISITA -->
-<div class="section" id="sec-visita">
-  <div class="section-hdr">
-    <div class="section-icon" style="background:var(--bluebg)">🗓️</div>
-    <div>
-      <div class="section-title">Datos de la visita</div>
-      <div class="section-sub">Técnico responsable y fecha de entrega</div>
-    </div>
-  </div>
-  <div class="section-body">
-    <div class="row2">
-      <div class="fg">
-        <label class="req">Técnico responsable</label>
-        <select id="sel-tecnico">
-          <option value="">— Técnico —</option>
-          <optgroup label="Operadores ACEX">
-            <option>Victor Torres</option>
-            <option>Sebastian Seron</option>
-            <option>Cristian Droguett</option>
-            <option>Sara Ganga</option>
-            <option>Cesar Soto</option>
-            <option>Emilio Cardenas</option>
-            <option>Nikkolas Eterrovic</option>
-          </optgroup>
-          <optgroup label="Contratistas">
-            <option>Rodrigo Jerez (SOLGELEC)</option>
-            <option>Eddic Monzart (SOLGELEC)</option>
-            <option>Daniel Contreras (DCC)</option>
-            <option>Rafael García (RAICA)</option>
-            <option>Fernando Morales (LARI)</option>
-            <option>Jonathan Salgado (SOLGEC)</option>
-            <option>Carlos Bozzo (AINEL)</option>
-          </optgroup>
-        </select>
-      </div>
-      <div class="fg">
-        <label class="req">Fecha de entrega</label>
-        <input type="date" id="inp-fecha"/>
-      </div>
-    </div>
-    <div class="fg">
-      <label>Observaciones generales</label>
-      <textarea id="obs-generales" placeholder="Condiciones del sitio, coordinación con el cliente, observaciones adicionales…"></textarea>
-    </div>
-  </div>
-</div>
-
-<!-- SECCIÓN 3: CHECKLIST POR CARGADOR -->
-<div class="section" id="sec-checklist" style="display:none">
-  <div class="section-hdr">
-    <div class="section-icon" style="background:var(--tealbg)">⚡</div>
-    <div>
-      <div class="section-title">Verificación por cargador</div>
-      <div class="section-sub" id="checklist-sub">Completa el checklist para cada cargador</div>
-    </div>
-  </div>
-  <div class="section-body">
-    <div class="cargadores-list" id="cargadores-list"></div>
-  </div>
-</div>
-
-<!-- SECCIÓN 4: ACTA DE RECEPCIÓN -->
-<div class="section" id="sec-acta" style="display:none">
-  <div class="section-hdr">
-    <div class="section-icon" style="background:var(--greenbg)">✍️</div>
-    <div>
-      <div class="section-title">Acta de Recepción</div>
-      <div class="section-sub">Firma del representante del cliente</div>
-    </div>
-  </div>
-  <div class="section-body">
-    <p class="acta-texto" style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">
-      El representante del cliente declarará haber recibido a satisfacción los equipos de carga
-      eléctrica instalados en el terminal, verificando su correcto funcionamiento según el
-      checklist adjunto, y dando conformidad a la entrega formal del proyecto.
-    </p>
-
-    <div class="row3" style="margin-bottom:16px">
-      <div class="fg" style="margin-bottom:0">
-        <label class="req">Nombre del representante</label>
-        <input type="text" id="firma-nombre" placeholder="Nombre completo"/>
-      </div>
-      <div class="fg" style="margin-bottom:0">
-        <label class="req">RUT</label>
-        <input type="text" id="firma-rut" placeholder="12.345.678-9"/>
-      </div>
-      <div class="fg" style="margin-bottom:0">
-        <label class="req">Cargo</label>
-        <input type="text" id="firma-cargo" placeholder="Ej: Jefe de Patio"/>
-      </div>
-    </div>
-
-    <div class="fg">
-      <label>Firma del representante</label>
-      <div class="firma-wrap" id="firma-wrap">
-        <canvas id="firma-canvas"></canvas>
-        <img id="firma-print" alt="Firma"/>
-        <div class="firma-line"></div>
-        <div class="firma-label-bottom">Firma</div>
-        <div class="firma-placeholder" id="firma-placeholder">
-          <div class="firma-placeholder-icon">✍️</div>
-          <div class="firma-placeholder-txt">Toca aquí para firmar</div>
+      <div class="row2">
+        <div class="fg">
+          <label class="req">N° Cargadores</label>
+          <input type="number" id="op-ncargadores" min="1" max="50" placeholder="8"/>
+        </div>
+        <div class="fg">
+          <label>Fecha programada</label>
+          <input type="date" id="op-fecha"/>
         </div>
       </div>
-      <button class="btn-limpiar-firma" type="button" onclick="limpiarFirma()">Limpiar firma</button>
+      <div class="fg">
+        <label>Empresa comisionadora</label>
+        <input type="text" id="op-empresa" placeholder="Ej: ABB Chile Ltda."/>
+      </div>
+      <div class="fg">
+        <label class="req">Nombre del responsable</label>
+        <input type="text" id="op-nombre" placeholder="Nombre completo"/>
+      </div>
+      <div class="fg">
+        <label class="req">Email del responsable</label>
+        <input type="email" id="op-email" placeholder="correo@empresa.com"/>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- SUCCESS -->
-<div id="success-state">
-  <div class="success-card">
-    <div class="success-icon">✅</div>
-    <div class="success-title">Comisionamiento registrado</div>
-    <div class="success-sub" id="success-msg">Terminal registrado correctamente.</div>
-    <button class="btn-pdf" onclick="generarPDF()">🖨️ Descargar Acta de Recepción</button>
-    <button class="btn-nuevo" onclick="location.reload()">+ Nuevo comisionamiento</button>
+  <!-- Resultado operador -->
+  <div id="result-op" class="result-section">
+    <div class="link-card">
+      <div class="link-card-title">✅ Orden creada</div>
+      <div class="link-card-sub">El link fue enviado al responsable. También puedes copiarlo manualmente:</div>
+      <div class="ticket-badge" id="op-ticket-badge">COM-…</div>
+      <div style="height:10px"></div>
+      <div class="link-box" id="op-link-box">—</div>
+      <button class="btn-copy" onclick="copiarLink()">📋 Copiar link</button>
+      <button class="btn-nuevo" onclick="location.reload()">+ Nueva orden</button>
+    </div>
+  </div>
+
+  <div class="submit-section" id="bar-op">
+    <button class="btn-submit" onclick="crearOrdenOp()">
+      ⚡ Crear orden y enviar link
+    </button>
   </div>
 </div>
 
-<!-- SUBMIT -->
-<div class="submit-section" id="submit-bar">
-  <button class="btn-submit" id="btn-submit" onclick="enviarComisionamiento()">
-    ⚡ Guardar comisionamiento y generar acta
-  </button>
+<!-- ══════════════════════════════════════════════
+     MODO TÉCNICO (con token)
+     ══════════════════════════════════════════════ -->
+<div id="modo-tecnico" style="display:none">
+
+  <!-- Info de la orden -->
+  <div class="section">
+    <div class="section-hdr">
+      <div class="section-icon" style="background:var(--purplebg)">📋</div>
+      <div>
+        <div class="section-title">Orden de comisionamiento</div>
+        <div class="section-sub" id="tech-header-sub">—</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="info-box">
+        <div class="info-row"><span class="info-lbl">Ticket</span><span class="info-val"><span class="ticket-badge" id="tech-ticket">—</span><span class="borrador-badge" id="borrador-badge" style="display:none">💾 Borrador guardado</span></span></div>
+        <div class="info-row"><span class="info-lbl">Terminal</span><span class="info-val" id="tech-terminal">—</span></div>
+        <div class="info-row"><span class="info-lbl">Cliente</span><span class="info-val" id="tech-cliente">—</span></div>
+        <div class="info-row"><span class="info-lbl">Dirección</span><span class="info-val" id="tech-dir">—</span></div>
+        <div class="info-row"><span class="info-lbl">Empresa</span><span class="info-val" id="tech-empresa">—</span></div>
+        <div class="info-row"><span class="info-lbl">Cargadores</span><span class="info-val" id="tech-ncargadores">—</span></div>
+      </div>
+      <div class="fg">
+        <label>Observaciones generales</label>
+        <textarea id="obs-generales" placeholder="Estado general del sitio, coordinación con jefe de patio, observaciones…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario técnico por cargador -->
+  <div class="section" id="sec-cargadores">
+    <div class="section-hdr">
+      <div class="section-icon" style="background:var(--purplebg)">⚡</div>
+      <div>
+        <div class="section-title">Datos técnicos por cargador</div>
+        <div class="section-sub" id="tech-carg-sub">Completa los datos de cada unidad</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="cargadores-list" id="cargadores-list"></div>
+    </div>
+  </div>
+
+  <!-- Resultado técnico -->
+  <div id="result-tech" class="result-section">
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Comisionamiento registrado</div>
+      <div class="success-sub" id="tech-success-msg">El registro fue guardado correctamente.</div>
+      <button class="btn-submit" style="width:100%;margin-bottom:10px" onclick="window.print()">🖨️ Imprimir / PDF</button>
+    </div>
+  </div>
+
+  <div class="submit-section" id="bar-tech">
+    <button class="btn-borrador" onclick="guardarBorrador()" title="Guardar avance">💾</button>
+    <button class="btn-submit" id="btn-enviar-tech" onclick="enviarTecnico()">
+      ✅ Enviar comisionamiento
+    </button>
+  </div>
+</div>
+
+<!-- ERROR -->
+<div id="modo-error" style="display:none" class="error-page">
+  <div class="e-icon">❌</div>
+  <h2>Orden no encontrada</h2>
+  <p>El link puede ser inválido o haber expirado.<br/>Contacta al operador ACEX.</p>
 </div>
 
 <!-- LOADING -->
 <div class="loading-overlay" id="loading">
   <div class="spinner"></div>
-  <div class="loading-txt">Guardando en Airtable…</div>
+  <div class="loading-txt" id="loading-txt">Cargando…</div>
 </div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
 const BASE_URL = '';
-const MAX_FOTOS = 4;
+const MAX_FOTOS_CONECTOR = 3;
 
-const CHECKLIST_COMISION = [
-  { id:'visual',     label:'Inspección visual — sin daños' },
-  { id:'cone1',      label:'Conector 1 — prueba de carga OK' },
-  { id:'cone2',      label:'Conector 2 — prueba de carga OK' },
-  { id:'display',    label:'Display / HMI operativo' },
-  { id:'ocpp',       label:'OCPP activo en plataforma' },
-  { id:'senaletica', label:'Señalética instalada' },
-  { id:'carcasa',    label:'Carcasa cerrada y sellada' },
-];
+// Tipos de conector disponibles
+const TIPOS_CONECTOR = ['CCS2','CHAdeMO','Tipo 2 AC','Schuko','CEE','GBT','CCS1','CHAdeMO DC'];
 
-// ─── ESTADO ───
-let S = {
-  clienteId: '', clienteNombre: '',
-  cargadores: [],
-  firmaVacia: true,
-};
+let S = { token: null, orden: null, cargadores: [] };
+let opLinkCreado = null;
 
 // ─── INIT ───
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('inp-fecha').value = new Date().toISOString().split('T')[0];
-  initCanvas();
+document.addEventListener('DOMContentLoaded', async () => {
+  const token = new URLSearchParams(window.location.search).get('token');
+  if (token) {
+    await initModoTecnico(token);
+  } else {
+    initModoOperador();
+  }
 });
 
-// ─── CLIENTE ───
-function onClienteChange() {
-  const val = document.getElementById('sel-cliente').value;
-  S.clienteId = val;
-  const nf = document.getElementById('nuevo-cliente-fields');
-  if (val === 'NUEVO') {
-    nf.classList.add('show');
-    S.clienteNombre = '';
-  } else {
-    nf.classList.remove('show');
-    const opt = document.querySelector(`#sel-cliente option[value="${val}"]`);
-    S.clienteNombre = opt ? opt.textContent : '';
+// ═══════════════════════════════════════
+// MODO OPERADOR
+// ═══════════════════════════════════════
+function initModoOperador() {
+  document.getElementById('modo-operador').style.display = 'block';
+  document.getElementById('op-fecha').value = new Date().toISOString().split('T')[0];
+}
+
+async function crearOrdenOp() {
+  const clienteNombre     = document.getElementById('op-cliente').value.trim();
+  const terminalNombre    = document.getElementById('op-terminal').value.trim();
+  const terminalDireccion = document.getElementById('op-dir').value.trim();
+  const numCargadores     = parseInt(document.getElementById('op-ncargadores').value, 10);
+  const fechaProgramada   = document.getElementById('op-fecha').value;
+  const empresaComision   = document.getElementById('op-empresa').value.trim();
+  const asignadoNombre    = document.getElementById('op-nombre').value.trim();
+  const asignadoEmail     = document.getElementById('op-email').value.trim();
+
+  if (!clienteNombre)                       { alert('Ingresa el nombre del cliente'); return; }
+  if (!terminalNombre)                      { alert('Ingresa el nombre del terminal'); return; }
+  if (!numCargadores || numCargadores < 1)  { alert('Ingresa un número válido de cargadores'); return; }
+  if (!asignadoNombre)                      { alert('Ingresa el nombre del responsable'); return; }
+  if (!asignadoEmail || !asignadoEmail.includes('@')) { alert('Ingresa un email válido'); return; }
+
+  setLoading(true, 'Creando orden…');
+
+  try {
+    const resp = await fetch(`${BASE_URL}/api/crear-orden-comisionamiento`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clienteNombre, terminalNombre, terminalDireccion,
+        numCargadores, fechaProgramada, empresaComision,
+        asignadoNombre, asignadoEmail,
+      }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Error al crear orden');
+
+    opLinkCreado = data.linkFormulario;
+    document.getElementById('op-ticket-badge').textContent = data.ticket;
+    document.getElementById('op-link-box').textContent = data.linkFormulario;
+
+    document.getElementById('result-op').classList.add('show');
+    document.getElementById('bar-op').style.display = 'none';
+    document.querySelector('#modo-operador .section').style.display = 'none';
+    setLoading(false);
+    document.getElementById('result-op').scrollIntoView({ behavior:'smooth' });
+  } catch(e) {
+    setLoading(false);
+    alert('Error: ' + e.message);
   }
 }
 
-// ─── CARGADORES ───
-function onCargadoresChange(val) {
-  const n = parseInt(val);
-  const sec = document.getElementById('sec-checklist');
-  const secActa = document.getElementById('sec-acta');
-  if (!n || n < 1 || n > 50) {
-    sec.style.display = 'none';
-    secActa.style.display = 'none';
-    return;
-  }
-  document.getElementById('checklist-sub').textContent =
-    `${n} cargador${n > 1 ? 'es' : ''} — verifica cada uno`;
-  generarCargadores(n);
-  sec.style.display = 'block';
-  secActa.style.display = 'block';
-  setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+function copiarLink() {
+  if (!opLinkCreado) return;
+  navigator.clipboard.writeText(opLinkCreado)
+    .then(() => mostrarToast('✅ Link copiado'))
+    .catch(() => { prompt('Copia el link:', opLinkCreado); });
 }
 
-function generarCargadores(n) {
+// ═══════════════════════════════════════
+// MODO TÉCNICO
+// ═══════════════════════════════════════
+async function initModoTecnico(token) {
+  S.token = token;
+  setLoading(true, 'Cargando orden…');
+
+  try {
+    const resp = await fetch(`${BASE_URL}/api/obtener-orden-comisionamiento?token=${encodeURIComponent(token)}`);
+    const data = await resp.json();
+    if (!resp.ok || !data.ok) throw new Error(data.error || 'Orden no encontrada');
+
+    S.orden = data.orden;
+    document.getElementById('modo-tecnico').style.display = 'block';
+    renderOrdenTecnico(data.orden);
+    setLoading(false);
+  } catch {
+    setLoading(false);
+    document.getElementById('modo-error').style.display = 'block';
+  }
+}
+
+function renderOrdenTecnico(orden) {
+  const n = orden.num_cargadores || 1;
+
+  document.getElementById('tech-ticket').textContent      = orden.ticket || '—';
+  document.getElementById('tech-terminal').textContent    = orden.terminal_nombre || '—';
+  document.getElementById('tech-cliente').textContent     = orden.cliente_nombre  || '—';
+  document.getElementById('tech-dir').textContent         = orden.terminal_direccion || '—';
+  document.getElementById('tech-empresa').textContent     = orden.empresa_comision   || '—';
+  document.getElementById('tech-ncargadores').textContent = `${n} cargadores`;
+  document.getElementById('tech-header-sub').textContent  = `${orden.terminal_nombre || '—'} · ${n} cargadores`;
+  document.getElementById('tech-carg-sub').textContent    = `${n} cargadores — completa SKU, marca, potencia, conectores y evidencias`;
+
+  if (orden.estado === 'En progreso' || orden.datos_borrador) {
+    document.getElementById('borrador-badge').style.display = 'inline-flex';
+  }
+
+  generarCargadores(n, orden.datos_borrador);
+}
+
+function generarCargadores(n, borrador) {
   const list = document.getElementById('cargadores-list');
   list.innerHTML = '';
   S.cargadores = [];
   for (let i = 1; i <= n; i++) {
-    S.cargadores.push({ num: i, sn: '', noAplica: false, checks: {}, observaciones: '', fotos: [] });
-    list.appendChild(crearCargadorCard(i));
+    const bData = borrador?.cargadores?.[i - 1] || {};
+    S.cargadores.push({ num: i, conectores: [] });
+    list.appendChild(crearCargadorCard(i, bData));
   }
 }
 
-function crearCargadorCard(num) {
+function crearCargadorCard(num, bData = {}) {
   const card = document.createElement('div');
   card.className = 'cargador-card';
   card.id = `card-${num}`;
@@ -553,332 +447,261 @@ function crearCargadorCard(num) {
       <div class="cargador-num-badge">${num}</div>
       Cargador ${num}
     </div>
-    <label class="no-aplica-toggle">
-      <input type="checkbox" id="na-${num}" onchange="toggleNoAplica(${num})"/>
-      <div class="toggle-pill"></div>
-      <span class="toggle-label">NO APLICA</span>
-    </label>
   `;
   card.appendChild(hdr);
 
   const body = document.createElement('div');
   body.className = 'cargador-body';
-  body.id = `body-${num}`;
 
-  // S/N
-  body.innerHTML += `
-    <div class="sn-row">
-      <span class="sn-label">S/N</span>
-      <input class="sn-input" type="text" id="sn-${num}" placeholder="Número de serie del equipo"
-        oninput="S.cargadores[${num - 1}].sn = this.value"/>
+  body.innerHTML = `
+    <div class="field-grid">
+      <div class="field-item">
+        <span class="field-lbl">SKU / Código</span>
+        <input class="field-input mono" type="text" id="sku-${num}" placeholder="ej: ABC-12345"
+          value="${bData.sku||''}"/>
+      </div>
+      <div class="field-item">
+        <span class="field-lbl">Marca</span>
+        <input class="field-input" type="text" id="marca-${num}" placeholder="ej: ABB"
+          value="${bData.marca||''}"/>
+      </div>
+      <div class="field-item">
+        <span class="field-lbl">Modelo</span>
+        <input class="field-input" type="text" id="modelo-${num}" placeholder="ej: Terra 54"
+          value="${bData.modelo||''}"/>
+      </div>
+      <div class="field-item">
+        <span class="field-lbl">Potencia (kW)</span>
+        <input class="field-input" type="text" id="potencia-${num}" placeholder="ej: 50"
+          value="${bData.potencia||''}"/>
+      </div>
+      <div class="field-item">
+        <span class="field-lbl">N° Serie</span>
+        <input class="field-input mono" type="text" id="sn-${num}" placeholder="S/N"
+          value="${bData.sn||''}"/>
+      </div>
+      <div class="field-item">
+        <span class="field-lbl">SIM (N° tarjeta)</span>
+        <input class="field-input mono" type="text" id="sim-${num}" placeholder="89549…"
+          value="${bData.sim||''}"/>
+      </div>
     </div>
   `;
 
-  // Checklist
+  // Conectores dinámicos
+  const conectoresSection = document.createElement('div');
+  const numConectores = bData.numConectores || 2;
+  S.cargadores[num-1].conectores = Array.from({ length: numConectores }, (_, i) => ({
+    tipo: bData.conectores?.[i]?.tipo || '',
+    fotos: bData.conectores?.[i]?.fotos || [],
+  }));
+
+  const ctrlRow = document.createElement('div');
+  ctrlRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px';
+  ctrlRow.innerHTML = `
+    <span class="conectores-label" style="margin:0">Conectores</span>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button type="button" onclick="cambiarNConectores(${num},-1)"
+        style="width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--s1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)">−</button>
+      <span id="ncont-lbl-${num}" style="font-size:13px;font-weight:700;color:var(--text);min-width:20px;text-align:center">${numConectores}</span>
+      <button type="button" onclick="cambiarNConectores(${num},+1)"
+        style="width:26px;height:26px;border-radius:50%;border:1px solid var(--purple);background:var(--purplebg);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--purple)">+</button>
+    </div>
+  `;
+  conectoresSection.appendChild(ctrlRow);
+
   const grid = document.createElement('div');
-  grid.className = 'checks-grid';
-  CHECKLIST_COMISION.forEach(item => {
-    const lbl = document.createElement('label');
-    lbl.className = 'check-item';
-    lbl.innerHTML = `
-      <input type="checkbox" id="chk-${num}-${item.id}"
-        onchange="onCheck(${num},'${item.id}',this.checked)"/>
-      <div class="check-box"></div>
-      <span class="check-lbl">${item.label}</span>
-    `;
-    grid.appendChild(lbl);
-  });
-  body.appendChild(grid);
-
-  // Observaciones
-  body.innerHTML += `
-    <div>
-      <div class="obs-toggle" id="obstog-${num}" onclick="toggleObs(${num})">
-        Observaciones del cargador
-      </div>
-      <div class="obs-textarea" id="obsbox-${num}">
-        <textarea id="obs-${num}" placeholder="Ej: requiere ajuste de conector, pendiente revisión de display…"
-          oninput="S.cargadores[${num - 1}].observaciones = this.value" style="margin-top:6px"></textarea>
-      </div>
-    </div>
-  `;
-
-  // Fotos
-  const fotoSec = document.createElement('div');
-  fotoSec.className = 'foto-section';
-  fotoSec.innerHTML = `
-    <div class="foto-hdr">
-      <span class="foto-hdr-lbl">
-        📷 Evidencia fotográfica
-        <span class="foto-cnt-badge" id="foto-cnt-${num}" style="display:none">0</span>
-      </span>
-      <label class="btn-add-foto" for="foto-inp-${num}">📷 Agregar</label>
-      <input type="file" id="foto-inp-${num}" accept="image/*" capture="environment"
-        style="display:none" onchange="addFoto(${num}, this)"/>
-    </div>
-    <div class="foto-strip" id="foto-strip-${num}"></div>
-  `;
-  body.appendChild(fotoSec);
-
+  grid.className = 'conectores-grid';
+  grid.id = `cont-grid-${num}`;
+  conectoresSection.appendChild(grid);
+  body.appendChild(conectoresSection);
   card.appendChild(body);
+
+  // Render initial connectors
+  setTimeout(() => renderConectoresGrid(num), 0);
+
   return card;
 }
 
-function toggleNoAplica(num) {
-  const checked = document.getElementById(`na-${num}`).checked;
-  S.cargadores[num - 1].noAplica = checked;
-  document.getElementById(`card-${num}`).classList.toggle('no-aplica-card', checked);
+function cambiarNConectores(cardNum, delta) {
+  const arr = S.cargadores[cardNum-1].conectores;
+  const newLen = Math.max(1, Math.min(6, arr.length + delta));
+  if (newLen > arr.length) {
+    arr.push({ tipo: '', fotos: [] });
+  } else if (newLen < arr.length) {
+    arr.pop();
+  }
+  document.getElementById(`ncont-lbl-${cardNum}`).textContent = arr.length;
+  renderConectoresGrid(cardNum);
 }
 
-function onCheck(num, itemId, checked) {
-  S.cargadores[num - 1].checks[itemId] = checked;
+function renderConectoresGrid(cardNum) {
+  const arr  = S.cargadores[cardNum-1].conectores;
+  const grid = document.getElementById(`cont-grid-${cardNum}`);
+  if (!grid) return;
+  grid.innerHTML = '';
+  arr.forEach((cont, idx) => {
+    const row = document.createElement('div');
+    row.className = 'conector-row';
+    row.innerHTML = `
+      <div class="conector-row-hdr">
+        <span class="conector-num">🔌 Conector ${idx + 1}</span>
+        <label class="btn-add-foto" for="foto-inp-${cardNum}-${idx}">📷 Foto</label>
+        <input type="file" id="foto-inp-${cardNum}-${idx}" accept="image/*" capture="environment"
+          style="display:none" onchange="addFotoConector(${cardNum},${idx},this)"/>
+      </div>
+      <div class="field-item" style="margin-bottom:8px">
+        <span class="field-lbl">Tipo de conector</span>
+        <select class="field-input" id="tipo-${cardNum}-${idx}" onchange="S.cargadores[${cardNum-1}].conectores[${idx}].tipo=this.value">
+          <option value="">— Selecciona —</option>
+          ${TIPOS_CONECTOR.map(t => `<option value="${t}" ${cont.tipo===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+      <div class="foto-cnt" id="foto-cnt-${cardNum}-${idx}" style="display:${cont.fotos.length?'block':'none'}">
+        ${cont.fotos.length} foto(s) de evidencia
+      </div>
+      <div class="foto-strip" id="foto-strip-${cardNum}-${idx}">
+        ${cont.fotos.map((src, fi) => `
+          <div class="foto-thumb">
+            <img src="${src}" alt="foto"/>
+            <button class="foto-thumb-del" type="button" onclick="removeFotoConector(${cardNum},${idx},${fi})">×</button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    grid.appendChild(row);
+  });
 }
 
-function toggleObs(num) {
-  document.getElementById(`obsbox-${num}`).classList.toggle('show');
-  document.getElementById(`obstog-${num}`).classList.toggle('open');
-}
-
-// ─── FOTOS ───
-function addFoto(num, input) {
+function addFotoConector(cardNum, idx, input) {
   const files = Array.from(input.files);
   if (!files.length) return;
-  const cargador = S.cargadores[num - 1];
-  const remaining = MAX_FOTOS - cargador.fotos.length;
-  files.slice(0, remaining).forEach(file => {
+  const arr = S.cargadores[cardNum-1].conectores[idx].fotos;
+  files.slice(0, MAX_FOTOS_CONECTOR - arr.length).forEach(file => {
     const reader = new FileReader();
     reader.onload = e => {
-      cargador.fotos.push(e.target.result);
-      renderFotos(num);
+      arr.push(e.target.result);
+      renderConectoresGrid(cardNum);
     };
     reader.readAsDataURL(file);
   });
   input.value = '';
 }
 
-function removeFoto(num, idx) {
-  S.cargadores[num - 1].fotos.splice(idx, 1);
-  renderFotos(num);
+function removeFotoConector(cardNum, idx, fi) {
+  S.cargadores[cardNum-1].conectores[idx].fotos.splice(fi, 1);
+  renderConectoresGrid(cardNum);
 }
 
-function renderFotos(num) {
-  const fotos  = S.cargadores[num - 1].fotos;
-  const strip  = document.getElementById(`foto-strip-${num}`);
-  const cntEl  = document.getElementById(`foto-cnt-${num}`);
-  const addLbl = document.querySelector(`label[for="foto-inp-${num}"]`);
-
-  strip.innerHTML = fotos.map((src, i) => `
-    <div class="foto-thumb">
-      <img src="${src}" alt="Foto ${i + 1}"/>
-      <button class="foto-thumb-del" type="button" onclick="removeFoto(${num}, ${i})">×</button>
-    </div>
-  `).join('');
-
-  cntEl.textContent = fotos.length;
-  cntEl.style.display = fotos.length ? 'inline' : 'none';
-  if (addLbl) addLbl.style.display = fotos.length >= MAX_FOTOS ? 'none' : 'inline-flex';
-}
-
-// ─── FIRMA CANVAS ───
-let isDrawing = false;
-
-function initCanvas() {
-  const canvas = document.getElementById('firma-canvas');
-  // Set canvas resolution to match display
-  const setSize = () => {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width  = Math.round(rect.width  * window.devicePixelRatio);
-    canvas.height = 160 * window.devicePixelRatio;
-    canvas.style.height = '160px';
-    getCtx().scale(window.devicePixelRatio, window.devicePixelRatio);
-  };
-  setSize();
-
-  canvas.addEventListener('mousedown', e => { isDrawing = true; const p = pos(e); getCtx().beginPath(); getCtx().moveTo(p.x, p.y); hidePlaceholder(); });
-  canvas.addEventListener('mousemove', e => { if (!isDrawing) return; drawLine(pos(e)); });
-  canvas.addEventListener('mouseup',   () => { isDrawing = false; });
-  canvas.addEventListener('mouseleave',() => { isDrawing = false; });
-
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing = true; const p = pos(e.touches[0]); getCtx().beginPath(); getCtx().moveTo(p.x, p.y); hidePlaceholder(); }, { passive: false });
-  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (!isDrawing) return; drawLine(pos(e.touches[0])); }, { passive: false });
-  canvas.addEventListener('touchend',   e => { e.preventDefault(); isDrawing = false; S.firmaVacia = false; }, { passive: false });
-}
-
-function getCtx() { return document.getElementById('firma-canvas').getContext('2d'); }
-
-function pos(e) {
-  const canvas = document.getElementById('firma-canvas');
-  const rect = canvas.getBoundingClientRect();
-  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-}
-
-function drawLine(p) {
-  const ctx = getCtx();
-  ctx.lineWidth  = 2;
-  ctx.lineCap    = 'round';
-  ctx.lineJoin   = 'round';
-  ctx.strokeStyle = '#1A1F2B';
-  ctx.lineTo(p.x, p.y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(p.x, p.y);
-  S.firmaVacia = false;
-}
-
-function hidePlaceholder() {
-  document.getElementById('firma-placeholder').classList.add('hide');
-  document.getElementById('firma-wrap').classList.add('signed');
-}
-
-function limpiarFirma() {
-  const canvas = document.getElementById('firma-canvas');
-  getCtx().clearRect(0, 0, canvas.width, canvas.height);
-  S.firmaVacia = true;
-  document.getElementById('firma-placeholder').classList.remove('hide');
-  document.getElementById('firma-wrap').classList.remove('signed');
-}
-
-// ─── TICKET ───
-function generarTicket() {
-  const d = new Date();
-  const fecha = d.toISOString().slice(0, 10).replace(/-/g, '');
-  const rnd = String(Math.floor(Math.random() * 900) + 100);
-  return `CMN-${fecha}-${rnd}`;
-}
-
-// ─── VALIDAR ───
-function validar() {
-  const cid = document.getElementById('sel-cliente').value;
-  if (!cid) return 'Selecciona un cliente';
-  if (cid === 'NUEVO' && !document.getElementById('nuevo-cliente-nombre').value.trim())
-    return 'Ingresa el nombre del nuevo cliente';
-  if (!document.getElementById('inp-terminal').value.trim()) return 'Ingresa el nombre del terminal';
-  if (!document.getElementById('inp-direccion').value.trim()) return 'Ingresa la dirección del terminal';
-  const nc = parseInt(document.getElementById('inp-cargadores').value);
-  if (!nc || nc < 1) return 'Ingresa el número de cargadores';
-  if (!document.getElementById('inp-marca').value.trim()) return 'Ingresa la marca / fabricante del cargador';
-  if (!document.getElementById('inp-modelo').value.trim()) return 'Ingresa el modelo del cargador';
-  if (!document.getElementById('inp-potencia').value.trim()) return 'Ingresa la potencia del cargador';
-  if (!document.getElementById('sel-tecnico').value)  return 'Selecciona un técnico';
-  if (!document.getElementById('inp-fecha').value)    return 'Ingresa la fecha de entrega';
-  if (!document.getElementById('firma-nombre').value.trim()) return 'Ingresa el nombre del representante';
-  if (!document.getElementById('firma-rut').value.trim())    return 'Ingresa el RUT del representante';
-  if (!document.getElementById('firma-cargo').value.trim())  return 'Ingresa el cargo del representante';
-  if (S.firmaVacia) return 'El representante debe firmar el acta antes de guardar';
-  return null;
-}
-
-// ─── ENVIAR ───
-async function enviarComisionamiento() {
-  const err = validar();
-  if (err) { alert(err); return; }
-
-  const ticket     = generarTicket();
-  const cid        = document.getElementById('sel-cliente').value;
-  const clienteNom = cid === 'NUEVO'
-    ? document.getElementById('nuevo-cliente-nombre').value.trim()
-    : document.querySelector(`#sel-cliente option[value="${cid}"]`)?.textContent || '';
-
-  const terminal  = document.getElementById('inp-terminal').value.trim();
-  const direccion = document.getElementById('inp-direccion').value.trim();
-  const nCarg     = parseInt(document.getElementById('inp-cargadores').value);
-  const marca     = document.getElementById('inp-marca').value.trim();
-  const modelo    = document.getElementById('inp-modelo').value.trim();
-  const potencia  = document.getElementById('inp-potencia').value.trim();
-  const conector  = document.getElementById('sel-conector').value;
-  const protocolo = document.getElementById('sel-protocolo').value;
-  const cert      = document.getElementById('inp-cert').value.trim();
-  const tecnico   = document.getElementById('sel-tecnico').value;
-  const fecha     = document.getElementById('inp-fecha').value;
-  const obsGen    = document.getElementById('obs-generales').value;
-  const firmaNom  = document.getElementById('firma-nombre').value.trim();
-  const firmaRut  = document.getElementById('firma-rut').value.trim();
-  const firmaCargo= document.getElementById('firma-cargo').value.trim();
-  const firmaImg  = document.getElementById('firma-canvas').toDataURL('image/png');
-
-  const cargadoresData = S.cargadores.map(c => ({
-    num:           c.num,
-    sn:            document.getElementById(`sn-${c.num}`)?.value || '',
-    noAplica:      document.getElementById(`na-${c.num}`)?.checked || false,
-    visual:        document.getElementById(`chk-${c.num}-visual`)?.checked || false,
-    cone1:         document.getElementById(`chk-${c.num}-cone1`)?.checked || false,
-    cone2:         document.getElementById(`chk-${c.num}-cone2`)?.checked || false,
-    display:       document.getElementById(`chk-${c.num}-display`)?.checked || false,
-    ocpp:          document.getElementById(`chk-${c.num}-ocpp`)?.checked || false,
-    senaletica:    document.getElementById(`chk-${c.num}-senaletica`)?.checked || false,
-    carcasa:       document.getElementById(`chk-${c.num}-carcasa`)?.checked || false,
-    observaciones: document.getElementById(`obs-${c.num}`)?.value || '',
-    fotos_count:   c.fotos.length,
+// ─── CAPTURAR DATOS ───
+function capturarDatos() {
+  return S.cargadores.map(c => ({
+    num:      c.num,
+    sku:      document.getElementById(`sku-${c.num}`)?.value || '',
+    marca:    document.getElementById(`marca-${c.num}`)?.value || '',
+    modelo:   document.getElementById(`modelo-${c.num}`)?.value || '',
+    potencia: document.getElementById(`potencia-${c.num}`)?.value || '',
+    sn:       document.getElementById(`sn-${c.num}`)?.value || '',
+    sim:      document.getElementById(`sim-${c.num}`)?.value || '',
+    numConectores: c.conectores.length,
+    conectores: c.conectores.map((cont, idx) => ({
+      tipo:  document.getElementById(`tipo-${c.num}-${idx}`)?.value || cont.tipo,
+      fotos: cont.fotos,
+    })),
   }));
+}
 
-  // Update print meta
-  document.getElementById('print-meta').textContent =
-    `${ticket} · ${terminal} · ${clienteNom} · Técnico: ${tecnico} · ${fecha}`;
-
-  // Update print signature
-  document.getElementById('firma-print').src = firmaImg;
-
-  const payload = {
-    ticket, clienteId: cid, clienteNombre: clienteNom,
-    terminalNombre: terminal, terminalDireccion: direccion,
-    numCargadores: nCarg, marcaCargador: marca, modeloCargador: modelo,
-    potenciaKw: potencia, tipoConector: conector, protocolo, certElectrico: cert,
-    tecnico, fecha, obsGenerales: obsGen,
-    cargadoresJson: JSON.stringify(cargadoresData),
-    firmaNombre: firmaNom, firmaRut, firmaCargo,
-    firmaImg,
+// ─── GUARDAR BORRADOR ───
+async function guardarBorrador() {
+  if (!S.token) return;
+  const datos = {
+    cargadores:   capturarDatos(),
+    obsGenerales: document.getElementById('obs-generales')?.value || '',
+    savedAt:      new Date().toISOString(),
   };
 
-  document.getElementById('loading').classList.add('show');
-  document.getElementById('btn-submit').disabled = true;
+  try {
+    const resp = await fetch(`${BASE_URL}/api/guardar-borrador-comisionamiento`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: S.token, datosBorrador: datos }),
+    });
+    if (resp.ok) {
+      document.getElementById('borrador-badge').style.display = 'inline-flex';
+      mostrarToast('💾 Borrador guardado');
+    } else {
+      mostrarToast('⚠️ No se pudo guardar');
+    }
+  } catch {
+    mostrarToast('⚠️ Sin conexión');
+  }
+}
+
+// ─── ENVIAR FINAL ───
+async function enviarTecnico() {
+  const btn = document.getElementById('btn-enviar-tech');
+  btn.disabled = true;
+  const cargadoresData = capturarDatos();
+  const obsGen         = document.getElementById('obs-generales')?.value || '';
+
+  setLoading(true, 'Guardando comisionamiento…');
 
   try {
     const resp = await fetch(`${BASE_URL}/api/guardar-comisionamiento`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        token:          S.token,
+        ticket:         S.orden?.ticket,
+        cargadoresJson: JSON.stringify(cargadoresData),
+        obsGenerales:   obsGen,
+        estado:         'Entregado',
+      }),
     });
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Error al guardar');
 
-    // Notificar por email que se registró un comisionamiento
+    // Notificación email
     fetch(`${BASE_URL}/api/enviar-notificacion`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         tipo:               'comisionamiento',
-        ticket,
+        ticket:             S.orden?.ticket,
         destinatarioNombre: 'Equipo ACEX',
         destinatarioEmail:  'sergio.espinozafb@enel.com',
-        terminalNombre:     terminal,
-        clienteNombre:      clienteNom,
-        tecnicoNombre:      tecnico,
-        linkFormulario:     `${BASE_URL}/comisionamiento.html`,
+        terminalNombre:     S.orden?.terminal_nombre || '',
+        clienteNombre:      S.orden?.cliente_nombre  || '',
+        tecnicoNombre:      S.orden?.asignado_nombre || '',
+        linkFormulario:     window.location.href,
       }),
-    }).catch(e => console.warn('Notificación comisionamiento falló:', e));
+    }).catch(e => console.warn('Email falló:', e));
 
-    document.getElementById('loading').classList.remove('show');
-    document.getElementById('sec-terminal').style.display   = 'none';
-    document.getElementById('sec-visita').style.display     = 'none';
-    document.getElementById('sec-checklist').style.display  = 'none';
-    document.getElementById('sec-acta').style.display       = 'none';
-    document.getElementById('submit-bar').style.display     = 'none';
-    document.getElementById('success-msg').textContent =
-      `Ticket ${ticket} · Terminal "${terminal}" registrado en Airtable.`;
-    document.getElementById('success-state').classList.add('show');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
+    setLoading(false);
+    document.getElementById('sec-cargadores').style.display = 'none';
+    document.getElementById('bar-tech').style.display = 'none';
+    document.getElementById('result-tech').classList.add('show');
+    document.getElementById('tech-success-msg').textContent =
+      `Ticket ${S.orden?.ticket || ''} registrado exitosamente. ${cargadoresData.length} cargadores comisionados.`;
+    window.scrollTo({ top: 0, behavior:'smooth' });
   } catch(e) {
-    document.getElementById('loading').classList.remove('show');
-    document.getElementById('btn-submit').disabled = false;
+    setLoading(false);
+    btn.disabled = false;
     alert('Error al guardar: ' + e.message);
   }
 }
 
-// ─── PDF ───
-function generarPDF() {
-  document.querySelectorAll('.obs-textarea').forEach(el => el.classList.add('show'));
-  window.print();
+// ─── HELPERS ───
+function setLoading(show, txt = '') {
+  document.getElementById('loading').classList.toggle('show', show);
+  if (txt) document.getElementById('loading-txt').textContent = txt;
+}
+
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 </script>
 </body>

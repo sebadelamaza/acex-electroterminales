@@ -10,10 +10,10 @@
   --bg:#F5F7FA; --s1:#FFFFFF; --s2:#EBF0F7; --s3:#D8E2EE;
   --border:#D8E2EE; --border2:#B8CAE0;
   --text:#1A1F2B; --muted:#637181; --faint:#9BAAB8;
-  --green:#007140; --greenl:#00A35E; --greenbg:#E6F4EC; --lime:#78be20;
+  --green:#007140; --greenl:#00A35E; --greenbg:#E6F4EC;
   --blue:#1D6FD1; --bluel:#4A96E8; --bluebg:#EBF3FD;
   --amber:#C96D00; --amberl:#E08300; --amberbg:#FEF3E2;
-  --red:#C0392B; --redl:#D94432; --redbg:#FEECEB;
+  --red:#C0392B; --redbg:#FEECEB;
   --teal:#0D7377; --teall:#129B9F; --tealbg:#E5F4F5;
   --r:12px; --rs:8px;
 }
@@ -21,7 +21,6 @@
 html{font-size:16px}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:120px}
 
-/* TOPBAR */
 .topbar{background:#1D6FD1;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo-block{display:flex;align-items:center;gap:10px}
 .logo-txt{font-size:13px;font-weight:700;color:#fff;letter-spacing:.3px}
@@ -29,7 +28,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .logo-sub{font-size:11px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.5px}
 .topbar-title{font-size:12px;color:rgba(255,255,255,.8);font-weight:600}
 
-/* SECTIONS */
+nav{display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid #D8E2EE;overflow-x:auto}
+.nav-link{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;border:1px solid transparent;color:#637181;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif}
+.nav-link.active{background:#EBF3FD;border-color:#B3D4F5;color:#1D6FD1}
+
 .section{margin:16px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 4px rgba(29,111,209,.06)}
 .section-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .section-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
@@ -37,7 +39,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .section-sub{font-size:11px;color:var(--muted);margin-top:1px}
 .section-body{padding:16px}
 
-/* FORM */
 .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
 .fg:last-child{margin-bottom:0}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -45,17 +46,27 @@ label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.2px}
 .req::after{content:' *';color:var(--red)}
 input,select,textarea{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;padding:12px 13px;width:100%;outline:none;-webkit-appearance:none;transition:border-color .15s}
 input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,111,209,.12)}
-input[readonly]{background:var(--s3);color:var(--muted)}
+input[readonly],input:disabled,select:disabled{background:var(--s3);color:var(--muted)}
 input::placeholder,textarea::placeholder{color:var(--faint)}
 select option{background:var(--s1)}
 textarea{resize:none;min-height:80px;line-height:1.5}
 
-/* TICKET BADGE */
-.ticket-badge{display:inline-flex;align-items:center;gap:6px;background:var(--tealbg);border:1px solid var(--teal);border-radius:20px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--teal);margin-bottom:16px}
+/* INFO BOX */
+.info-box{background:var(--bluebg);border:1px solid #B3D4F5;border-radius:var(--rs);padding:14px 16px;margin-bottom:16px}
+.info-box h3{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px}
+.info-row{display:flex;gap:6px;margin-bottom:4px;font-size:13px}
+.info-lbl{color:var(--muted);min-width:90px;font-weight:500}
+.info-val{color:var(--text);font-weight:600}
 
-/* CARGADOR CARD */
+/* TICKET BADGE */
+.ticket-badge{display:inline-flex;align-items:center;gap:6px;background:var(--tealbg);border:1px solid var(--teal);border-radius:20px;padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--teal);margin-bottom:12px}
+
+/* BORRADOR BADGE */
+.borrador-badge{display:inline-flex;align-items:center;gap:6px;background:var(--amberbg);border:1px solid var(--amber);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--amber);margin-left:8px}
+
+/* CARGADOR CARDS */
 .cargadores-list{display:flex;flex-direction:column;gap:12px}
-.cargador-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);overflow:hidden;transition:border-color .2s}
+.cargador-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--rs);overflow:hidden}
 .cargador-card.no-aplica-card{opacity:.5}
 .cargador-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--s3);border-bottom:1px solid var(--border)}
 .cargador-num{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
@@ -69,22 +80,13 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 .toggle-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.3px}
 .cargador-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
 
-/* EQUIPO FIELDS por cargador */
 .equipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:2px}
 .equipo-field{display:flex;flex-direction:column;gap:3px}
 .equipo-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
 .equipo-input{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:13px;color:var(--text);outline:none;width:100%;transition:border-color .15s}
 .equipo-input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,111,209,.1)}
-.equipo-input.prefilled{background:var(--greenbg);border-color:var(--green);color:var(--green)}
-/* S/N usa mono */
 .equipo-input.mono{font-family:'JetBrains Mono',monospace}
-/* SN INPUT inline (legacy) */
-.sn-row{display:flex;align-items:center;gap:8px}
-.sn-label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;letter-spacing:.2px;min-width:24px}
-.sn-input{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);outline:none;flex:1;transition:border-color .15s}
-.sn-input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,111,209,.1)}
 
-/* CHECKS GRID */
 .checks-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .check-item{display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:8px 10px;cursor:pointer;user-select:none;transition:border-color .15s,background .15s}
 .check-item:active{background:var(--greenbg)}
@@ -95,18 +97,15 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 .check-item input:checked ~ .check-lbl{color:var(--green);font-weight:600}
 .check-lbl{font-size:12px;color:var(--muted);line-height:1.2}
 
-/* OBSERVACIONES TOGGLE */
 .obs-toggle{font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;display:flex;align-items:center;gap:4px;padding:2px 0}
 .obs-toggle::before{content:'+ '}
 .obs-toggle.open::before{content:'− '}
 .obs-textarea{display:none;margin-top:6px}
 .obs-textarea.show{display:block}
 
-/* CORRECTIVO BADGE en tarjeta */
 .correctivo-indicator{display:none;font-size:11px;font-weight:700;color:var(--amber);background:var(--amberbg);border:1px solid var(--amberl);border-radius:20px;padding:3px 8px}
 .correctivo-indicator.show{display:inline-flex;align-items:center;gap:4px}
 
-/* FOTOS POR CARGADOR — Antes / Después */
 .foto-bloques{display:flex;gap:8px;margin-top:10px}
 .foto-bloque{flex:1;min-width:0;border-radius:8px;padding:8px 10px}
 .foto-bloque.antes{background:rgba(180,83,9,.06);border:1px solid rgba(180,83,9,.2)}
@@ -122,90 +121,61 @@ textarea{resize:none;min-height:80px;line-height:1.5}
 .foto-bloque.antes .btn-add-foto{color:#b45309;background:rgba(180,83,9,.08);border-color:#b45309}
 .foto-bloque.despues .btn-add-foto{color:#007140;background:rgba(0,113,64,.08);border-color:#007140}
 .btn-add-foto:active{opacity:.7}
-.foto-strip{display:flex;flex-wrap:wrap;gap:5px;min-height:0}
+.foto-strip{display:flex;flex-wrap:wrap;gap:5px}
 .foto-thumb{position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--border);flex-shrink:0}
 .foto-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .foto-thumb-del{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
 
-/* DISABLED state */
-.cargador-card.no-aplica-card .cargador-body{pointer-events:none}
-.cargador-card.no-aplica-card .checks-grid{opacity:.4}
-.cargador-card.no-aplica-card .sn-input{opacity:.4}
-.cargador-card.no-aplica-card .equipo-input{opacity:.4}
+.cargador-card.no-aplica-card .cargador-body{pointer-events:none;opacity:.5}
 
-/* SUBMIT */
-.submit-section{position:fixed;bottom:0;left:0;right:0;padding:16px;background:rgba(245,247,250,.96);backdrop-filter:blur(8px);border-top:1px solid var(--border);z-index:50}
-.btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--teal),var(--blue));border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s}
+/* BOTTOM BAR */
+.submit-section{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:rgba(245,247,250,.96);backdrop-filter:blur(8px);border-top:1px solid var(--border);z-index:50;display:flex;gap:10px}
+.btn-submit{flex:1;padding:15px;background:linear-gradient(135deg,var(--teal),var(--blue));border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s}
 .btn-submit:active{opacity:.85}
 .btn-submit:disabled{background:var(--border2);cursor:not-allowed;opacity:.6}
+.btn-borrador{padding:15px 18px;background:var(--s1);border:1.5px solid var(--amber);border-radius:var(--rs);color:var(--amber);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.btn-borrador:active{opacity:.7}
 
-/* SUCCESS STATE */
-#success-state{display:none;margin:16px}
-#success-state.show{display:block}
+/* SUCCESS / LINK CARD */
+.result-section{margin:16px;display:none}
+.result-section.show{display:block}
 .success-card{background:var(--greenbg);border:1.5px solid var(--green);border-radius:var(--r);padding:24px;text-align:center}
 .success-icon{font-size:40px;margin-bottom:12px}
 .success-title{font-size:18px;font-weight:700;color:var(--green);margin-bottom:6px}
 .success-sub{font-size:13px;color:var(--text);margin-bottom:20px;line-height:1.5}
-.btn-pdf{width:100%;padding:14px;background:var(--blue);border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
-.btn-nuevo{width:100%;padding:13px;background:transparent;border:1.5px solid var(--green);border-radius:var(--rs);color:var(--green);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 
-/* LOADING OVERLAY */
+.link-card{background:var(--bluebg);border:1.5px solid var(--blue);border-radius:var(--r);padding:20px}
+.link-card-title{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:8px}
+.link-card-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.link-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);word-break:break-all;margin-bottom:12px}
+.btn-copy{width:100%;padding:13px;background:var(--blue);border:none;border-radius:var(--rs);color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.btn-nuevo{width:100%;padding:12px;background:transparent;border:1.5px solid var(--green);border-radius:var(--rs);color:var(--green);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+
+/* LOADING */
 .loading-overlay{display:none;position:fixed;inset:0;background:rgba(245,247,250,.9);z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .loading-overlay.show{display:flex}
 .spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-txt{font-size:13px;color:var(--muted);font-weight:500}
 
-/* ── PRINT ── */
+/* ERROR STATE */
+.error-page{margin:32px 16px;text-align:center}
+.error-page .e-icon{font-size:48px;margin-bottom:16px}
+.error-page h2{font-size:20px;font-weight:700;margin-bottom:8px;color:var(--red)}
+.error-page p{color:var(--muted);font-size:14px;line-height:1.6}
+
+/* BORRADOR SAVED TOAST */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:#1A1F2B;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .2s,transform .2s;z-index:300;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
 @media print {
   body{background:#fff;padding:0}
-  .topbar,.submit-section,#success-state,.obs-toggle{display:none!important}
-  .print-summary{display:block!important}
-  .ps-grid{display:grid!important;grid-template-columns:repeat(3,1fr)!important}
-  .ps-cell{border:1px solid #ccc;border-radius:4px;padding:6px 8px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .ps-lbl{font-size:8px;font-weight:700;color:#637181;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
-  .ps-val{font-size:11px;font-weight:600;color:#1a2533}
-  .ps-val.highlight{color:#1D6FD1}
-  .ps-val.warn{color:#b45309}
+  .topbar,nav,.submit-section,#result-op,#result-tech,.toast{display:none!important}
   .section{margin:0 0 16px;box-shadow:none;border:1px solid #ccc;break-inside:avoid}
   .cargador-card{break-inside:avoid}
-  .print-header{display:block!important}
   .obs-textarea{display:block!important}
-  .cargador-card.no-aplica-card .cargador-body{pointer-events:auto}
-  .cargador-card.no-aplica-card .checks-grid{opacity:1}
   .check-item input:checked ~ .check-box{border-color:#007140;background:#007140;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .cargador-num-badge{background:#1D6FD1;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .equipo-grid{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:4px!important;margin-bottom:4px}
-  .equipo-label{font-size:8px!important;letter-spacing:.3px}
-  .equipo-input{font-size:11px!important;padding:4px 6px!important;background:#F5F7FA!important;border:1px solid #D8E2EE!important}
-  .equipo-input.prefilled{background:#E6F4EC!important;border-color:#007140!important;color:#007140!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .foto-bloques{display:flex!important;gap:6px}
-  .foto-bloque{flex:1;padding:5px 7px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .foto-bloque.antes{background:rgba(180,83,9,.06)!important;border:1px solid rgba(180,83,9,.25)!important}
-  .foto-bloque.despues{background:rgba(0,113,64,.06)!important;border:1px solid rgba(0,113,64,.25)!important}
-  .foto-bloque-lbl{font-size:9px!important;font-weight:700!important}
-  .foto-bloque.antes .foto-bloque-lbl{color:#b45309!important}
-  .foto-bloque.despues .foto-bloque-lbl{color:#007140!important}
-  .foto-strip{display:flex!important;flex-wrap:wrap;gap:4px}
-  .foto-thumb{width:72px;height:72px;break-inside:avoid}
-  .foto-thumb img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .foto-thumb-del,.btn-add-foto,.foto-cnt-badge{display:none!important}
-}
-.print-header{display:none;text-align:center;padding:16px 0 8px;border-bottom:2px solid #1D6FD1;margin-bottom:12px}
-.print-header h1{font-size:18px;font-weight:700;color:#1D6FD1}
-.print-header p{font-size:12px;color:#637181;margin-top:4px}
-/* Ficha resumen de portada — solo print */
-.print-summary{display:none}
-.ps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
-.ps-cell{border:1px solid #D8E2EE;border-radius:6px;padding:7px 10px}
-.ps-lbl{font-size:9px;font-weight:700;color:#637181;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
-.ps-val{font-size:12px;font-weight:600;color:#1a2533}
-.ps-val.highlight{color:#1D6FD1}
-.ps-val.warn{color:#b45309}
-.ps-divider{border:none;border-top:1px solid #D8E2EE;margin:10px 0}
-/* Sin comentarios en print */
-@media print{
-  .obs-empty-print::after{content:'Sin comentarios';color:#9aadbd;font-style:italic;font-size:11px;display:block;padding:4px 0}
 }
 </style>
 </head>
@@ -217,181 +187,163 @@ textarea{resize:none;min-height:80px;line-height:1.5}
     <div class="logo-divider"></div>
     <span class="logo-sub">ACEX</span>
   </div>
-  <span class="topbar-title">Mantención Preventiva</span>
+  <span class="topbar-title">Mant. Preventivo</span>
 </div>
 
-<!-- MODULE NAV -->
-<nav style="display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid #D8E2EE;overflow-x:auto">
-  <a href="index.html" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;border:1px solid transparent;color:#637181;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">🔧 Asist. Correctivo</a>
-  <a href="mantencion.html" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#EBF3FD;border:1px solid #B3D4F5;color:#1D6FD1;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">🔩 Mant. Preventivo</a>
-  <a href="comisionamiento.html" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;border:1px solid transparent;color:#637181;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">⚡ Comisionamiento</a>
-  <a href="dashboard.html" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;border:1px solid transparent;color:#637181;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">📋 Dashboard</a>
+<nav>
+  <a href="index.html" class="nav-link">🔧 Asist. Correctivo</a>
+  <a href="mantencion.html" class="nav-link active">🔩 Mant. Preventivo</a>
+  <a href="comisionamiento.html" class="nav-link">⚡ Comisionamiento</a>
+  <a href="dashboard.html" class="nav-link">📋 Dashboard</a>
 </nav>
 
-<!-- PRINT HEADER (solo visible al imprimir) -->
-<div class="print-header">
-  <h1>ACEX · Registro de Mantención Preventiva</h1>
-  <p id="print-meta"></p>
-</div>
+<!-- ══════════════════════════════════════════════
+     MODO OPERADOR (sin token)
+     ══════════════════════════════════════════════ -->
+<div id="modo-operador" style="display:none">
 
-<!-- PORTADA DE RESUMEN (solo visible al imprimir) -->
-<div class="print-summary" id="print-summary">
-  <div class="ps-grid">
-    <div class="ps-cell">
-      <div class="ps-lbl">Cliente</div>
-      <div class="ps-val" id="ps-cliente">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Terminal</div>
-      <div class="ps-val" id="ps-terminal">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Dirección</div>
-      <div class="ps-val" id="ps-direccion">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Modelo cargador</div>
-      <div class="ps-val" id="ps-modelo">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Potencia / Protocolo</div>
-      <div class="ps-val" id="ps-potencia">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">N° cargadores</div>
-      <div class="ps-val" id="ps-ncargadores">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Fecha puesta en marcha</div>
-      <div class="ps-val highlight" id="ps-fechacom">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Meses en servicio</div>
-      <div class="ps-val highlight" id="ps-mesescom">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Último mantenimiento</div>
-      <div class="ps-val warn" id="ps-ultimomant">Sin registro</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Meses desde último mant.</div>
-      <div class="ps-val warn" id="ps-mesesmant">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Fecha visita</div>
-      <div class="ps-val" id="ps-fechavisita">—</div>
-    </div>
-    <div class="ps-cell">
-      <div class="ps-lbl">Técnico</div>
-      <div class="ps-val" id="ps-tecnico">—</div>
-    </div>
-  </div>
-  <hr class="ps-divider"/>
-</div>
-
-<!-- SECCIÓN 1: DATOS DE LA VISITA -->
-<div class="section" id="sec-datos">
-  <div class="section-hdr">
-    <div class="section-icon" style="background:#EBF3FD">🗓️</div>
-    <div>
-      <div class="section-title">Datos de la visita</div>
-      <div class="section-sub">Terminal, técnico y fecha de mantención</div>
-    </div>
-  </div>
-  <div class="section-body">
-    <div class="fg">
-      <label class="req">Cliente</label>
-      <select id="sel-cliente" onchange="onClienteChange()">
-        <option value="">— Selecciona cliente —</option>
-      </select>
-    </div>
-    <div class="fg">
-      <label class="req">Terminal</label>
-      <select id="sel-terminal" disabled onchange="onTerminalChange()">
-        <option value="">— Selecciona cliente primero —</option>
-      </select>
-    </div>
-    <div class="row2">
-      <div class="fg">
-        <label>N° Cargadores</label>
-        <input type="text" id="info-cargadores" readonly placeholder="—"/>
+  <div class="section">
+    <div class="section-hdr">
+      <div class="section-icon" style="background:#EBF3FD">📋</div>
+      <div>
+        <div class="section-title">Asignar mantención preventiva</div>
+        <div class="section-sub">El técnico recibirá un link para completar el checklist</div>
       </div>
+    </div>
+    <div class="section-body">
       <div class="fg">
-        <label class="req">Técnico</label>
-        <select id="sel-tecnico">
-          <option value="">— Técnico —</option>
-          <optgroup label="Operadores ACEX">
-            <option>Victor Torres</option>
-            <option>Sebastian Seron</option>
-            <option>Cristian Droguett</option>
-            <option>Sara Ganga</option>
-            <option>Cesar Soto</option>
-            <option>Emilio Cardenas</option>
-            <option>Nikkolas Eterrovic</option>
-          </optgroup>
-          <optgroup label="Contratistas">
-            <option>Rodrigo Jerez (SOLGELEC)</option>
-            <option>Eddic Monzart (SOLGELEC)</option>
-            <option>Daniel Contreras (DCC)</option>
-            <option>Rafael García (RAICA)</option>
-            <option>Fernando Morales (LARI)</option>
-            <option>Jonathan Salgado (SOLGEC)</option>
-            <option>Carlos Bozzo (AINEL)</option>
-          </optgroup>
+        <label class="req">Cliente</label>
+        <select id="op-cliente" onchange="opOnClienteChange()">
+          <option value="">— Selecciona cliente —</option>
         </select>
       </div>
+      <div class="fg">
+        <label class="req">Terminal</label>
+        <select id="op-terminal" disabled onchange="opOnTerminalChange()">
+          <option value="">— Selecciona cliente primero —</option>
+        </select>
+      </div>
+      <div class="row2">
+        <div class="fg">
+          <label>N° Cargadores</label>
+          <input type="text" id="op-ncargadores" readonly placeholder="—"/>
+        </div>
+        <div class="fg">
+          <label class="req">Fecha programada</label>
+          <input type="date" id="op-fecha"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="req">Nombre del técnico asignado</label>
+        <input type="text" id="op-nombre" placeholder="Nombre completo"/>
+      </div>
+      <div class="fg">
+        <label class="req">Email del técnico asignado</label>
+        <input type="email" id="op-email" placeholder="correo@empresa.com"/>
+      </div>
     </div>
-    <div class="fg">
-      <label class="req">Fecha de visita</label>
-      <input type="date" id="inp-fecha"/>
+  </div>
+
+  <!-- Resultado operator -->
+  <div id="result-op" class="result-section">
+    <div class="link-card">
+      <div class="link-card-title">✅ Orden creada</div>
+      <div class="link-card-sub">El link fue enviado por email al técnico. También puedes copiarlo manualmente:</div>
+      <div class="ticket-badge" id="op-ticket-badge">MNT-…</div>
+      <div class="link-box" id="op-link-box">—</div>
+      <button class="btn-copy" onclick="copiarLink()">📋 Copiar link</button>
+      <button class="btn-nuevo" onclick="location.reload()">+ Nueva asignación</button>
     </div>
-    <div class="fg">
-      <label>Observaciones generales de la visita</label>
-      <textarea id="obs-generales" placeholder="Condiciones del sitio, coordinación con jefe de patio, observaciones adicionales…"></textarea>
-    </div>
+  </div>
+
+  <div class="submit-section" id="bar-op">
+    <button class="btn-submit" onclick="crearOrdenOp()">
+      📤 Crear orden y enviar link
+    </button>
   </div>
 </div>
 
-<!-- SECCIÓN 2: CHECKLIST CARGADORES -->
-<div class="section" id="sec-checklist" style="display:none">
-  <div class="section-hdr">
-    <div class="section-icon" style="background:#E5F4F5">⚡</div>
-    <div>
-      <div class="section-title">Checklist por cargador</div>
-      <div class="section-sub" id="checklist-sub">Marca los ítems completados por cada cargador</div>
+<!-- ══════════════════════════════════════════════
+     MODO TÉCNICO (con token)
+     ══════════════════════════════════════════════ -->
+<div id="modo-tecnico" style="display:none">
+
+  <!-- Info de la orden -->
+  <div class="section">
+    <div class="section-hdr">
+      <div class="section-icon" style="background:#EBF3FD">🗓️</div>
+      <div>
+        <div class="section-title">Orden de mantención</div>
+        <div class="section-sub" id="tech-header-sub">—</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="info-box" id="tech-info-box">
+        <div class="info-row"><span class="info-lbl">Ticket</span><span class="info-val"><span class="ticket-badge" id="tech-ticket">—</span><span class="borrador-badge" id="borrador-badge" style="display:none">💾 Borrador guardado</span></span></div>
+        <div class="info-row"><span class="info-lbl">Terminal</span><span class="info-val" id="tech-terminal">—</span></div>
+        <div class="info-row"><span class="info-lbl">Cliente</span><span class="info-val" id="tech-cliente">—</span></div>
+        <div class="info-row"><span class="info-lbl">Fecha</span><span class="info-val" id="tech-fecha">—</span></div>
+        <div class="info-row"><span class="info-lbl">Cargadores</span><span class="info-val" id="tech-ncargadores">—</span></div>
+      </div>
+      <div class="fg">
+        <label>Observaciones generales de la visita</label>
+        <textarea id="obs-generales" placeholder="Condiciones del sitio, coordinación con jefe de patio, observaciones adicionales…"></textarea>
+      </div>
     </div>
   </div>
-  <div class="section-body">
-    <div class="cargadores-list" id="cargadores-list"></div>
+
+  <!-- Checklist por cargador -->
+  <div class="section" id="sec-checklist">
+    <div class="section-hdr">
+      <div class="section-icon" style="background:#E5F4F5">⚡</div>
+      <div>
+        <div class="section-title">Checklist por cargador</div>
+        <div class="section-sub" id="checklist-sub">Marca los ítems completados</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="cargadores-list" id="cargadores-list"></div>
+    </div>
+  </div>
+
+  <!-- Resultado técnico -->
+  <div id="result-tech" class="result-section">
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Mantención registrada</div>
+      <div class="success-sub" id="tech-success-msg">El registro fue guardado correctamente.</div>
+      <button class="btn-submit" style="width:100%;margin-bottom:10px" onclick="window.print()">🖨️ Imprimir / PDF</button>
+    </div>
+  </div>
+
+  <div class="submit-section" id="bar-tech">
+    <button class="btn-borrador" onclick="guardarBorrador()" title="Guardar avance y continuar después">💾</button>
+    <button class="btn-submit" id="btn-enviar-tech" onclick="enviarTecnico()">
+      ✅ Enviar mantención
+    </button>
   </div>
 </div>
 
-<!-- SUCCESS -->
-<div id="success-state">
-  <div class="success-card">
-    <div class="success-icon">✅</div>
-    <div class="success-title">Mantención registrada</div>
-    <div class="success-sub" id="success-msg">El registro fue guardado en Airtable.</div>
-    <button class="btn-pdf" onclick="generarPDF()">🖨️ Descargar / Imprimir PDF</button>
-    <button class="btn-nuevo" onclick="location.reload()">+ Nueva mantención</button>
-  </div>
-</div>
-
-<!-- SUBMIT -->
-<div class="submit-section" id="submit-bar">
-  <button class="btn-submit" id="btn-submit" onclick="enviarMantencion()">
-    💾 Guardar registro de mantención
-  </button>
+<!-- ERROR -->
+<div id="modo-error" style="display:none" class="error-page">
+  <div class="e-icon">❌</div>
+  <h2>Orden no encontrada</h2>
+  <p>El link puede ser inválido o haber expirado.<br/>Contacta al operador ACEX.</p>
 </div>
 
 <!-- LOADING -->
 <div class="loading-overlay" id="loading">
   <div class="spinner"></div>
-  <div class="loading-txt">Guardando en Airtable…</div>
+  <div class="loading-txt" id="loading-txt">Cargando…</div>
 </div>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-// ─── DB FALLBACK (mientras Airtable Terminales esté vacío) ───
+const BASE_URL = '';
+
+// ─── DB FALLBACK ───
 const DB_FALLBACK = {
   clientes: [
     { id:'CL001', nombre:'RBU' },
@@ -432,7 +384,6 @@ const DB_FALLBACK = {
   }
 };
 
-// DB activo — se reemplaza con datos de Airtable si hay terminales comisionados
 let DB = { clientes: DB_FALLBACK.clientes, terminales: DB_FALLBACK.terminales };
 
 const CHECKLIST_ITEMS = [
@@ -444,20 +395,33 @@ const CHECKLIST_ITEMS = [
   { id:'carga',      label:'Prueba de carga' },
 ];
 
-const BASE_URL = '';
-
-// ─── ESTADO ───
-let S = { clienteId:'', terminal:null, tecnico:'', fecha:'', cargadores:[] };
+let S = { token: null, orden: null, cargadores: [] };
+let opTerminal = null;
+let opLinkCreado = null;
 
 // ─── INIT ───
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('inp-fecha').value = new Date().toISOString().split('T')[0];
-  poblarClientes();
-  cargarTerminalesDeAirtable(); // intenta enriquecer con terminales comisionados
+document.addEventListener('DOMContentLoaded', async () => {
+  const token = new URLSearchParams(window.location.search).get('token');
+
+  if (token) {
+    await initModoTecnico(token);
+  } else {
+    initModoOperador();
+  }
 });
 
-function poblarClientes() {
-  const sel = document.getElementById('sel-cliente');
+// ═══════════════════════════════════════
+// MODO OPERADOR
+// ═══════════════════════════════════════
+function initModoOperador() {
+  document.getElementById('modo-operador').style.display = 'block';
+  document.getElementById('op-fecha').value = new Date().toISOString().split('T')[0];
+  poblarClientesOp();
+  cargarTerminalesAirtable();
+}
+
+function poblarClientesOp() {
+  const sel = document.getElementById('op-cliente');
   sel.innerHTML = '<option value="">— Selecciona cliente —</option>';
   DB.clientes.forEach(c => {
     const o = document.createElement('option');
@@ -466,73 +430,50 @@ function poblarClientes() {
   });
 }
 
-async function cargarTerminalesDeAirtable() {
+async function cargarTerminalesAirtable() {
   try {
     const resp = await fetch(`${BASE_URL}/api/get-terminales`);
-    if (!resp.ok) return; // silencioso: usamos fallback
+    if (!resp.ok) return;
     const data = await resp.json();
-    if (!data.ok || !data.total) return; // tabla vacía — usamos fallback
+    if (!data.ok || !data.total) return;
 
-    // Convertir lista plana a la estructura DB esperada
-    const terminalesAirtable = {};
+    const terminalesMap = {};
     const clientesSet = {};
-
     data.terminales.forEach(t => {
       const cid = t.clienteId || t.cliente;
       if (!clientesSet[cid]) {
         clientesSet[cid] = { id: cid, nombre: t.cliente };
-        terminalesAirtable[cid] = [];
+        terminalesMap[cid] = [];
       }
-      terminalesAirtable[cid].push({
-        id:                   t.terminalId || t.id,
-        nombre:               t.nombre,
-        ubic:                 t.direccion || '',
-        cargadores:           t.numCargadores || 0,
-        modeloCargador:       t.modeloCargador || null,
-        potenciaKw:           t.potenciaKw || null,
-        protocolo:            t.protocolo || null,
-        fechaComisionamiento: t.fechaComisionamiento || null,
-        cliente:              t.cliente || '',
+      terminalesMap[cid].push({
+        id:        t.terminalId || t.id,
+        nombre:    t.nombre,
+        ubic:      t.direccion || '',
+        cargadores: t.numCargadores || 0,
       });
     });
 
-    // Fusionar: Airtable tiene precedencia, pero conservamos los del fallback que no estén
     const clientesAirtable = Object.values(clientesSet);
-    const clienteIdsAirtable = new Set(clientesAirtable.map(c => c.id));
-
-    DB.clientes = [
-      ...clientesAirtable,
-      ...DB_FALLBACK.clientes.filter(c => !clienteIdsAirtable.has(c.id)),
-    ];
-    DB.terminales = terminalesAirtable;
-    // Agregar terminales fallback para clientes que no estén en Airtable
+    const ids = new Set(clientesAirtable.map(c => c.id));
+    DB.clientes = [ ...clientesAirtable, ...DB_FALLBACK.clientes.filter(c => !ids.has(c.id)) ];
+    DB.terminales = terminalesMap;
     DB_FALLBACK.clientes.forEach(c => {
-      if (!terminalesAirtable[c.id] && DB_FALLBACK.terminales[c.id]) {
+      if (!terminalesMap[c.id] && DB_FALLBACK.terminales[c.id])
         DB.terminales[c.id] = DB_FALLBACK.terminales[c.id];
-      }
     });
-
-    poblarClientes(); // repoblar con datos actualizados
-  } catch {
-    // Silencioso — usamos DB fallback tal cual
-  }
+    poblarClientesOp();
+  } catch {}
 }
 
-function onClienteChange() {
-  const cid = document.getElementById('sel-cliente').value;
-  S.clienteId = cid;
-  S.terminal = null;
-  const selT = document.getElementById('sel-terminal');
+function opOnClienteChange() {
+  const cid = document.getElementById('op-cliente').value;
+  const selT = document.getElementById('op-terminal');
   selT.innerHTML = '<option value="">— Selecciona terminal —</option>';
   selT.disabled = !cid;
-  document.getElementById('info-cargadores').value = '';
-  document.getElementById('sec-checklist').style.display = 'none';
+  document.getElementById('op-ncargadores').value = '';
+  opTerminal = null;
   if (!cid) return;
   const terms = DB.terminales[cid] || [];
-  if (!terms.length) {
-    selT.innerHTML = '<option value="">Sin terminales registrados</option>';
-    return;
-  }
   terms.forEach(t => {
     const o = document.createElement('option');
     o.value = t.id; o.textContent = t.nombre;
@@ -540,68 +481,134 @@ function onClienteChange() {
   });
 }
 
-function onTerminalChange() {
-  const cid = document.getElementById('sel-cliente').value;
-  const tid = document.getElementById('sel-terminal').value;
-  if (!tid) { document.getElementById('sec-checklist').style.display='none'; return; }
+function opOnTerminalChange() {
+  const cid = document.getElementById('op-cliente').value;
+  const tid = document.getElementById('op-terminal').value;
   const terms = DB.terminales[cid] || [];
-  S.terminal = terms.find(t => t.id === tid) || null;
-  S.ultimoMantenimiento = null;
-  // Cargar último mantenimiento (incluye datos de equipos para pre-rellenar)
-  if (S.terminal) {
-    fetch(`${BASE_URL}/api/get-ultimo-mantenimiento?terminalId=${encodeURIComponent(S.terminal.id)}`)
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (!d || !d.ok) return;
-        S.ultimoMantenimiento = d.ultimoMantenimiento;
-        // Pre-rellenar datos del equipo si existen en el último mantenimiento
-        if (d.cargadoresData && Array.isArray(d.cargadoresData)) {
-          d.cargadoresData.forEach(cd => {
-            const idx = cd.num - 1;
-            if (idx < 0 || idx >= S.cargadores.length) return;
-            const prefill = (fieldId, val, stateKey) => {
-              const el = document.getElementById(`${fieldId}-${cd.num}`);
-              if (!el || el.value) return; // no sobreescribir si ya hay algo
-              if (val) {
-                el.value = val;
-                el.classList.add('prefilled');
-                S.cargadores[idx][stateKey] = val;
-              }
-            };
-            prefill('sn',      cd.sn,       'sn');
-            prefill('marca',   cd.marca,    'marca');
-            prefill('modelo',  cd.modelo,   'modelo');
-            prefill('potencia',cd.potencia, 'potencia');
-          });
-        }
-      })
-      .catch(() => {});
-  }
-  if (!S.terminal) return;
-  document.getElementById('info-cargadores').value = S.terminal.cargadores;
-  document.getElementById('checklist-sub').textContent =
-    `${S.terminal.nombre} · ${S.terminal.cargadores} cargadores`;
-  generarCargadores(S.terminal.cargadores);
-  document.getElementById('sec-checklist').style.display = 'block';
-  setTimeout(() => document.getElementById('sec-checklist').scrollIntoView({behavior:'smooth',block:'start'}), 100);
+  opTerminal = terms.find(t => t.id === tid) || null;
+  document.getElementById('op-ncargadores').value = opTerminal ? opTerminal.cargadores : '';
 }
 
-function generarCargadores(n) {
+async function crearOrdenOp() {
+  const clienteId    = document.getElementById('op-cliente').value;
+  const terminalId   = document.getElementById('op-terminal').value;
+  const fecha        = document.getElementById('op-fecha').value;
+  const nombre       = document.getElementById('op-nombre').value.trim();
+  const email        = document.getElementById('op-email').value.trim();
+  const clienteNombre = DB.clientes.find(c => c.id === clienteId)?.nombre || '';
+
+  if (!terminalId) { alert('Selecciona un terminal'); return; }
+  if (!fecha)      { alert('Ingresa la fecha programada'); return; }
+  if (!nombre)     { alert('Ingresa el nombre del técnico'); return; }
+  if (!email || !email.includes('@')) { alert('Ingresa un email válido'); return; }
+
+  setLoading(true, 'Creando orden…');
+
+  try {
+    const resp = await fetch(`${BASE_URL}/api/crear-orden-mantencion`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        terminalId,
+        terminalNombre:  opTerminal?.nombre || '',
+        clienteId,
+        clienteNombre,
+        asignadoNombre:  nombre,
+        asignadoEmail:   email,
+        fechaProgramada: fecha,
+      }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Error al crear orden');
+
+    opLinkCreado = data.linkFormulario;
+    document.getElementById('op-ticket-badge').textContent = data.ticket;
+    document.getElementById('op-link-box').textContent = data.linkFormulario;
+
+    document.getElementById('result-op').classList.add('show');
+    document.getElementById('bar-op').style.display = 'none';
+    document.querySelector('#modo-operador .section').style.display = 'none';
+    setLoading(false);
+    document.getElementById('result-op').scrollIntoView({ behavior:'smooth' });
+  } catch(e) {
+    setLoading(false);
+    alert('Error: ' + e.message);
+  }
+}
+
+function copiarLink() {
+  if (!opLinkCreado) return;
+  navigator.clipboard.writeText(opLinkCreado)
+    .then(() => mostrarToast('✅ Link copiado'))
+    .catch(() => {
+      prompt('Copia el link:', opLinkCreado);
+    });
+}
+
+// ═══════════════════════════════════════
+// MODO TÉCNICO
+// ═══════════════════════════════════════
+async function initModoTecnico(token) {
+  S.token = token;
+  setLoading(true, 'Cargando orden…');
+
+  try {
+    const resp = await fetch(`${BASE_URL}/api/obtener-orden-mantencion?token=${encodeURIComponent(token)}`);
+    const data = await resp.json();
+    if (!resp.ok || !data.ok) throw new Error(data.error || 'Orden no encontrada');
+
+    S.orden = data.orden;
+    document.getElementById('modo-tecnico').style.display = 'block';
+    renderOrdenTecnico(data.orden);
+    setLoading(false);
+  } catch {
+    setLoading(false);
+    document.getElementById('modo-error').style.display = 'block';
+  }
+}
+
+function renderOrdenTecnico(orden) {
+  document.getElementById('tech-ticket').textContent = orden.ticket || '—';
+  document.getElementById('tech-terminal').textContent = orden.terminal || orden.terminal_nombre || '—';
+  document.getElementById('tech-cliente').textContent = orden.cliente || orden.cliente_nombre || '—';
+  document.getElementById('tech-fecha').textContent = orden.fecha_visita || orden.fecha_programada || '—';
+
+  const n = orden.num_cargadores || orden.cargadores || 1;
+  document.getElementById('tech-ncargadores').textContent = `${n} cargadores`;
+  document.getElementById('tech-header-sub').textContent =
+    `${orden.terminal || '—'} · ${n} cargadores`;
+  document.getElementById('checklist-sub').textContent =
+    `${orden.terminal || '—'} · ${n} cargadores`;
+
+  // Si hay borrador guardado
+  if (orden.estado === 'En progreso' || orden.datos_borrador) {
+    document.getElementById('borrador-badge').style.display = 'inline-flex';
+  }
+
+  generarCargadores(n, orden.datos_borrador);
+}
+
+function generarCargadores(n, borrador) {
   const list = document.getElementById('cargadores-list');
   list.innerHTML = '';
   S.cargadores = [];
   for (let i = 1; i <= n; i++) {
-    S.cargadores.push({ num:i, sn:'', marca:'', modelo:'', potencia:'', noAplica:false, checks:{}, observaciones:'', fotosAntes:[], fotosDespues:[] });
-    list.appendChild(crearCargadorCard(i));
+    const bData = borrador?.cargadores?.[i - 1] || {};
+    S.cargadores.push({
+      num: i,
+      sn: '', marca: '', modelo: '', potencia: '',
+      noAplica: false, checks: {}, observaciones: '',
+      fotosAntes: [], fotosDespues: [],
+    });
+    list.appendChild(crearCargadorCard(i, bData));
   }
 }
 
-function crearCargadorCard(num) {
+function crearCargadorCard(num, bData = {}) {
   const card = document.createElement('div');
   card.className = 'cargador-card';
   card.id = `card-${num}`;
 
-  // Header
   const hdr = document.createElement('div');
   hdr.className = 'cargador-hdr';
   hdr.innerHTML = `
@@ -610,53 +617,50 @@ function crearCargadorCard(num) {
       Cargador ${num}
       <span class="correctivo-indicator" id="ci-${num}">⚠️ Correctivo</span>
     </div>
-    <label class="no-aplica-toggle" onclick="toggleNoAplica(${num}, this)">
-      <input type="checkbox" id="na-${num}"/>
+    <label class="no-aplica-toggle">
+      <input type="checkbox" id="na-${num}" onchange="toggleNoAplica(${num},this)"/>
       <div class="toggle-pill"></div>
       <span class="toggle-label">NO APLICA</span>
     </label>
   `;
   card.appendChild(hdr);
 
-  // Body
   const body = document.createElement('div');
   body.className = 'cargador-body';
-  body.id = `body-${num}`;
 
-  // Datos del equipo (Marca / Modelo / Potencia / S/N)
   body.innerHTML += `
     <div class="equipo-grid">
       <div class="equipo-field">
         <span class="equipo-label">Marca</span>
         <input class="equipo-input" type="text" id="marca-${num}" placeholder="ej. ABB"
-          oninput="S.cargadores[${num-1}].marca=this.value"/>
+          value="${bData.marca||''}" oninput="S.cargadores[${num-1}].marca=this.value"/>
       </div>
       <div class="equipo-field">
         <span class="equipo-label">Modelo</span>
         <input class="equipo-input" type="text" id="modelo-${num}" placeholder="ej. Terra 54"
-          oninput="S.cargadores[${num-1}].modelo=this.value"/>
+          value="${bData.modelo||''}" oninput="S.cargadores[${num-1}].modelo=this.value"/>
       </div>
       <div class="equipo-field">
         <span class="equipo-label">Potencia (kW)</span>
         <input class="equipo-input" type="text" id="potencia-${num}" placeholder="ej. 50"
-          oninput="S.cargadores[${num-1}].potencia=this.value"/>
+          value="${bData.potencia||''}" oninput="S.cargadores[${num-1}].potencia=this.value"/>
       </div>
       <div class="equipo-field">
         <span class="equipo-label">N° de Serie</span>
-        <input class="equipo-input mono" type="text" id="sn-${num}" placeholder="S/N (opcional)"
-          oninput="S.cargadores[${num-1}].sn=this.value"/>
+        <input class="equipo-input mono" type="text" id="sn-${num}" placeholder="S/N"
+          value="${bData.sn||''}" oninput="S.cargadores[${num-1}].sn=this.value"/>
       </div>
     </div>
   `;
 
-  // Checklist grid
   const grid = document.createElement('div');
   grid.className = 'checks-grid';
   CHECKLIST_ITEMS.forEach(item => {
+    const checked = bData.checks?.[item.id] ? 'checked' : '';
     const lbl = document.createElement('label');
     lbl.className = 'check-item';
     lbl.innerHTML = `
-      <input type="checkbox" id="chk-${num}-${item.id}"
+      <input type="checkbox" id="chk-${num}-${item.id}" ${checked}
         onchange="onCheck(${num},'${item.id}',this.checked)"/>
       <div class="check-box"></div>
       <span class="check-lbl">${item.label}</span>
@@ -665,26 +669,34 @@ function crearCargadorCard(num) {
   });
   body.appendChild(grid);
 
-  // Observaciones / correctivos
+  const obsVal = bData.observaciones || '';
   body.innerHTML += `
     <div>
-      <div class="obs-toggle" id="obstog-${num}" onclick="toggleObs(${num})">
+      <div class="obs-toggle ${obsVal ? 'open' : ''}" id="obstog-${num}" onclick="toggleObs(${num})">
         Observaciones / correctivo requerido
       </div>
-      <div class="obs-textarea" id="obsbox-${num}">
-        <textarea id="obs-${num}" placeholder="Ej: requiere cambio de módulo de potencia, conector CCS2 dañado, toma deteriorada…"
-          oninput="onObs(${num},this.value)" style="margin-top:6px"></textarea>
+      <div class="obs-textarea ${obsVal ? 'show' : ''}" id="obsbox-${num}">
+        <textarea id="obs-${num}" placeholder="Ej: requiere cambio de módulo, conector dañado…"
+          oninput="onObs(${num},this.value)" style="margin-top:6px">${obsVal}</textarea>
       </div>
     </div>
   `;
 
-  // Fotos Antes / Después
+  if (obsVal.trim()) {
+    S.cargadores[num-1].observaciones = obsVal;
+    // show badge on next tick
+    setTimeout(() => {
+      const ci = document.getElementById(`ci-${num}`);
+      if (ci) ci.classList.add('show');
+    }, 0);
+  }
+
+  // Fotos
   const fotoSection = document.createElement('div');
   fotoSection.className = 'foto-bloques';
-  fotoSection.id = `foto-sec-${num}`;
   ['antes','despues'].forEach(tipo => {
     const emoji = tipo === 'antes' ? '📷' : '✅';
-    const label = tipo === 'antes' ? 'Estado ANTES del mantenimiento' : 'Estado DESPUÉS del mantenimiento';
+    const label = tipo === 'antes' ? 'ANTES' : 'DESPUÉS';
     const bloque = document.createElement('div');
     bloque.className = `foto-bloque ${tipo}`;
     bloque.innerHTML = `
@@ -704,17 +716,21 @@ function crearCargadorCard(num) {
   body.appendChild(fotoSection);
 
   card.appendChild(body);
+
+  // Si borrador marcó noAplica
+  if (bData.noAplica) {
+    setTimeout(() => {
+      const cb = document.getElementById(`na-${num}`);
+      if (cb) { cb.checked = true; toggleNoAplica(num, cb); }
+    }, 0);
+  }
+
   return card;
 }
 
-function toggleNoAplica(num, lbl) {
-  // El click ya maneja el checkbox nativo; leemos su estado en el próximo tick
-  setTimeout(() => {
-    const checked = document.getElementById(`na-${num}`).checked;
-    S.cargadores[num-1].noAplica = checked;
-    const card = document.getElementById(`card-${num}`);
-    card.classList.toggle('no-aplica-card', checked);
-  }, 0);
+function toggleNoAplica(num, cb) {
+  S.cargadores[num-1].noAplica = cb.checked;
+  document.getElementById(`card-${num}`).classList.toggle('no-aplica-card', cb.checked);
 }
 
 function onCheck(num, itemId, checked) {
@@ -723,33 +739,24 @@ function onCheck(num, itemId, checked) {
 
 function onObs(num, val) {
   S.cargadores[num-1].observaciones = val;
-  // Mostrar badge si hay texto
-  const ci = document.getElementById(`ci-${num}`);
-  ci.classList.toggle('show', val.trim().length > 0);
+  document.getElementById(`ci-${num}`).classList.toggle('show', val.trim().length > 0);
 }
 
 function toggleObs(num) {
-  const box = document.getElementById(`obsbox-${num}`);
-  const tog = document.getElementById(`obstog-${num}`);
-  box.classList.toggle('show');
-  tog.classList.toggle('open');
+  document.getElementById(`obsbox-${num}`).classList.toggle('show');
+  document.getElementById(`obstog-${num}`).classList.toggle('open');
 }
 
 // ─── FOTOS ───
-const MAX_FOTOS = 3; // por tipo (antes / después)
+const MAX_FOTOS = 3;
 
 function addFoto(num, tipo, input) {
   const files = Array.from(input.files);
   if (!files.length) return;
-  const cargador  = S.cargadores[num - 1];
-  const arr       = tipo === 'antes' ? cargador.fotosAntes : cargador.fotosDespues;
-  const remaining = MAX_FOTOS - arr.length;
-  files.slice(0, remaining).forEach(file => {
+  const arr = tipo === 'antes' ? S.cargadores[num-1].fotosAntes : S.cargadores[num-1].fotosDespues;
+  files.slice(0, MAX_FOTOS - arr.length).forEach(file => {
     const reader = new FileReader();
-    reader.onload = e => {
-      arr.push(e.target.result);
-      renderFotos(num, tipo);
-    };
+    reader.onload = e => { arr.push(e.target.result); renderFotos(num, tipo); };
     reader.readAsDataURL(file);
   });
   input.value = '';
@@ -762,195 +769,137 @@ function removeFoto(num, tipo, idx) {
 }
 
 function renderFotos(num, tipo) {
-  const arr    = tipo === 'antes' ? S.cargadores[num-1].fotosAntes : S.cargadores[num-1].fotosDespues;
-  const strip  = document.getElementById(`foto-strip-${num}-${tipo}`);
-  const cntEl  = document.getElementById(`foto-cnt-${num}-${tipo}`);
+  const arr   = tipo === 'antes' ? S.cargadores[num-1].fotosAntes : S.cargadores[num-1].fotosDespues;
+  const strip = document.getElementById(`foto-strip-${num}-${tipo}`);
+  const cntEl = document.getElementById(`foto-cnt-${num}-${tipo}`);
   const addLbl = document.querySelector(`label[for="foto-inp-${num}-${tipo}"]`);
-
   strip.innerHTML = arr.map((src, i) => `
     <div class="foto-thumb">
-      <img src="${src}" alt="Foto ${i + 1}"/>
+      <img src="${src}" alt="Foto ${i+1}"/>
       <button class="foto-thumb-del" type="button" onclick="removeFoto(${num},'${tipo}',${i})">×</button>
     </div>
   `).join('');
-
   cntEl.textContent = arr.length;
   cntEl.style.display = arr.length ? 'inline' : 'none';
   if (addLbl) addLbl.style.display = arr.length >= MAX_FOTOS ? 'none' : 'inline-flex';
 }
 
-// ─── GENERAR TICKET ───
-function generarTicket() {
-  const d = new Date();
-  const fecha = d.toISOString().slice(0,10).replace(/-/g,'');
-  const rnd = String(Math.floor(Math.random()*900)+100);
-  return `MNT-${fecha}-${rnd}`;
-}
-
-// ─── VALIDAR ───
-function validar() {
-  if (!document.getElementById('sel-cliente').value) return 'Selecciona un cliente';
-  if (!document.getElementById('sel-terminal').value) return 'Selecciona un terminal';
-  if (!document.getElementById('sel-tecnico').value)  return 'Selecciona un técnico';
-  if (!document.getElementById('inp-fecha').value)    return 'Ingresa la fecha de visita';
-  return null;
-}
-
-// ─── ENVIAR ───
-async function enviarMantencion() {
-  const err = validar();
-  if (err) { alert(err); return; }
-
-  const ticket   = generarTicket();
-  const tecnico  = document.getElementById('sel-tecnico').value;
-  const fecha    = document.getElementById('inp-fecha').value;
-  const obsGen   = document.getElementById('obs-generales').value;
-  const tieneCorrectivos = S.cargadores.some(c => c.observaciones?.trim());
-
-  // Snapshot de datos de cargadores
-  const cargadoresData = S.cargadores.map(c => ({
+// ─── CAPTURAR DATOS FORMULARIO ───
+function capturarDatos() {
+  return S.cargadores.map(c => ({
     num:           c.num,
-    sn:            document.getElementById(`sn-${c.num}`)?.value     || '',
-    marca:         document.getElementById(`marca-${c.num}`)?.value  || '',
+    sn:            document.getElementById(`sn-${c.num}`)?.value || '',
+    marca:         document.getElementById(`marca-${c.num}`)?.value || '',
     modelo:        document.getElementById(`modelo-${c.num}`)?.value || '',
     potencia:      document.getElementById(`potencia-${c.num}`)?.value || '',
     noAplica:      document.getElementById(`na-${c.num}`)?.checked || false,
-    limpieza:      document.getElementById(`chk-${c.num}-limpieza`)?.checked || false,
-    reapriete:     document.getElementById(`chk-${c.num}-reapriete`)?.checked || false,
-    filtro:        document.getElementById(`chk-${c.num}-filtro`)?.checked || false,
-    tension:       document.getElementById(`chk-${c.num}-tension`)?.checked || false,
-    sello:         document.getElementById(`chk-${c.num}-sello`)?.checked || false,
-    carga:         document.getElementById(`chk-${c.num}-carga`)?.checked || false,
+    checks:        Object.fromEntries(CHECKLIST_ITEMS.map(it => [it.id, document.getElementById(`chk-${c.num}-${it.id}`)?.checked || false])),
     observaciones: document.getElementById(`obs-${c.num}`)?.value || '',
-    fotos_antes_count:   c.fotosAntes.length,
+    fotosAntesCount:   c.fotosAntes.length,
     fotos_despues_count: c.fotosDespues.length,
   }));
+}
 
-  const payload = {
-    ticket,
-    terminal:            S.terminal.nombre,
-    terminalId:          S.terminal.id,
-    cliente:             DB.clientes.find(c => c.id === S.clienteId)?.nombre || '',
-    clienteId:           S.clienteId,
-    fecha,
-    tecnico,
-    cargadoresJson:      JSON.stringify(cargadoresData),
-    observacionesGen:    obsGen,
-    tieneCorrectivos,
+// ─── GUARDAR BORRADOR ───
+async function guardarBorrador() {
+  if (!S.token) return;
+  const datosBorrador = {
+    cargadores:      capturarDatos(),
+    obsGenerales:    document.getElementById('obs-generales')?.value || '',
+    savedAt:         new Date().toISOString(),
   };
 
-  // Actualizar print meta
-  document.getElementById('print-meta').textContent =
-    `${ticket} · ${S.terminal.nombre} · ${tecnico} · ${fecha}`;
+  try {
+    const resp = await fetch(`${BASE_URL}/api/guardar-borrador-mantencion`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: S.token, datosBorrador }),
+    });
+    if (resp.ok) {
+      document.getElementById('borrador-badge').style.display = 'inline-flex';
+      mostrarToast('💾 Borrador guardado');
+    } else {
+      mostrarToast('⚠️ No se pudo guardar');
+    }
+  } catch {
+    mostrarToast('⚠️ Sin conexión');
+  }
+}
 
-  document.getElementById('loading').classList.add('show');
-  document.getElementById('btn-submit').disabled = true;
+// ─── ENVIAR FINAL (TÉCNICO) ───
+async function enviarTecnico() {
+  const btn = document.getElementById('btn-enviar-tech');
+  btn.disabled = true;
+
+  const cargadoresData  = capturarDatos();
+  const obsGen          = document.getElementById('obs-generales')?.value || '';
+  const tieneCorrectivos = cargadoresData.some(c => c.observaciones?.trim());
+
+  setLoading(true, 'Guardando mantención…');
 
   try {
     const resp = await fetch(`${BASE_URL}/api/guardar-mantencion`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        token:           S.token,
+        ticket:          S.orden?.ticket,
+        terminal:        S.orden?.terminal || S.orden?.terminal_nombre,
+        terminalId:      S.orden?.terminal_id,
+        cliente:         S.orden?.cliente || S.orden?.cliente_nombre,
+        clienteId:       S.orden?.cliente_id,
+        fecha:           S.orden?.fecha_visita || new Date().toISOString().split('T')[0],
+        tecnico:         S.orden?.asignado_nombre || '',
+        cargadoresJson:  JSON.stringify(cargadoresData),
+        observacionesGen: obsGen,
+        tieneCorrectivos,
+        estado:          'Completado',
+      }),
     });
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Error al guardar');
 
-    // Notificar por email que se registró una mantención
+    // Notificación email
     fetch(`${BASE_URL}/api/enviar-notificacion`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         tipo:               'mantencion',
-        ticket,
+        ticket:             S.orden?.ticket,
         destinatarioNombre: 'Equipo ACEX',
         destinatarioEmail:  'sergio.espinozafb@enel.com',
-        terminalNombre:     S.terminal?.nombre || '',
-        clienteNombre:      S.terminal?.cliente || '',
-        tecnicoNombre:      tecnico,
-        linkFormulario:     `${BASE_URL}/mantencion.html`,
+        terminalNombre:     S.orden?.terminal || '',
+        clienteNombre:      S.orden?.cliente || '',
+        tecnicoNombre:      S.orden?.asignado_nombre || '',
+        linkFormulario:     window.location.href,
       }),
-    }).catch(e => console.warn('Notificación mantención falló:', e));
+    }).catch(e => console.warn('Email falló:', e));
 
-    document.getElementById('loading').classList.remove('show');
-    document.getElementById('sec-datos').style.display = 'none';
+    setLoading(false);
     document.getElementById('sec-checklist').style.display = 'none';
-    document.getElementById('submit-bar').style.display = 'none';
-    document.getElementById('success-msg').textContent =
-      `Ticket ${ticket} guardado correctamente.${tieneCorrectivos ? ' ⚠️ Hay correctivos pendientes.' : ''}`;
-    document.getElementById('success-state').classList.add('show');
-    window.scrollTo({top:0,behavior:'smooth'});
-
+    document.getElementById('bar-tech').style.display = 'none';
+    document.getElementById('result-tech').classList.add('show');
+    document.getElementById('tech-success-msg').textContent =
+      `Ticket ${S.orden?.ticket || ''} guardado.${tieneCorrectivos ? ' ⚠️ Hay correctivos pendientes.' : ''}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch(e) {
-    document.getElementById('loading').classList.remove('show');
-    document.getElementById('btn-submit').disabled = false;
+    setLoading(false);
+    btn.disabled = false;
     alert('Error al guardar: ' + e.message);
   }
 }
 
-function mesesEntre(fechaIso, ref) {
-  if (!fechaIso) return null;
-  const d1 = new Date(fechaIso);
-  const d2 = ref || new Date();
-  return Math.max(0, (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth()));
+// ─── HELPERS ───
+function setLoading(show, txt = '') {
+  document.getElementById('loading').classList.toggle('show', show);
+  if (txt) document.getElementById('loading-txt').textContent = txt;
 }
 
-function generarPDF() {
-  const clienteNombre = DB.clientes.find(c => c.id === S.clienteId)?.nombre || S.terminal?.cliente || '';
-  const termNombre    = S.terminal?.nombre || '';
-  const fechaStr      = document.getElementById('inp-fecha')?.value || new Date().toISOString().split('T')[0];
-  const tecnicoStr    = document.getElementById('inp-tecnico')?.value || '';
-  const tituloOriginal = document.title;
-  document.title = `ACEX · Mantención · ${clienteNombre} · ${termNombre} · ${fechaStr}`;
-
-  // ── Poblar ficha de portada ──
-  const t   = S.terminal || {};
-  const ref = new Date(fechaStr);
-  const mesesCom  = mesesEntre(t.fechaComisionamiento, ref);
-  const mesesMant = S.ultimoMantenimiento ? mesesEntre(S.ultimoMantenimiento.fecha, ref) : null;
-
-  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
-  set('ps-cliente',    clienteNombre);
-  set('ps-terminal',   termNombre);
-  set('ps-direccion',  t.ubic || '—');
-  set('ps-modelo',     [t.marcaCargador, t.modeloCargador].filter(Boolean).join(' · ') || '—');
-  set('ps-potencia',   [t.potenciaKw ? `${t.potenciaKw} kW` : null, t.tipoConector, t.protocolo].filter(Boolean).join(' · ') || '—');
-  set('ps-ncargadores', t.cargadores ? `${t.cargadores} cargadores` : '—');
-  set('ps-fechacom',   t.fechaComisionamiento || '—');
-  set('ps-mesescom',   mesesCom !== null ? `${mesesCom} meses` : '—');
-  set('ps-ultimomant', S.ultimoMantenimiento ? `${S.ultimoMantenimiento.fecha} (${S.ultimoMantenimiento.ticket})` : 'Sin registro');
-  set('ps-mesesmant',  mesesMant !== null ? `${mesesMant} meses` : '—');
-  set('ps-fechavisita', fechaStr);
-  set('ps-tecnico',    tecnicoStr);
-
-  const printSummary = document.getElementById('print-summary');
-  if (printSummary) printSummary.style.display = 'block';
-
-  // ── Mostrar obs vacías como "Sin comentarios" ──
-  document.querySelectorAll('.obs-textarea').forEach(el => el.classList.add('show'));
-  const obsEmptyEls = [];
-  S.cargadores.forEach((c, i) => {
-    const obs = document.getElementById(`obs-${i + 1}`)?.value || '';
-    if (!obs.trim()) {
-      const box = document.getElementById(`obsbox-${i + 1}`);
-      if (box) { box.classList.add('obs-empty-print'); obsEmptyEls.push(box); }
-    }
-  });
-
-  // ── Mostrar checklist (fotos) ──
-  const secChecklist = document.getElementById('sec-checklist');
-  const wasHidden    = secChecklist && secChecklist.style.display === 'none';
-  if (wasHidden) secChecklist.style.display = '';
-
-  window.print();
-
-  // ── Restaurar estado tras imprimir ──
-  window.addEventListener('afterprint', function restoreAfterPrint() {
-    document.title = tituloOriginal;
-    if (wasHidden && secChecklist) secChecklist.style.display = 'none';
-    if (printSummary) printSummary.style.display = 'none';
-    obsEmptyEls.forEach(el => el.classList.remove('obs-empty-print'));
-    window.removeEventListener('afterprint', restoreAfterPrint);
-  }, { once: true });
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 </script>
 </body>

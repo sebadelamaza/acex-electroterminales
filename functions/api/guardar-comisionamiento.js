@@ -1,5 +1,7 @@
 // functions/api/guardar-comisionamiento.js — Cloudflare Pages Function
-// Guarda un comisionamiento: crea registro en terminales + comisionamientos.
+// Guarda el registro final de comisionamiento.
+//   - Con `token`: UPDATE sobre la orden existente (flujo técnico desde link)
+//   - Sin `token`:  INSERT nuevo + crea terminal (flujo legado)
 // Variables de entorno: SUPABASE_URL, SUPABASE_SERVICE_KEY
 
 import { createClient } from '@supabase/supabase-js';
@@ -15,7 +17,7 @@ export async function onRequest(context) {
 
   if (request.method === 'OPTIONS') return new Response('', { status: 200, headers: HEADERS });
   if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: HEADERS });
+    return new Response(JSON.stringify({ error: 'Método no permitido' }), { status: 405, headers: HEADERS });
   }
 
   const SUPABASE_URL = env.SUPABASE_URL;
@@ -29,18 +31,15 @@ export async function onRequest(context) {
   catch { return new Response(JSON.stringify({ error: 'JSON inválido' }), { status: 400, headers: HEADERS }); }
 
   const {
+    token,
     ticket, clienteId, clienteNombre,
     terminalNombre, terminalDireccion,
-    numCargadores, marcaCargador, modeloCargador,
-    potenciaKw, tipoConector, protocolo, certElectrico,
-    tecnico, fecha, obsGenerales,
+    numCargadores, tecnico, fecha, obsGenerales,
     cargadoresJson,
     firmaNombre, firmaRut, firmaCargo, firmaImg,
+    // legado
+    marcaCargador, modeloCargador, potenciaKw, tipoConector, protocolo, certElectrico,
   } = body;
-
-  if (!ticket || !clienteNombre || !terminalNombre || !tecnico || !fecha) {
-    return new Response(JSON.stringify({ error: 'Faltan campos obligatorios' }), { status: 400, headers: HEADERS });
-  }
 
   let cargadoresObj;
   try {
@@ -49,20 +48,56 @@ export async function onRequest(context) {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ── 1. Crear registro en terminales ──────────────────────────────────────
+  // ── FLUJO TÉCNICO: UPDATE por token ────────────────────────────────────────
+  if (token) {
+    const updateData = {
+      cargadores_json: cargadoresObj || [],
+      observaciones:   obsGenerales  || null,
+      estado:          'Entregado',
+      datos_borrador:  null,
+    };
+    if (firmaNombre) updateData.firma_nombre = firmaNombre;
+    if (firmaRut)    updateData.firma_rut    = firmaRut;
+    if (firmaCargo)  updateData.firma_cargo  = firmaCargo;
+    if (firmaImg)    updateData.firma_img    = firmaImg;
+
+    try {
+      const { data, error } = await supabase
+        .from('comisionamientos')
+        .update(updateData)
+        .eq('token', token)
+        .select('id, ticket')
+        .single();
+
+      if (error) {
+        console.error('Supabase UPDATE error guardar-comisionamiento:', error);
+        return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: HEADERS });
+      }
+
+      return new Response(JSON.stringify({ ok: true, recordId: data.id, ticket: data.ticket }), { status: 200, headers: HEADERS });
+    } catch (err) {
+      return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: HEADERS });
+    }
+  }
+
+  // ── FLUJO LEGADO: INSERT nuevo + crear terminal ────────────────────────────
+  if (!ticket || !clienteNombre || !terminalNombre || !tecnico || !fecha) {
+    return new Response(JSON.stringify({ error: 'Faltan campos obligatorios' }), { status: 400, headers: HEADERS });
+  }
+
   const terminalRow = {
     terminal_id:            ticket,
     nombre:                 terminalNombre,
-    cliente_id:             clienteId   || null,
+    cliente_id:             clienteId         || null,
     cliente_nombre:         clienteNombre,
-    direccion:              terminalDireccion || null,
+    direccion:              terminalDireccion  || null,
     num_cargadores:         numCargadores ? Number(numCargadores) : null,
-    marca_cargador:         marcaCargador   || null,
-    modelo_cargador:        modeloCargador  || null,
-    potencia_kw:            potenciaKw      || null,
-    tipo_conector:          tipoConector    || null,
-    protocolo:              protocolo       || 'OCPP 1.6',
-    cert_electrico:         certElectrico   || null,
+    marca_cargador:         marcaCargador      || null,
+    modelo_cargador:        modeloCargador     || null,
+    potencia_kw:            potenciaKw         || null,
+    tipo_conector:          tipoConector       || null,
+    protocolo:              protocolo          || 'OCPP 1.6',
+    cert_electrico:         certElectrico      || null,
     fecha_comisionamiento:  fecha,
     estado:                 'Activo',
   };
@@ -78,7 +113,6 @@ export async function onRequest(context) {
     return new Response(JSON.stringify({ error: 'Error al crear terminal', detail: termError.message }), { status: 502, headers: HEADERS });
   }
 
-  // ── 2. Crear registro en comisionamientos ────────────────────────────────
   const comisionRow = {
     ticket,
     terminal_id:     ticket,
@@ -105,18 +139,10 @@ export async function onRequest(context) {
   if (comError) {
     console.error('Supabase error comisionamientos:', comError);
     return new Response(JSON.stringify({
-      ok: true,
-      partial: true,
-      terminalId: termData.id,
-      ticket,
+      ok: true, partial: true, terminalId: termData.id, ticket,
       warning: 'Terminal creado pero error al guardar comisionamiento: ' + comError.message,
     }), { status: 207, headers: HEADERS });
   }
 
-  return new Response(JSON.stringify({
-    ok: true,
-    ticket,
-    terminalId: termData.id,
-    comisionId: comData.id,
-  }), { status: 200, headers: HEADERS });
+  return new Response(JSON.stringify({ ok: true, ticket, terminalId: termData.id, comisionId: comData.id }), { status: 200, headers: HEADERS });
 }

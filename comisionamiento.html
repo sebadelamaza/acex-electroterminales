@@ -841,6 +841,22 @@ async function enviarComisionamiento() {
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Error al guardar');
 
+    // Notificar por email que se registró un comisionamiento
+    fetch(`${BASE_URL}/api/enviar-notificacion`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo:               'comisionamiento',
+        ticket,
+        destinatarioNombre: 'Equipo ACEX',
+        destinatarioEmail:  'sergio.espinozafb@enel.com',
+        terminalNombre:     terminal,
+        clienteNombre:      clienteNom,
+        tecnicoNombre:      tecnico,
+        linkFormulario:     `${BASE_URL}/comisionamiento.html`,
+      }),
+    }).catch(e => console.warn('Notificación comisionamiento falló:', e));
+
     document.getElementById('loading').classList.remove('show');
     document.getElementById('sec-terminal').style.display   = 'none';
     document.getElementById('sec-visita').style.display     = 'none';

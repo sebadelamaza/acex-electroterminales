@@ -58,6 +58,12 @@ export async function onRequest(context) {
   } else if (tipo === 'reporte') {
     subject  = `[ACEX] Reporte técnico disponible — ${ticket}`;
     htmlBody = templateReporte({ ticket, destinatarioNombre, terminalNombre, clienteNombre, tecnicoNombre, linkFormulario });
+  } else if (tipo === 'mantencion') {
+    subject  = `[ACEX] Mantención registrada — ${ticket}`;
+    htmlBody = templateMantencion({ ticket, destinatarioNombre, terminalNombre, clienteNombre, tecnicoNombre, linkFormulario });
+  } else if (tipo === 'comisionamiento') {
+    subject  = `[ACEX] Comisionamiento registrado — ${ticket}`;
+    htmlBody = templateComisionamiento({ ticket, destinatarioNombre, terminalNombre, clienteNombre, tecnicoNombre, linkFormulario });
   } else {
     return new Response(JSON.stringify({ error: `Tipo desconocido: ${tipo}` }), { status: 400, headers: HEADERS });
   }
@@ -179,6 +185,34 @@ function templateInforme({ ticket, destinatarioNombre, terminalNombre, clienteNo
     <div class="btn-wrap"><a href="${linkFormulario}" class="btn">✅ Revisar y aprobar →</a></div>
     <p style="font-size:12px;color:#637181;margin-top:8px">Si el botón no funciona, copia este link en tu navegador:<br/>
     <span style="font-family:monospace;font-size:11px;color:#1D6FD1;word-break:break-all">${linkFormulario}</span></p>
+  `);
+}
+
+function templateMantencion({ ticket, destinatarioNombre, terminalNombre, clienteNombre, tecnicoNombre, linkFormulario }) {
+  return baseTemplate(`
+    <div class="ticket-badge">🔩 ${ticket}</div>
+    <h2>Mantención registrada</h2>
+    <p class="subtitle">Hola <strong>${destinatarioNombre || 'equipo'}</strong>, se ha completado y registrado una mantención preventiva.</p>
+    <div class="data-table">
+      <div class="data-row"><span class="dk">Cliente</span><span class="dv">${clienteNombre || '—'}</span></div>
+      <div class="data-row"><span class="dk">Terminal</span><span class="dv">${terminalNombre || '—'}</span></div>
+      <div class="data-row"><span class="dk">Técnico</span><span class="dv">${tecnicoNombre || '—'}</span></div>
+      <div class="data-row"><span class="dk">Ticket</span><span class="dv" style="font-family:monospace">${ticket}</span></div>
+    </div>
+  `);
+}
+
+function templateComisionamiento({ ticket, destinatarioNombre, terminalNombre, clienteNombre, tecnicoNombre, linkFormulario }) {
+  return baseTemplate(`
+    <div class="ticket-badge">⚡ ${ticket}</div>
+    <h2>Comisionamiento registrado</h2>
+    <p class="subtitle">Hola <strong>${destinatarioNombre || 'equipo'}</strong>, se ha completado y registrado el acta de comisionamiento de un nuevo terminal.</p>
+    <div class="data-table">
+      <div class="data-row"><span class="dk">Cliente</span><span class="dv">${clienteNombre || '—'}</span></div>
+      <div class="data-row"><span class="dk">Terminal</span><span class="dv">${terminalNombre || '—'}</span></div>
+      <div class="data-row"><span class="dk">Técnico</span><span class="dv">${tecnicoNombre || '—'}</span></div>
+      <div class="data-row"><span class="dk">Ticket</span><span class="dv" style="font-family:monospace">${ticket}</span></div>
+    </div>
   `);
 }
 

@@ -855,6 +855,22 @@ async function enviarMantencion() {
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Error al guardar');
 
+    // Notificar por email que se registró una mantención
+    fetch(`${BASE_URL}/api/enviar-notificacion`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo:               'mantencion',
+        ticket,
+        destinatarioNombre: 'Equipo ACEX',
+        destinatarioEmail:  'sergio.espinozafb@enel.com',
+        terminalNombre:     S.terminal?.nombre || '',
+        clienteNombre:      S.terminal?.cliente || '',
+        tecnicoNombre:      tecnico,
+        linkFormulario:     `${BASE_URL}/mantencion.html`,
+      }),
+    }).catch(e => console.warn('Notificación mantención falló:', e));
+
     document.getElementById('loading').classList.remove('show');
     document.getElementById('sec-datos').style.display = 'none';
     document.getElementById('sec-checklist').style.display = 'none';

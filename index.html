@@ -406,13 +406,20 @@ const S = {
   warranty:null, ticket:null, seqCounter:{}
 };
 
-function genTicket() {
-  if (!S.clienteId) return null;
+function getFecha() {
   const d = new Date();
-  const fecha = d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
-  const key = fecha + S.clienteId;
-  S.seqCounter[key] = (S.seqCounter[key] || 0) + 1;
-  return `TKT-${fecha}-${S.clienteId}-${String(S.seqCounter[key]).padStart(3,'0')}`;
+  return d.getFullYear().toString() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+}
+
+async function genTicket() {
+  if (!S.clienteId) return null;
+  const fecha = getFecha();
+  let seq = 1;
+  try {
+    const r = await fetch(`/api/get-next-ticket?fecha=${fecha}&clienteId=${encodeURIComponent(S.clienteId)}`);
+    if (r.ok) { const d = await r.json(); seq = d.seq || 1; }
+  } catch(e) { /* fallback a 1 */ }
+  return `TKT-${fecha}-${S.clienteId}-${String(seq).padStart(3,'0')}`;
 }
 
 function calcWarranty() {
@@ -460,11 +467,15 @@ function onClienteChange() {
   if (S.clienteId) {
     const terms = DB.terminales[S.clienteId] || [];
     terms.forEach(t => { const o=document.createElement('option'); o.value=t.id; o.textContent=`${t.id} — ${t.nombre}`; tsel.appendChild(o); });
-    S.ticket = genTicket();
-    document.getElementById('ticket-chip').textContent = S.ticket;
-    document.getElementById('ticket-chip').className = 'ticket-chip ready';
-    document.getElementById('ticket-big').textContent = S.ticket;
-    document.getElementById('ticket-big').className = 'ticket-display-big';
+    document.getElementById('ticket-chip').textContent = '…';
+    document.getElementById('ticket-big').textContent = 'Generando ticket…';
+    genTicket().then(tkt => {
+      S.ticket = tkt;
+      document.getElementById('ticket-chip').textContent = S.ticket;
+      document.getElementById('ticket-chip').className = 'ticket-chip ready';
+      document.getElementById('ticket-big').textContent = S.ticket;
+      document.getElementById('ticket-big').className = 'ticket-display-big';
+    });
   } else {
     S.ticket = null;
     document.getElementById('ticket-chip').textContent = '— sin ticket';

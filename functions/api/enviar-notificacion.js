@@ -72,7 +72,10 @@ export async function onRequest(context) {
       body: JSON.stringify({
         sender:      { name: fromName, email: fromEmail },
         to:          [{ email: destinatarioEmail, name: destinatarioNombre || destinatarioEmail }],
-        cc:          [{ email: 'sergio.espinozafb@enel.com', name: 'Sergio Espinoza' }],
+        cc:          [
+          { email: 'sergio.espinozafb@enel.com', name: 'Sergio Espinoza' },
+          { email: 'delamazasebastian@gmail.com', name: 'Sebastián De la Maza' },
+        ],
         subject,
         htmlContent: htmlBody,
       }),

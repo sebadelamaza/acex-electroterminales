@@ -605,6 +605,25 @@ async function firmarDocumento() {
     const data = await resp.json();
 
     if (resp.ok) {
+      // Notificar por email que el cliente firmó el reporte
+      const f = A.caso;
+      const BASE_URL    = 'https://app.acex.cl';
+      const linkReporte = `${BASE_URL}/reporte.html?ticket=${encodeURIComponent(A.ticket)}&token=${encodeURIComponent(A.token)}`;
+      fetch('/api/enviar-notificacion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo:              'reporte',
+          ticket:            A.ticket,
+          destinatarioNombre: 'Equipo ACEX',
+          destinatarioEmail:  'sergio.espinozafb@enel.com',
+          terminalNombre:    f['Terminal nombre'] || '',
+          clienteNombre:     f['Cliente nombre']  || '',
+          tecnicoNombre:     f['Tecnico nombre']  || '',
+          linkFormulario:    linkReporte,
+        }),
+      }).catch(e => console.warn('Notificación reporte falló:', e));
+
       mostrarExito(nombre, cargo);
     } else {
       alert('Error al registrar la firma. Por favor intenta de nuevo.');
